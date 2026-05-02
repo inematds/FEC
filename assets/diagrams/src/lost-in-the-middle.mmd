@@ -1,0 +1,18 @@
+flowchart TB
+    subgraph CTX["Janela de contexto"]
+        T1["Tokens 1-1k<br>(início, alta atenção)"]
+        T2["Tokens 1k-9k<br>(meio, atenção degrada)"]
+        T3["Tokens 9k-10k<br>(fim, recência alta)"]
+    end
+
+    A["Resposta"]
+    T1 -->|peso ✓| A
+    T2 -.->|peso ✗ degradado| A
+    T3 -->|peso ✓| A
+
+    note["Liu et al. 2023:<br>acurácia cai ~30%<br>quando info crítica<br>está no meio"]
+
+    style T1 fill:#10b98144,stroke:#10b981,color:#fff
+    style T2 fill:#ef444444,stroke:#ef4444,color:#fff
+    style T3 fill:#10b98144,stroke:#10b981,color:#fff
+    style note fill:#fafaf944,stroke:#71717a,color:#fff

@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schemas/revoked_versions.schema.json",
+  "schema_version": "1",
+  "manifest_version": 1,
+  "issued_at": "2026-05-02T00:00:00Z",
+  "revoked": []
+}

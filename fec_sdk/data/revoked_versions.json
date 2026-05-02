@@ -1,0 +1,7 @@
+{
+  "schema_version": "1",
+  "manifest_version": 1,
+  "issued_at": "2026-05-02T00:00:00Z",
+  "revoked": [],
+  "_note": "Baseline embutida no wheel. Manifesto remoto em https://inematds.github.io/FEC/v1/revoked.json adiciona a esta lista, não substitui."
+}

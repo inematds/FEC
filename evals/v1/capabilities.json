@@ -1,0 +1,54 @@
+{
+  "$schema": "../../schemas/capabilities.schema.json",
+  "schema_version": "1",
+  "capabilities": [
+    {
+      "id": "tool-calling",
+      "name": "Tool / function calling",
+      "description": "Modelo invoca ferramentas estruturadas via JSON.",
+      "taught_in_modules": ["modulo-4-1"],
+      "providers": {
+        "anthropic": { "status": "native", "fec_sdk_module": "fec_sdk.adapters.anthropic" },
+        "openai": { "status": "native", "fec_sdk_module": "fec_sdk.adapters.openai" },
+        "google": { "status": "native", "fec_sdk_module": "fec_sdk.adapters.google" },
+        "ollama": { "status": "adapter", "notes": "Suporte recente; verificar modelo específico." }
+      }
+    },
+    {
+      "id": "prompt-caching",
+      "name": "Prompt caching",
+      "description": "Reuso de prefixo de contexto entre requests para reduzir custo/latência.",
+      "taught_in_modules": ["modulo-5-2"],
+      "providers": {
+        "anthropic": { "status": "native", "doc_url": "https://docs.anthropic.com" },
+        "openai": { "status": "adapter", "notes": "Equivalente parcial via cached prompts." },
+        "google": { "status": "adapter" },
+        "ollama": { "status": "mock", "notes": "Sem caching nativo; lab usa simulação por gravação." }
+      }
+    },
+    {
+      "id": "long-context",
+      "name": "Long context (>200k tokens)",
+      "description": "Janela de contexto extensa.",
+      "taught_in_modules": ["modulo-1-2", "modulo-3-2"],
+      "providers": {
+        "anthropic": { "status": "native" },
+        "openai": { "status": "native" },
+        "google": { "status": "native" },
+        "ollama": { "status": "not_supported", "notes": "OSS local 2026-Q2 raramente >128k confiável." }
+      }
+    },
+    {
+      "id": "mcp",
+      "name": "Model Context Protocol",
+      "description": "Protocolo para integração de tools/recursos externos.",
+      "taught_in_modules": ["modulo-4-3"],
+      "providers": {
+        "anthropic": { "status": "native" },
+        "openai": { "status": "adapter" },
+        "google": { "status": "adapter" },
+        "ollama": { "status": "adapter" }
+      }
+    }
+  ]
+}

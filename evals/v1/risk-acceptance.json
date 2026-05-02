@@ -1,0 +1,5 @@
+{
+  "$schema": "../../schemas/risk-acceptance.schema.json",
+  "schema_version": "1",
+  "acceptances": []
+}

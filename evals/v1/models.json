@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/models.schema.json",
+  "schema_version": "1",
+  "release": "v1.0.0",
+  "pinned_at": "2026-05-02",
+  "roles": {
+    "frontier": {
+      "provider": "anthropic",
+      "id": "claude-sonnet-4-6@2026-04",
+      "tested_on": "2026-05-02",
+      "context_window": 200000,
+      "notes": "Modelo de raciocínio principal para alegações de qualidade no harness. Pinar exato com data."
+    },
+    "low_cost": {
+      "provider": "openai",
+      "id": "gpt-5-mini@2026-04",
+      "tested_on": "2026-05-02",
+      "notes": "Modelo de baixo custo para comparações de cost-effectiveness."
+    },
+    "oss": {
+      "provider": "ollama",
+      "id": "qwen2.5-7b-instruct@q4_K_M",
+      "tested_on": "2026-05-02",
+      "context_window": 32768,
+      "notes": "OSS local rodável em 16GB RAM. Caminho 'free path' (item 52 do PLAN)."
+    }
+  }
+}

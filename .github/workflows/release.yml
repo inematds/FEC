@@ -1,0 +1,202 @@
+# release.yml — gate manual de release. Atomic draft → checksums → finalize.
+# PLAN itens 49, 74, 74a (PyPI build-once-publish-later, Pages versionado).
+#
+# Trigger manual com tag de RC ou stable. NUNCA dispara automaticamente.
+
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g. v1.0.0-rc.1 or v1.0.0)"
+        required: true
+        type: string
+      promote_rc:
+        description: "If true, re-tag the existing RC artifact as stable (no rebuild)"
+        required: false
+        type: boolean
+        default: false
+      rc_source:
+        description: "RC tag to promote (required if promote_rc=true, e.g. v1.0.0-rc.3)"
+        required: false
+        type: string
+
+permissions:
+  contents: write   # for tag and Release creation
+  id-token: write   # for trusted publishing to PyPI
+  pages: write      # for deploy
+  attestations: write
+
+concurrency:
+  group: release-${{ github.event.inputs.version }}
+  cancel-in-progress: false  # never cancel a release mid-flight
+
+env:
+  SOURCE_DATE_EPOCH: "1746230400"  # 2026-05-03T00:00:00Z — pinned for reproducible builds
+
+jobs:
+  preflight:
+    name: Preflight gates
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Verify rc gates (zero blocking issues, 7d real auto-smoke green, etc.)
+        run: python scripts/check-rc-gates.py --version=${{ github.event.inputs.version }}
+      - name: Audit evals (claims linked to runs, hashes match)
+        run: python scripts/audit-evals.py
+      - name: Verify CSP policy unchanged
+        run: python scripts/audit-csp.py
+
+  build-or-reuse:
+    name: Build artifact (RC) or reuse (promote_rc)
+    needs: preflight
+    runs-on: ubuntu-latest
+    environment: release
+    outputs:
+      zip_sha256: ${{ steps.hash.outputs.zip_sha256 }}
+      wheel_sha256: ${{ steps.hash.outputs.wheel_sha256 }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.inputs.promote_rc == 'true' && github.event.inputs.rc_source || github.event.inputs.version }}
+      - name: Decide build vs reuse
+        id: decide
+        run: |
+          if [ "${{ github.event.inputs.promote_rc }}" = "true" ]; then
+            echo "mode=reuse" >> $GITHUB_OUTPUT
+          else
+            echo "mode=build" >> $GITHUB_OUTPUT
+          fi
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+      - name: Build deterministic assets (Tailwind, Mermaid pre-rendered)
+        if: steps.decide.outputs.mode == 'build'
+        run: bash scripts/build-release-assets.sh
+      - name: Build fec_sdk wheel + sdist (final-version, never rcN)
+        if: steps.decide.outputs.mode == 'build'
+        run: bash scripts/build-wheel.sh ${{ github.event.inputs.version }}
+      - name: Compute checksums (sha256 + blake3)
+        id: hash
+        run: |
+          python scripts/compute-checksums.py
+          echo "zip_sha256=$(sha256sum dist/fec-*.zip | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+          echo "wheel_sha256=$(sha256sum dist/fec_sdk-*.whl | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+      - name: Audit pages (versioned immutable path)
+        run: python scripts/audit-pages.py --version=${{ github.event.inputs.version }}
+      - name: Audit zip offline (headless Chromium, no network)
+        run: python scripts/audit-zip-offline.py
+      - name: Verify reproducibility (rebuild and compare hashes)
+        if: steps.decide.outputs.mode == 'build'
+        run: bash scripts/verify-reproducible-build.sh
+      - uses: actions/upload-artifact@v5
+        with:
+          name: release-artifacts
+          path: |
+            dist/
+            CHECKSUMS.txt
+
+  draft-release:
+    name: Draft GitHub Release
+    needs: build-or-reuse
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          name: release-artifacts
+      - name: Create draft Release with assets and checksums
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          prerelease: ${{ contains(github.event.inputs.version, '-rc.') }}
+          tag_name: ${{ github.event.inputs.version }}
+          files: |
+            dist/fec-*.zip
+            dist/fec_sdk-*.whl
+            dist/fec_sdk-*.tar.gz
+            CHECKSUMS.txt
+
+  publish-pypi:
+    name: Publish to PyPI (stable only; RC uses TestPyPI)
+    needs: draft-release
+    runs-on: ubuntu-latest
+    environment: release
+    if: ${{ !contains(github.event.inputs.version, '-rc.') }}
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: release-artifacts
+      - name: Publish via Trusted Publishing (no API token in CI)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
+      - name: Verify post-upload (pip download in clean env, recompute hash)
+        run: bash scripts/verify-pypi-post-upload.sh ${{ github.event.inputs.version }} ${{ needs.build-or-reuse.outputs.wheel_sha256 }}
+
+  publish-pages-versioned:
+    name: Deploy GitHub Pages /v<X.Y.Z>/ (immutable)
+    needs: draft-release
+    runs-on: ubuntu-latest
+    environment: github-pages
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          name: release-artifacts
+      - name: Build /v<X.Y.Z>/ subtree
+        run: bash scripts/build-pages-subtree.sh ${{ github.event.inputs.version }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages-build/
+      - uses: actions/deploy-pages@v4
+      - name: Verify served Pages match checksums
+        run: python scripts/audit-pages.py --version=${{ github.event.inputs.version }} --remote
+
+  flip-latest-alias:
+    name: Flip /latest/ alias (stable only, after gates)
+    needs: [publish-pypi, publish-pages-versioned]
+    runs-on: ubuntu-latest
+    environment: release
+    if: ${{ !contains(github.event.inputs.version, '-rc.') }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Update /latest/ to point to /v<X.Y.Z>/
+        run: bash scripts/flip-latest.sh ${{ github.event.inputs.version }}
+
+  zenodo-mirror:
+    name: Zenodo mirror (idempotent, content-addressed)
+    needs: draft-release
+    runs-on: ubuntu-latest
+    environment: release
+    continue-on-error: true  # if Zenodo down, fallback documented in runbooks/zenodo-down.md
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
+        with:
+          name: release-artifacts
+      - name: Upload to Zenodo with idempotency key
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+        run: python scripts/zenodo-mirror.py --version=${{ github.event.inputs.version }}
+
+  finalize:
+    name: Finalize (publish draft, atomic)
+    needs: [publish-pypi, publish-pages-versioned, flip-latest-alias, zenodo-mirror]
+    if: always() && needs.publish-pages-versioned.result == 'success'
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v5
+      - name: Convert draft to published
+        run: bash scripts/finalize-release.sh ${{ github.event.inputs.version }}

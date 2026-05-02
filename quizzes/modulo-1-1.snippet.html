@@ -1,0 +1,55 @@
+<form class="fec-quiz" data-module="modulo-1-1" data-questions="5">
+<h3 class="text-2xl font-bold mb-4 text-primary">Quiz — Janela, atenção e lost in the middle</h3>
+<fieldset class="my-6 border-l-4 border-zinc-700 pl-4" data-q="q1">
+<legend class="font-semibold mb-2">O que descreve melhor o fenômeno &#x27;lost in the middle&#x27; em LLMs?</legend>
+<div class="space-y-2">
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q1" value="a" id="modulo-1-1-q1-a" class="mr-2"><span>Modelos esquecem completamente tokens fora da janela.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q1" value="b" id="modulo-1-1-q1-b" class="mr-2"><span>Acurácia degrada quando informação crítica está no meio da janela; permanece alta no início e fim.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q1" value="c" id="modulo-1-1-q1-c" class="mr-2"><span>Tokens no meio da janela custam mais caro que os do início.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q1" value="d" id="modulo-1-1-q1-d" class="mr-2"><span>Modelos pequenos não sofrem do efeito; só os grandes.</span></label>
+</div>
+<div class="hidden text-sm text-zinc-500 mt-2 fec-quiz-rationale" data-correct="&quot;b&quot;">Liu et al. (2023) mostram a curva U: bom no início (prefix bias) e fim (recency bias), degradado no meio.</div>
+</fieldset>
+<fieldset class="my-6 border-l-4 border-zinc-700 pl-4" data-q="q2">
+<legend class="font-semibold mb-2">Por que colocar seções estáveis (system prompt, few-shot fixos) no INÍCIO da janela é boa engenharia?</legend>
+<div class="space-y-2">
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q2" value="a" id="modulo-1-1-q2-a" class="mr-2"><span>Porque o modelo não consegue ler o que vem depois.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q2" value="b" id="modulo-1-1-q2-b" class="mr-2"><span>Porque maximiza reuso de prompt cache (KV cache do prefixo) e evita invalidação a cada turn.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q2" value="c" id="modulo-1-1-q2-c" class="mr-2"><span>Porque tokens no início são mais baratos.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q2" value="d" id="modulo-1-1-q2-d" class="mr-2"><span>Porque o tokenizer prioriza início da string.</span></label>
+</div>
+<div class="hidden text-sm text-zinc-500 mt-2 fec-quiz-rationale" data-correct="&quot;b&quot;">Prompt caching reutiliza o KV cache do prefixo. Mexer no system prompt invalida tudo. Anthropic 2024 documenta o padrão.</div>
+</fieldset>
+<fieldset class="my-6 border-l-4 border-zinc-700 pl-4" data-q="q3">
+<legend class="font-semibold mb-2">Quais mitigações são VÁLIDAS para &#x27;lost in the middle&#x27; em RAG? (escolha todas)</legend>
+<div class="space-y-2">
+<label class="block cursor-pointer"><input type="checkbox" name="modulo-1-1-q3" value="a" id="modulo-1-1-q3-a" class="mr-2"><span>Reranking — colocar os mais relevantes nas extremidades da lista.</span></label>
+<label class="block cursor-pointer"><input type="checkbox" name="modulo-1-1-q3" value="b" id="modulo-1-1-q3-b" class="mr-2"><span>Recuperar menos documentos, com qualidade maior.</span></label>
+<label class="block cursor-pointer"><input type="checkbox" name="modulo-1-1-q3" value="c" id="modulo-1-1-q3-c" class="mr-2"><span>Aumentar a janela do modelo (ex.: 200k → 1M tokens).</span></label>
+<label class="block cursor-pointer"><input type="checkbox" name="modulo-1-1-q3" value="d" id="modulo-1-1-q3-d" class="mr-2"><span>Ancoragem — repetir a pergunta antes E depois da lista.</span></label>
+</div>
+<div class="hidden text-sm text-zinc-500 mt-2 fec-quiz-rationale" data-correct="[&quot;a&quot;, &quot;b&quot;, &quot;d&quot;]">(c) é falso; janela maior NÃO resolve degradação no meio (ver RULER, Hsieh et al. 2024). As outras três têm evidência.</div>
+</fieldset>
+<fieldset class="my-6 border-l-4 border-zinc-700 pl-4" data-q="q4">
+<legend class="font-semibold mb-2">Você tem 100k tokens de contexto e o modelo cobra $3/M input + $15/M output. Você manda a janela cheia mas o modelo só gera 200 tokens de saída. Quanto você paga (aproximado)?</legend>
+<div class="space-y-2">
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q4" value="a" id="modulo-1-1-q4-a" class="mr-2"><span>$0.003 — só conta a saída.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q4" value="b" id="modulo-1-1-q4-b" class="mr-2"><span>$0.30 — input completo + saída pequena.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q4" value="c" id="modulo-1-1-q4-c" class="mr-2"><span>$1.50 — janela inteira × preço de output.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q4" value="d" id="modulo-1-1-q4-d" class="mr-2"><span>$0.0006 — só os tokens &#x27;atendidos&#x27; pela atenção.</span></label>
+</div>
+<div class="hidden text-sm text-zinc-500 mt-2 fec-quiz-rationale" data-correct="&quot;b&quot;">Input: 100k × $3/M = $0.30. Output: 200 × $15/M ≈ $0.003. Total ~$0.30. Atenção não-uniforme NÃO dá desconto — você paga pela janela inteira.</div>
+</fieldset>
+<fieldset class="my-6 border-l-4 border-zinc-700 pl-4" data-q="q5">
+<legend class="font-semibold mb-2">Quando você ESCOLHERIA NÃO usar contexto longo (&gt;50k tokens)?</legend>
+<div class="space-y-2">
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q5" value="a" id="modulo-1-1-q5-a" class="mr-2"><span>Quando o modelo é frontier — só contexto curto desperdiça capacidade.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q5" value="b" id="modulo-1-1-q5-b" class="mr-2"><span>Quando a tarefa é extração de campo único e RAG já recupera documentos relevantes.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q5" value="c" id="modulo-1-1-q5-c" class="mr-2"><span>Quando você quer máxima qualidade — sempre quanto mais contexto, melhor.</span></label>
+<label class="block cursor-pointer"><input type="radio" name="modulo-1-1-q5" value="d" id="modulo-1-1-q5-d" class="mr-2"><span>Nunca — contexto longo é universalmente superior.</span></label>
+</div>
+<div class="hidden text-sm text-zinc-500 mt-2 fec-quiz-rationale" data-correct="&quot;b&quot;">Contexto longo é caro, lento, e pode degradar via &#x27;lost in the middle&#x27;. Para tarefas estruturadas com RAG bom, contexto curto é melhor.</div>
+</fieldset>
+<button type="submit" class="btn btn-primary">Verificar</button>
+<output class="block mt-4 fec-quiz-output text-sm"></output>
+</form>

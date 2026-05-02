@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Formação de Engenharia de Contexto — curso master em PT-BR sobre engenharia de contexto para LLMs. Padrões agnósticos de provedor, exercícios testáveis, projetos cumulativos.">
+  <title>FEC — Formação de Engenharia de Contexto</title>
+  <link rel="stylesheet" href="assets/css/inema.css">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen">
+
+  <!-- Status banner (rendered conditionally from /status/banners.json in production; static placeholder here) -->
+  <!-- <div class="bg-amber-500/10 border-b border-amber-500/30 text-amber-200 text-center py-2 text-sm">
+    ⚠️ Versão em desenvolvimento — release v1.0.0 prevista para maio/2026.
+  </div> -->
+
+  <header class="border-b border-zinc-800">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <span class="text-2xl font-bold text-primary">FEC</span>
+        <span class="text-zinc-400 hidden md:inline">Formação de Engenharia de Contexto</span>
+      </a>
+      <div class="flex items-center gap-6 text-sm">
+        <a href="curso/trilha1/index.html" class="hover:text-primary transition">Começar</a>
+        <a href="ESCOPO.md" class="hover:text-primary transition">Escopo</a>
+        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" class="text-sky-400 hover:text-sky-300 transition">INEMA.CLUB</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-16">
+
+    <!-- Hero -->
+    <section class="mb-20">
+      <div class="max-w-3xl">
+        <p class="text-primary text-sm font-semibold tracking-wider uppercase mb-4">Curso master · PT-BR · Maio 2026</p>
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          Engenharia de Contexto<br>
+          <span class="text-primary">para quem leva LLM a produção.</span>
+        </h1>
+        <p class="text-xl text-zinc-300 mb-8 leading-relaxed">
+          A disciplina de projetar, montar, comprimir, persistir e avaliar a janela de contexto que um modelo recebe.
+          <strong class="text-zinc-100">Não é "prompt engineering" enfeitado.</strong>
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="curso/trilha1/index.html" class="inline-flex justify-start px-6 py-3 bg-primary text-zinc-900 font-semibold rounded hover:bg-yellow-300 transition">
+            Começar pela Trilha 1 →
+          </a>
+          <a href="PRE-REQUISITOS.md" class="inline-flex justify-start px-6 py-3 border border-zinc-700 text-zinc-200 rounded hover:bg-zinc-800 transition">
+            Pré-requisitos
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mapa das 6 trilhas -->
+    <section class="mb-20">
+      <h2 class="text-3xl font-bold mb-2">6 trilhas, 14 módulos</h2>
+      <p class="text-zinc-400 mb-8">10 módulos GA + 4 beta · 3 projetos cumulativos · ≥3 ilustrações por módulo · exercícios com teste automatizado.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <a href="curso/trilha1/index.html" class="block p-6 rounded-lg border border-emerald-500/30 bg-gradient-to-br from-emerald-900/30 to-zinc-900 hover:from-emerald-900/50 transition">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-emerald-400 text-xs font-semibold tracking-wider">T1</span>
+            <span class="text-zinc-500 text-xs">2 GA</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-emerald-400">Fundamentos de Contexto</h3>
+          <p class="text-sm text-zinc-400">Janela, atenção, "lost in the middle", tokens, custo, limites por modelo.</p>
+        </a>
+
+        <a href="curso/trilha2/index.html" class="block p-6 rounded-lg border border-blue-500/30 bg-gradient-to-br from-blue-900/30 to-zinc-900 hover:from-blue-900/50 transition">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-blue-400 text-xs font-semibold tracking-wider">T2</span>
+            <span class="text-zinc-500 text-xs">2 GA</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-blue-400">Engenharia da Mensagem</h3>
+          <p class="text-sm text-zinc-400">System prompt, few-shot, XML/JSON, ancoragem, versionamento, eval primer.</p>
+        </a>
+
+        <a href="curso/trilha3/index.html" class="block p-6 rounded-lg border border-purple-500/30 bg-gradient-to-br from-purple-900/30 to-zinc-900 hover:from-purple-900/50 transition">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-purple-400 text-xs font-semibold tracking-wider">T3</span>
+            <span class="text-zinc-500 text-xs">2 GA + 1 beta</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-purple-400">RAG e Recuperação</h3>
+          <p class="text-sm text-zinc-400">Chunking, embeddings, BM25/híbrido, reranking, contextual retrieval, citações.</p>
+        </a>
+
+        <a href="curso/trilha4/index.html" class="block p-6 rounded-lg border border-amber-500/30 bg-gradient-to-br from-amber-900/30 to-zinc-900 hover:from-amber-900/50 transition">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-amber-400 text-xs font-semibold tracking-wider">T4</span>
+            <span class="text-zinc-500 text-xs">2 GA + 1 beta</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-amber-400">Tools, Agentes e Multi-Agente</h3>
+          <p class="text-sm text-zinc-400">Function calling, ReAct, planner/executor, MCP, padrões multi-agente.</p>
+        </a>
+
+        <a href="curso/trilha5/index.html" class="block p-6 rounded-lg border border-teal-500/30 bg-gradient-to-br from-teal-900/30 to-zinc-900 hover:from-teal-900/50 transition">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-teal-400 text-xs font-semibold tracking-wider">T5</span>
+            <span class="text-zinc-500 text-xs">1 GA + 1 beta</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-teal-400">Memória e Compressão</h3>
+          <p class="text-sm text-zinc-400">Memória curto/longo prazo, summarização hierárquica, prompt caching, distillation.</p>
+        </a>
+
+        <a href="curso/trilha6/index.html" class="block p-6 rounded-lg border border-rose-500/30 bg-gradient-to-br from-rose-900/30 to-zinc-900 hover:from-rose-900/50 transition">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-rose-400 text-xs font-semibold tracking-wider">T6</span>
+            <span class="text-zinc-500 text-xs">1 GA + 1 beta</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-rose-400">Avaliação e Produção</h3>
+          <p class="text-sm text-zinc-400">Golden sets, LLM-as-judge, tracing, prompt injection, custo, A/B em produção.</p>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Diferenciais -->
+    <section class="mb-20">
+      <h2 class="text-3xl font-bold mb-8">Diferenciais editoriais</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-lg bg-zinc-900 border border-zinc-800">
+          <h3 class="text-lg font-bold mb-2 text-primary">Provider-neutral primeiro</h3>
+          <p class="text-sm text-zinc-400">Cada padrão é ensinado em forma agnóstica e materializado em provedor canônico do módulo, com adaptadores e mocks. <code class="text-xs">fec_sdk/</code> é cliente abstrato.</p>
+        </div>
+        <div class="p-6 rounded-lg bg-zinc-900 border border-zinc-800">
+          <h3 class="text-lg font-bold mb-2 text-primary">Toda alegação roda no harness</h3>
+          <p class="text-sm text-zinc-400">Datasets, judges e modelos pinados em <code class="text-xs">evals/v1/</code>. Sem cherry-pick: alegação numérica linka run-id auditável.</p>
+        </div>
+        <div class="p-6 rounded-lg bg-zinc-900 border border-zinc-800">
+          <h3 class="text-lg font-bold mb-2 text-primary">"Quando NÃO usar" obrigatório</h3>
+          <p class="text-sm text-zinc-400">RAG, agente, multi-agente, memória, caching — todo padrão tem seção sobre seus trade-offs e quando o aluno deve <em>não</em> aplicá-lo.</p>
+        </div>
+        <div class="p-6 rounded-lg bg-zinc-900 border border-zinc-800">
+          <h3 class="text-lg font-bold mb-2 text-primary">Exercícios com teste automatizado</h3>
+          <p class="text-sm text-zinc-400">Aluno roda <code class="text-xs">pytest</code> e sabe se passou. Sandbox jailed para todo lab que toca filesystem/processo/rede.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Status / disclaimer -->
+    <section class="mb-12 p-6 rounded-lg border border-amber-500/30 bg-amber-500/5">
+      <h3 class="text-lg font-bold text-amber-400 mb-2">Status do projeto</h3>
+      <p class="text-sm text-zinc-300 mb-3">
+        Em desenvolvimento ativo seguindo o <a href="PLAN.md" class="text-sky-400 underline">PLAN.md</a> (95 itens, endurecido por 5 rodadas adversariais).
+        v1.0.0 prevista para maio/2026.
+      </p>
+      <p class="text-xs text-zinc-500">
+        Canal canônico de download: asset nomeado <code>fec-vX.Y.Z.zip</code> da <a href="https://github.com/inematds/FEC/releases" class="text-sky-400 underline">GitHub Release</a>.
+        Os "Source code (zip/tar.gz)" auto-gerados pelo GitHub não são auditados.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-zinc-800 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <a href="https://inema.club" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> ·
+        Conteúdo CC BY-SA 4.0 · Código MIT · v1.0.0 (em desenvolvimento)
+      </div>
+      <div class="flex gap-6">
+        <a href="SECURITY.md" class="hover:text-zinc-300">Segurança</a>
+        <a href="CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>
+        <a href="CHANGELOG.md" class="hover:text-zinc-300">Changelog</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inematds.github.io/FEC/schemas/models.schema.json",
+  "title": "FEC Pinned Models",
+  "description": "Source of truth for pinned model identifiers per role per release. Generates MODELOS.md.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "release",
+    "roles"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "release": {
+      "type": "string",
+      "description": "Course release this pin set applies to (e.g. v1.0.0)."
+    },
+    "pinned_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "roles": {
+      "type": "object",
+      "required": [
+        "frontier",
+        "low_cost",
+        "oss"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "frontier": {
+          "$ref": "#/$defs/model"
+        },
+        "low_cost": {
+          "$ref": "#/$defs/model"
+        },
+        "oss": {
+          "$ref": "#/$defs/model"
+        }
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "model": {
+      "type": "object",
+      "required": [
+        "provider",
+        "id",
+        "tested_on"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": [
+            "anthropic",
+            "openai",
+            "google",
+            "ollama",
+            "vllm",
+            "huggingface"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "description": "Provider-specific model identifier (e.g. claude-sonnet-4-6, gpt-5-mini, qwen2.5-7b-instruct@q4_K_M)."
+        },
+        "tested_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "context_window": {
+          "type": "integer"
+        },
+        "pricing_input_per_mtok": {
+          "type": "number"
+        },
+        "pricing_output_per_mtok": {
+          "type": "number"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

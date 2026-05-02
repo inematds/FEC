@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== INEMA design system — base ===== */
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { font-feature-settings: "ss01", "cv11"; }
+
+  pre, code { font-family: theme('fontFamily.mono'); }
+  pre { @apply p-4 bg-zinc-950 border border-zinc-800 rounded text-sm overflow-x-auto; }
+  :not(pre) > code { @apply text-primary text-sm bg-zinc-900 px-1.5 py-0.5 rounded; }
+
+  h1, h2, h3, h4 { @apply text-zinc-50 font-bold; }
+}
+
+/* ===== Cores por trilha ===== */
+@layer components {
+  .trilha-T1 { @apply text-emerald-400; }
+  .trilha-T2 { @apply text-blue-400; }
+  .trilha-T3 { @apply text-purple-400; }
+  .trilha-T4 { @apply text-amber-400; }
+  .trilha-T5 { @apply text-teal-400; }
+  .trilha-T6 { @apply text-rose-400; }
+
+  /* Card de módulo (index de trilha) */
+  .modulo-card {
+    @apply block p-6 rounded-lg border bg-gradient-to-br from-zinc-900/50 to-zinc-900 hover:from-zinc-800/50 transition;
+  }
+
+  /* Indicador numérico de tópico (regra crítica INEMA: nunca usar setas) */
+  .topico-numero {
+    @apply w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold;
+  }
+
+  /* Botão padrão */
+  .btn { @apply inline-flex justify-start px-4 py-2 rounded font-semibold transition; }
+  .btn-primary { @apply btn bg-primary text-zinc-900 hover:bg-yellow-300; }
+  .btn-outline { @apply btn border border-zinc-700 text-zinc-200 hover:bg-zinc-800; }
+
+  /* Tópico expansível */
+  .topico-expansivel { @apply border-b border-zinc-800 py-4; }
+  .topico-expansivel summary { @apply cursor-pointer flex items-center gap-3 text-lg font-semibold list-none; }
+  .topico-expansivel summary::-webkit-details-marker { display: none; }
+
+  /* Subseções INEMA (3 obrigatórias) */
+  .subsecao-inema { @apply mt-3 ml-9; }
+  .subsecao-inema h4 { @apply text-sm uppercase tracking-wider text-zinc-500 mb-1; }
+
+  /* Quando NÃO usar */
+  .quando-nao-usar {
+    @apply mt-6 p-4 rounded border border-red-500/30 bg-red-900/10;
+  }
+  .quando-nao-usar h4 { @apply text-red-400 text-sm font-semibold mb-2; }
+
+  /* Bloco de evidência (linka run-id do harness) */
+  .evidencia {
+    @apply text-xs text-zinc-500 mt-2;
+  }
+  .evidencia a { @apply text-sky-400 underline; }
+}
+
+/* ===== Light mode (override) ===== */
+@media (prefers-color-scheme: light) {
+  body { @apply bg-zinc-50 text-zinc-900; }
+  h1, h2, h3, h4 { @apply text-zinc-900; }
+  pre { @apply bg-zinc-100 border-zinc-200 text-zinc-800; }
+  :not(pre) > code { @apply bg-zinc-100 text-yellow-700; }
+
+  .trilha-T1 { color: #047857; }
+  .trilha-T2 { color: #1d4ed8; }
+  .trilha-T3 { color: #7e22ce; }
+  .trilha-T4 { color: #92400e; } /* mais escuro — tom -800 (regra INEMA) */
+  .trilha-T5 { color: #0f766e; }
+  .trilha-T6 { color: #9f1239; }   /* mais escuro — tom -800 */
+
+  .text-primary { color: #a16207; }
+  .text-sky-400 { color: #0369a1 !important; }
+}

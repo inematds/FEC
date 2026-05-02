@@ -1,0 +1,105 @@
+# ci-fast.yml — bloqueante em PR e push, alvo <90s wall (PLAN item 46).
+# Não recebe secrets. Forks rodam aqui sem credenciais.
+
+name: ci-fast
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ci-fast-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate INEMA structure + schemas
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v5  # PIN exato no release.yml — aqui float aceitável; pinact migra.
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install jsonschema pyyaml
+      - name: Validate JSON schemas (canonical manifests)
+        run: python scripts/validate-schemas.py
+      - name: Validate INEMA structure (≥6 expandable subtopics, 3 INEMA subsections, etc.)
+        run: python scripts/validate.py
+      - name: Internal link checker (only repo-relative)
+        run: python scripts/check-internal-links.py
+
+  lint-content:
+    name: Lint content (XSS sanitization checks)
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r scripts/requirements.txt || true
+      - name: Lint content (no <script>, no on*=, no javascript:, no <iframe> without sandbox)
+        run: python scripts/lint-content.py --mode=block
+
+  python-tests:
+    name: Python lint + sandbox tests + mocked provider contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install ruff pytest respx
+      - name: Ruff
+        run: ruff check fec_sdk/ exercicios/ exemplos/ scripts/
+      - name: Sandbox traversal battery (PLAN item 62a)
+        run: pytest tests/sandbox/ -v
+      - name: Mocked provider contract tests (no network, no secrets)
+        run: pytest tests/contracts/ -v
+
+  secret-scanning:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  freeze-evals:
+    name: Freeze evals (immutability check)
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Verify HASHES.lock matches current evals/v1/ content
+        run: python scripts/freeze-evals.py --verify
+
+  budgets:
+    name: Asset/CI budgets (block release)
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Check zip/SVG/Mermaid budgets (PLAN item 91)
+        run: python scripts/check-budgets.py

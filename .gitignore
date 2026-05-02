@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Node
+node_modules/
+.npm/
+dist-node/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Build outputs
+docs/dashboard.html.tmp
+assets/css/inema.css.map
+
+# Local secrets / credentials — NEVER commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Per-user fec_sdk state
+~/.fec/
+.fec.local.json
+
+# OS
+*.log
+*.tmp
+
+# Claude Code / claudex local tooling state (transcripts redundantes com RELATORIO-CLAUDEX.md)
+.claude/
+
+# Dataset caches (download once, don't commit large)
+fixtures-external/
+*.cache/
+
+# Playwright / Mermaid
+test-results/
+playwright-report/
+.mermaid-cache/
+
+# Release artifacts (built into releases/v<X.Y.Z>/, but binary builds excluded)
+releases/v*/dist/
+*.whl
+*.tar.gz
+*.zip
+!releases/CHECKSUMS-*.txt

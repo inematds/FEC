@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schemas/budgets.schema.json",
+  "schema_version": "1",
+  "currency": "USD",
+  "tiers": {
+    "auto_smoke": {
+      "per_provider_per_day": 0.50,
+      "per_provider_per_month": 10.00,
+      "providers": ["anthropic", "openai", "google"],
+      "key_secret_name": "FEC_SMOKE_LOWPRIV",
+      "native_cap_required": true
+    },
+    "production_smoke": {
+      "per_run_max": 5.00,
+      "monthly_cap": 20.00,
+      "key_secret_name": "FEC_SMOKE_PROD",
+      "environment": "production-smoke"
+    },
+    "release": {
+      "monthly_cap": 10.00,
+      "environment": "release"
+    }
+  },
+  "totals": {
+    "target_monthly": 60.00,
+    "alert_threshold_pct": 80,
+    "kill_threshold_pct": 100
+  },
+  "github_actions": {
+    "minutes_per_month": 2000,
+    "alert_at_pct": 70
+  }
+}

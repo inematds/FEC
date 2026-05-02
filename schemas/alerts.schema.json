@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inematds.github.io/FEC/schemas/alerts.schema.json",
+  "title": "FEC Alert Mapping",
+  "description": "metric \u2192 severity \u2192 owner \u2192 action. Generates ALERTS.md and is consumed by dashboard.py.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "alerts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "alerts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "metric",
+          "condition",
+          "severity",
+          "owner_role",
+          "action",
+          "runbook"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Z0-9-]+$"
+          },
+          "metric": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string",
+            "description": "Human-readable trigger condition."
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "SEV-1",
+              "SEV-2",
+              "SEV-3"
+            ]
+          },
+          "owner_role": {
+            "type": "string",
+            "enum": [
+              "on-call-primary",
+              "on-call-secondary",
+              "maintainer",
+              "security"
+            ]
+          },
+          "action": {
+            "type": "string"
+          },
+          "runbook": {
+            "type": "string",
+            "description": "Path under runbooks/ relative to repo root."
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "github-issue",
+                "discord",
+                "slack",
+                "email",
+                "pagerduty"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  }
+}

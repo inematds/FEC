@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inematds.github.io/FEC/schemas/budgets.schema.json",
+  "title": "FEC Budgets",
+  "description": "Coherent per-tier and per-provider budget definitions for smoke and release workflows. Generates BUDGETS.md.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "currency",
+    "tiers",
+    "totals"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "currency": {
+      "type": "string",
+      "const": "USD"
+    },
+    "tiers": {
+      "type": "object",
+      "required": [
+        "auto_smoke",
+        "production_smoke",
+        "release"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "auto_smoke": {
+          "type": "object",
+          "required": [
+            "per_provider_per_day",
+            "per_provider_per_month",
+            "providers"
+          ],
+          "properties": {
+            "per_provider_per_day": {
+              "type": "number",
+              "minimum": 0
+            },
+            "per_provider_per_month": {
+              "type": "number",
+              "minimum": 0
+            },
+            "providers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "key_secret_name": {
+              "type": "string",
+              "const": "FEC_SMOKE_LOWPRIV"
+            },
+            "native_cap_required": {
+              "type": "boolean",
+              "const": true
+            }
+          }
+        },
+        "production_smoke": {
+          "type": "object",
+          "required": [
+            "per_run_max",
+            "monthly_cap"
+          ],
+          "properties": {
+            "per_run_max": {
+              "type": "number"
+            },
+            "monthly_cap": {
+              "type": "number"
+            },
+            "key_secret_name": {
+              "type": "string",
+              "const": "FEC_SMOKE_PROD"
+            },
+            "environment": {
+              "type": "string",
+              "const": "production-smoke"
+            }
+          }
+        },
+        "release": {
+          "type": "object",
+          "required": [
+            "monthly_cap"
+          ],
+          "properties": {
+            "monthly_cap": {
+              "type": "number"
+            },
+            "environment": {
+              "type": "string",
+              "const": "release"
+            }
+          }
+        }
+      }
+    },
+    "totals": {
+      "type": "object",
+      "required": [
+        "target_monthly",
+        "alert_threshold_pct",
+        "kill_threshold_pct"
+      ],
+      "properties": {
+        "target_monthly": {
+          "type": "number",
+          "minimum": 0
+        },
+        "alert_threshold_pct": {
+          "type": "integer",
+          "minimum": 50,
+          "maximum": 95,
+          "default": 80
+        },
+        "kill_threshold_pct": {
+          "type": "integer",
+          "minimum": 90,
+          "maximum": 100,
+          "default": 100
+        }
+      }
+    },
+    "github_actions": {
+      "type": "object",
+      "properties": {
+        "minutes_per_month": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "alert_at_pct": {
+          "type": "integer"
+        }
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  }
+}

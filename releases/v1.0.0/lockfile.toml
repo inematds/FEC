@@ -1,0 +1,60 @@
+# Lockfile da release v1.0.0 — PLAN item 82.
+#
+# Gerado por: scripts/build-lockfile.sh (a implementar)
+# - Usa `uv pip compile` ou `pip-compile --generate-hashes`.
+# - Pinned exato + sha256 de cada wheel.
+#
+# Este arquivo NÃO deve ser editado à mão.
+# Para upgrade: roda o script, commita resultado.
+
+[lockfile]
+schema_version = "1"
+release = "v1.0.0"
+generated_at = "2026-05-02T00:00:00Z"
+python_version_window = ["3.11", "3.12"]
+
+# Hash do próprio fec_sdk publicado neste release
+[fec_sdk]
+version = "1.0.0"
+wheel = "fec_sdk-1.0.0-py3-none-any.whl"
+sha256 = "PENDING"  # gerado pelo release.yml com SOURCE_DATE_EPOCH fixado
+blake3 = "PENDING"
+sdist_sha256 = "PENDING"
+
+# Dependências runtime — versões e hashes pinados.
+# (Estes hashes serão preenchidos quando o release.yml rodar contra os índices PyPI reais.)
+[[deps]]
+name = "httpx"
+version = "0.27.2"
+hash = "PENDING"
+
+[[deps]]
+name = "pydantic"
+version = "2.9.2"
+hash = "PENDING"
+
+[[deps]]
+name = "tenacity"
+version = "9.0.0"
+hash = "PENDING"
+
+# Optional extras pinned per provider — usuário escolhe via `pip install fec-sdk[anthropic]`
+[extras.anthropic]
+deps = [
+  { name = "anthropic", version = "0.40.0", hash = "PENDING" },
+]
+
+[extras.openai]
+deps = [
+  { name = "openai", version = "1.51.2", hash = "PENDING" },
+]
+
+[extras.google]
+deps = [
+  { name = "google-generativeai", version = "0.8.3", hash = "PENDING" },
+]
+
+[extras.ollama]
+deps = [
+  { name = "ollama", version = "0.5.1", hash = "PENDING" },
+]

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inematds.github.io/FEC/schemas/risk-acceptance.schema.json",
+  "title": "FEC Risk Acceptance Registry",
+  "description": "Named risk acceptances for severity:high issues that ship to stable with workarounds. Consumed by check-rc-gates.py.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "acceptances"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "acceptances": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "issue",
+          "release",
+          "severity",
+          "class",
+          "workaround",
+          "signers",
+          "release_notes_disclosure",
+          "expires_at"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^RISK-\\d{4}-\\d{3}$"
+          },
+          "issue": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to GitHub issue."
+          },
+          "release": {
+            "type": "string",
+            "description": "Course release this acceptance applies to."
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "severity:high"
+            ]
+          },
+          "class": {
+            "type": "string",
+            "description": "Class blocking classes (security, data-integrity, sandbox, licensing, lab-breaking, injection-bypass) MUST NOT appear here.",
+            "enum": [
+              "a11y",
+              "ux",
+              "performance",
+              "doc-clarity",
+              "minor-bug",
+              "compat-edge",
+              "other"
+            ]
+          },
+          "workaround": {
+            "type": "string"
+          },
+          "signers": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": [
+                "maintainer",
+                "signed_at"
+              ],
+              "properties": {
+                "maintainer": {
+                  "type": "string"
+                },
+                "signed_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          "release_notes_disclosure": {
+            "type": "string",
+            "description": "Exact text to appear under Known Issues."
+          },
+          "site_banner": {
+            "type": "boolean",
+            "default": true
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Acceptance auto-expires; must be re-signed if not resolved."
+          }
+        }
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inematds.github.io/FEC/schemas/capabilities.schema.json",
+  "title": "FEC Provider Capabilities Matrix",
+  "description": "capability \u00d7 provider \u00d7 status. Generates CAPACIDADES.md.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "capabilities"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "providers"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "taught_in_modules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "providers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "native",
+                    "adapter",
+                    "mock",
+                    "not_supported"
+                  ]
+                },
+                "since": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "doc_url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "fec_sdk_module": {
+                  "type": "string"
+                },
+                "notes": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  }
+}

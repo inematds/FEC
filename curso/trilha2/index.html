@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T2 — Engenharia da Mensagem · FEC</title>
+  <link rel="stylesheet" href="../../assets/css/inema.css">
+  <meta name="trilha" content="T2">
+  <meta name="status" content="GA">
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="GA">
+  <header class="border-b border-zinc-800">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../../index.html" class="flex items-center gap-3"><span class="text-2xl font-bold text-primary">FEC</span><span class="text-zinc-400 text-sm">/ T2 Mensagem</span></a>
+      <div class="flex items-center gap-6 text-sm"><a href="../../index.html" class="hover:text-primary">← Trilhas</a><a href="https://inema.club" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></div>
+    </nav>
+  </header>
+  <main class="max-w-5xl mx-auto px-6 py-12">
+    <section class="mb-10">
+      <p class="text-blue-400 text-sm font-semibold tracking-wider uppercase mb-2">Trilha 2</p>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Engenharia da Mensagem</h1>
+      <p class="text-lg text-zinc-300 mb-6 max-w-2xl">System prompt, few-shot, CoT, formato XML/JSON, ordem de seções, ancoragem, versionamento de prompt, e o eval primer (toda mudança de prompt entra com mini-eval).</p>
+      <div class="flex gap-3 text-xs">
+        <span class="px-3 py-1 bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded">2 módulos GA</span>
+        <span class="px-3 py-1 bg-zinc-800 border border-zinc-700 text-zinc-300 rounded">~3-4h</span>
+      </div>
+    </section>
+
+    <h2 class="text-2xl font-bold mb-6">Módulos</h2>
+    <div class="space-y-4">
+      <details class="topico-expansivel border border-blue-500/30 rounded-lg bg-zinc-900 p-5" open>
+        <summary class="cursor-pointer flex items-center gap-3 text-lg font-semibold list-none">
+          <span class="topico-numero bg-blue-500/20 border border-blue-500/30 text-blue-400">1</span>
+          <span class="text-blue-400">2.1 — Estrutura da mensagem: system, few-shot, XML/JSON, ancoragem</span>
+          <span class="ml-auto text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">GA</span>
+        </summary>
+        <div class="subsecao-inema">
+          <h4>O que é</h4><p class="text-sm">A anatomia de uma mensagem bem-engenhada — as 5 seções estáveis, formato declarativo, exemplos few-shot.</p>
+          <h4 class="mt-3">Por que aprender</h4><p class="text-sm">Engenheiros que mandam "string solta" entregam resultados imprevisíveis. Estrutura é a primeira alavanca de qualidade.</p>
+          <h4 class="mt-3">Conceitos-chave</h4><p class="text-sm">System prompt, few-shot, XML/JSON tags, ancoragem da pergunta no fim, instruction at the end pattern.</p>
+        </div>
+        <div class="mt-4"><a href="modulo-2-1.html" class="btn btn-primary">Ver completo →</a></div>
+      </details>
+
+      <details class="topico-expansivel border border-blue-500/30 rounded-lg bg-zinc-900 p-5">
+        <summary class="cursor-pointer flex items-center gap-3 text-lg font-semibold list-none">
+          <span class="topico-numero bg-blue-500/20 border border-blue-500/30 text-blue-400">2</span>
+          <span class="text-blue-400">2.2 — Templates, versionamento de prompt e eval primer</span>
+          <span class="ml-auto text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded">GA</span>
+        </summary>
+        <div class="subsecao-inema">
+          <h4>O que é</h4><p class="text-sm">Prompts viram código: tem versão, diff, teste. Toda mudança em prompt deve passar por mini-eval no harness.</p>
+          <h4 class="mt-3">Por que aprender</h4><p class="text-sm">Sem versionamento, regressão silenciosa é certeza. Eval primer estabelece a disciplina antes de T6.</p>
+          <h4 class="mt-3">Conceitos-chave</h4><p class="text-sm">Prompt as code, semantic versioning, golden set, regression eval, A/B em prompt.</p>
+        </div>
+        <div class="mt-4"><a href="modulo-2-2.html" class="btn btn-primary">Ver completo →</a></div>
+      </details>
+    </div>
+
+    <section class="mt-12 p-6 rounded-lg border border-amber-500/30 bg-amber-900/10">
+      <h3 class="text-amber-400 font-bold mb-2">⚠️ Conteúdo em desenvolvimento</h3>
+      <p class="text-sm text-zinc-200">Esta trilha está sendo escrita. T1 é o piloto completo. T2-T6 entram em ondas conforme o cronograma do <a href="../../PLAN.md" class="text-sky-400 underline">PLAN.md</a>.</p>
+    </section>
+
+  </main>
+  <footer class="border-t border-zinc-800 mt-16"><div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500"><a href="https://inema.club" class="text-sky-400">INEMA.CLUB</a> · CC BY-SA 4.0 + MIT</div></footer>
+</body></html>

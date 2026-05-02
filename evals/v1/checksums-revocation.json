@@ -1,0 +1,5 @@
+{
+  "$schema": "../../schemas/checksums-revocation.schema.json",
+  "schema_version": "1",
+  "revoked": []
+}

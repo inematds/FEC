@@ -1,0 +1,52 @@
+# CODEOWNERS — caminhos que exigem aprovação de maintainer
+# Sintaxe: <pattern> <@user|@org/team>
+#
+# Substitua @inematds/maintainers pelo time real antes da v1.0.
+# A política está em PLAN.md item 48a (segurança de CI) e 28a (imutabilidade do harness).
+
+# Workflows e scripts críticos — qualquer mudança exige review
+/.github/workflows/                @inematds/maintainers
+/scripts/smoke-providers.py        @inematds/maintainers
+/scripts/redact.py                 @inematds/maintainers
+/scripts/sign-manifest.py          @inematds/maintainers
+/scripts/release-*.py              @inematds/maintainers
+/scripts/rollback-pages.py         @inematds/maintainers
+
+# Harness de avaliação — imutabilidade verificável (item 28a)
+/evals/                            @inematds/maintainers
+/schemas/                          @inematds/maintainers
+
+# Manifestos canônicos machine-readable (item 95)
+/evals/v1/compat.json              @inematds/maintainers
+/evals/v1/revoked_versions.json    @inematds/maintainers
+/evals/v1/budgets.json             @inematds/maintainers
+/evals/v1/models.json              @inematds/maintainers
+/evals/v1/capabilities.json        @inematds/maintainers
+/evals/v1/alerts.json              @inematds/maintainers
+/evals/v1/risk-acceptance.json     @inematds/maintainers
+/evals/v1/checksums-revocation.json @inematds/maintainers
+/evals/v1/SMOKE-KILLSWITCH.json    @inematds/maintainers
+/evals/v1/HASHES.lock              @inematds/maintainers
+
+# Markdown gerado dos JSONs — não editar à mão; protegido para evitar drift
+/COMPAT.md                         @inematds/maintainers
+/MODELOS.md                        @inematds/maintainers
+/CAPACIDADES.md                    @inematds/maintainers
+/RISK-ACCEPTANCE.md                @inematds/maintainers
+/CHECKSUMS-REVOCATION.md           @inematds/maintainers
+/ALERTS.md                         @inematds/maintainers
+
+# Lockfiles de release
+/releases/                         @inematds/maintainers
+
+# Decisões arquiteturais sensíveis
+/HOSTING-DECISION.md               @inematds/maintainers
+/BREAK-GLASS.md                    @inematds/maintainers
+/SECURITY.md                       @inematds/maintainers
+/SECURITY-SANDBOX.md               @inematds/maintainers
+/SAFETY-INJECTION.md               @inematds/maintainers
+
+# fec_sdk core (sandbox, check_compat) — review obrigatório
+/fec_sdk/sandbox/                  @inematds/maintainers
+/fec_sdk/__init__.py               @inematds/maintainers
+/fec_sdk/check_compat.py           @inematds/maintainers

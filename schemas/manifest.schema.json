@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inematds.github.io/FEC/schemas/manifest.schema.json",
+  "title": "FEC Eval Run Manifest",
+  "description": "Content-addressed run manifest under evals/v1/runs/<run-id>/manifest.json. Records what was tested with what.",
+  "type": "object",
+  "required": [
+    "schema_version", "run_id", "issued_at", "harness_version",
+    "dataset", "judge", "model", "module_prompt", "fec_sdk", "metrics"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "run_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "harness_version": { "type": "string" },
+    "dataset": {
+      "type": "object",
+      "required": ["id", "sha256"],
+      "properties": {
+        "id": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "n_examples": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "judge": {
+      "type": "object",
+      "required": ["id", "sha256"],
+      "properties": {
+        "id": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "calibration_kappa": { "type": "number" }
+      }
+    },
+    "model": {
+      "type": "object",
+      "required": ["provider", "id", "temperature", "seed"],
+      "properties": {
+        "provider": { "type": "string" },
+        "id": { "type": "string" },
+        "temperature": { "type": "number" },
+        "seed": { "type": "integer" }
+      }
+    },
+    "module_prompt": {
+      "type": "object",
+      "required": ["module_id", "sha256"],
+      "properties": {
+        "module_id": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "fec_sdk": {
+      "type": "object",
+      "required": ["version", "wheel_sha256"],
+      "properties": {
+        "version": { "type": "string" },
+        "wheel_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": { "type": "number" }
+    },
+    "cost_usd": { "type": "number", "minimum": 0 },
+    "wall_time_seconds": { "type": "number", "minimum": 0 }
+  }
+}

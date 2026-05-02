@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/compat.schema.json",
+  "schema_version": "1",
+  "support_window": {
+    "course_releases": ["v1.0.0"],
+    "fec_sdk_minors": ["1.0", "1.1"],
+    "python_minors": ["3.11", "3.12"],
+    "provider_sdk_minors": {
+      "anthropic": ["0.40", "0.41"],
+      "openai": ["1.50", "1.51"],
+      "google": ["0.8", "0.9"],
+      "ollama": ["0.5", "0.6"]
+    }
+  },
+  "core_combinations": [],
+  "extended_combinations": []
+}

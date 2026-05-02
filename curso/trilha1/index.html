@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T1 — Fundamentos de Contexto · FEC</title>
+  <link rel="stylesheet" href="../../assets/css/inema.css">
+  <meta name="trilha" content="T1">
+  <meta name="status" content="GA">
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="GA">
+
+  <header class="border-b border-zinc-800">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../../index.html" class="flex items-center gap-3">
+        <span class="text-2xl font-bold text-primary">FEC</span>
+        <span class="text-zinc-400 text-sm">/ T1 Fundamentos</span>
+      </a>
+      <div class="flex items-center gap-6 text-sm">
+        <a href="../../index.html" class="hover:text-primary transition">← Trilhas</a>
+        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" class="text-sky-400 hover:text-sky-300 transition">INEMA.CLUB</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-12">
+
+    <section class="mb-10">
+      <p class="text-emerald-400 text-sm font-semibold tracking-wider uppercase mb-2">Trilha 1</p>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Fundamentos de Contexto</h1>
+      <p class="text-lg text-zinc-300 mb-6 max-w-2xl">
+        A janela de contexto, atenção e o fenômeno "lost in the middle". Tokens, custo, e os limites práticos
+        por modelo. Esta trilha é pré-requisito de todas as outras.
+      </p>
+      <div class="flex gap-3 text-xs">
+        <span class="px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded">2 módulos GA</span>
+        <span class="px-3 py-1 bg-zinc-800 border border-zinc-700 text-zinc-300 rounded">~3-4h</span>
+        <span class="px-3 py-1 bg-zinc-800 border border-zinc-700 text-zinc-300 rounded">builder solo · eng. produto · eng. plataforma</span>
+      </div>
+    </section>
+
+    <!-- Resultado de aprendizagem da trilha (PLAN item 4) -->
+    <section class="mb-12 p-6 rounded-lg border border-emerald-500/30 bg-emerald-900/10">
+      <h2 class="text-xl font-bold text-emerald-400 mb-2">Ao final desta trilha, você consegue:</h2>
+      <ul class="list-disc ml-6 space-y-1 text-sm text-zinc-200">
+        <li>Decompor uma mensagem entrante em tokens, prever custo e latência aproximados.</li>
+        <li>Reconhecer o fenômeno "lost in the middle" e as estratégias de mitigação validadas no harness FEC-EVAL-v1.</li>
+        <li>Escolher o modelo certo (frontier / low-cost / OSS) para um caso dado, com base em janela, custo e capacidade.</li>
+        <li>Configurar `fec_sdk` em ambiente local e rodar o `selftest()`.</li>
+      </ul>
+    </section>
+
+    <!-- Cards de módulos (regra crítica INEMA: cada card linka para modulo-X-Y.html via "Ver Completo") -->
+    <h2 class="text-2xl font-bold mb-6">Módulos</h2>
+
+    <div class="space-y-4">
+
+      <details class="topico-expansivel border border-emerald-500/30 rounded-lg bg-zinc-900 p-5" open>
+        <summary class="cursor-pointer flex items-center gap-3 text-lg font-semibold list-none">
+          <span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">1</span>
+          <span class="text-emerald-400">1.1 — Janela de contexto, atenção e "lost in the middle"</span>
+          <span class="ml-auto text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded">GA</span>
+        </summary>
+        <div class="subsecao-inema">
+          <h4>O que é</h4>
+          <p class="text-sm text-zinc-300">A janela de contexto é a quantidade total de tokens que um modelo "lê" em uma chamada. Atenção é o mecanismo que pondera quais tokens importam para gerar cada token de saída.</p>
+          <h4 class="mt-3">Por que aprender</h4>
+          <p class="text-sm text-zinc-300">Sem entender atenção, você não sabe por que prompts longos degradam — e cai no anti-padrão de "jogar tudo no contexto" assumindo que o modelo dá peso uniforme.</p>
+          <h4 class="mt-3">Conceitos-chave</h4>
+          <p class="text-sm text-zinc-300">Janela, posição, atenção causal, "lost in the middle" (Liu et al. 2023), prefix bias.</p>
+        </div>
+        <div class="mt-4">
+          <a href="modulo-1-1.html" class="btn btn-primary">Ver completo →</a>
+          <span class="text-xs text-zinc-500 ml-3">~30 min leitura + 30 min lab</span>
+        </div>
+      </details>
+
+      <details class="topico-expansivel border border-emerald-500/30 rounded-lg bg-zinc-900 p-5">
+        <summary class="cursor-pointer flex items-center gap-3 text-lg font-semibold list-none">
+          <span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">2</span>
+          <span class="text-emerald-400">1.2 — Tokens, custo e limites práticos por modelo</span>
+          <span class="ml-auto text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded">GA</span>
+        </summary>
+        <div class="subsecao-inema">
+          <h4>O que é</h4>
+          <p class="text-sm text-zinc-300">Tokens são as unidades de cobrança e medida de janela. Cada provedor tem um tokenizer diferente; preço por 1M tokens varia em ~50× entre frontier e low-cost.</p>
+          <h4 class="mt-3">Por que aprender</h4>
+          <p class="text-sm text-zinc-300">Engenharia de contexto sem cálculo de custo é wishful thinking. Aqui você aprende a estimar antes de mandar a chamada.</p>
+          <h4 class="mt-3">Conceitos-chave</h4>
+          <p class="text-sm text-zinc-300">Tokenização BPE/SentencePiece, contexto efetivo vs. nominal, KV cache, billing input vs. output.</p>
+        </div>
+        <div class="mt-4">
+          <a href="modulo-1-2.html" class="btn btn-primary">Ver completo →</a>
+          <span class="text-xs text-zinc-500 ml-3">~25 min leitura + 30 min lab</span>
+        </div>
+      </details>
+
+    </div>
+
+    <section class="mt-16 p-6 rounded-lg border border-zinc-800 bg-zinc-900/50">
+      <h3 class="text-lg font-bold mb-2">Bibliografia da trilha</h3>
+      <p class="text-sm text-zinc-400 mb-3">Referências datadas, congeladas na release. Para versão atualizada, ver `bibliografia/T1.md`.</p>
+      <a href="../../bibliografia/T1.md" class="btn btn-outline">Bibliografia T1 →</a>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-zinc-800 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
+      <div><a href="https://inema.club" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> · CC BY-SA 4.0 + MIT</div>
+      <div class="flex gap-6">
+        <a href="../../SECURITY.md" class="hover:text-zinc-300">Segurança</a>
+        <a href="../../CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!--
+  Banner de deprecação — incluído condicionalmente em index.html / módulos via PR
+  durante incidente. PLAN item 78.1.
+
+  Variáveis a substituir antes de mergear:
+    {{VERSAO_AFETADA}}, {{SEVERIDADE}}, {{SUCESSOR}}, {{ADVISORY_URL}}, {{DATA}}
+
+  Para usar: copiar este bloco para o início do <body> do arquivo afetado, dentro
+  de <header> ou imediatamente após a abertura do <body>.
+-->
+<aside class="bg-red-500/15 border-b border-red-500/40 text-red-200 text-center py-3 text-sm" role="alert" data-banner="deprecation">
+  <strong class="text-red-300">⚠️ {{VERSAO_AFETADA}} foi deprecada</strong>
+  <span class="hidden md:inline"> — atualize para
+    <a href="../{{SUCESSOR}}/" class="underline text-red-100">{{SUCESSOR}}</a>.
+  </span>
+  <a href="{{ADVISORY_URL}}" class="underline text-red-100 ml-2">advisory</a>
+  <span class="text-zinc-400 ml-2">({{DATA}})</span>
+</aside>

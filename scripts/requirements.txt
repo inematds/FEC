@@ -1,0 +1,9 @@
+# Deps mínimas dos scripts de CI. Pinadas com lower bound; lockfile da release fixa exatas.
+jsonschema>=4.21
+pyyaml>=6.0
+httpx>=0.27
+ruff>=0.6
+pytest>=8
+respx>=0.21
+beautifulsoup4>=4.12
+markdown-it-py>=3.0

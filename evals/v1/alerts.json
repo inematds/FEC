@@ -1,0 +1,106 @@
+{
+  "$schema": "../../schemas/alerts.schema.json",
+  "schema_version": "1",
+  "alerts": [
+    {
+      "id": "AUTO-SMOKE-FAIL-2D",
+      "metric": "auto_smoke.consecutive_failures",
+      "condition": ">=2 consecutive scheduled runs failing",
+      "severity": "SEV-2",
+      "owner_role": "on-call-primary",
+      "action": "Diagnose with runbooks/smoke-failure.md within 24h business hours.",
+      "runbook": "runbooks/smoke-failure.md",
+      "channels": ["github-issue", "discord"]
+    },
+    {
+      "id": "AUTO-SMOKE-MISSED",
+      "metric": "auto_smoke.last_run_age_hours",
+      "condition": ">26h without a scheduled run (workflow silently disabled)",
+      "severity": "SEV-2",
+      "owner_role": "on-call-primary",
+      "action": "Re-enable workflow and investigate.",
+      "runbook": "runbooks/smoke-failure.md",
+      "channels": ["github-issue"]
+    },
+    {
+      "id": "GITLEAKS-MAINTAINER-PR",
+      "metric": "gitleaks.blocked_in_maintainer_pr",
+      "condition": "Any block in CI-fast on a maintainer PR",
+      "severity": "SEV-1",
+      "owner_role": "security",
+      "action": "Immediate key rotation + audit. Use BREAK-GLASS.md if needed.",
+      "runbook": "runbooks/secret-exposure.md",
+      "channels": ["github-issue", "discord", "email"]
+    },
+    {
+      "id": "BUDGET-80",
+      "metric": "budget.monthly_used_pct",
+      "condition": ">80% and <100%",
+      "severity": "SEV-3",
+      "owner_role": "maintainer",
+      "action": "Warning + Check Run neutral. Investigate cost spike.",
+      "runbook": "runbooks/smoke-failure.md",
+      "channels": ["discord"]
+    },
+    {
+      "id": "BUDGET-100",
+      "metric": "budget.monthly_used_pct",
+      "condition": ">=100%",
+      "severity": "SEV-2",
+      "owner_role": "maintainer",
+      "action": "Provider native cap engaged. Bot opens kill-switch PR. Promotion blocked.",
+      "runbook": "runbooks/smoke-failure.md",
+      "channels": ["github-issue", "discord"]
+    },
+    {
+      "id": "ZENODO-DOWN-AT-RELEASE",
+      "metric": "synthetic.zenodo_status",
+      "condition": "Zenodo unreachable during release publication",
+      "severity": "SEV-2",
+      "owner_role": "maintainer",
+      "action": "Publish GitHub Release first; retry Zenodo when available; checksums must still match.",
+      "runbook": "runbooks/zenodo-down.md",
+      "channels": ["github-issue"]
+    },
+    {
+      "id": "PYPI-INSTALL-FAIL",
+      "metric": "synthetic.pypi_install",
+      "condition": "3 consecutive failures of pip install --require-hashes in clean venv",
+      "severity": "SEV-1",
+      "owner_role": "on-call-primary",
+      "action": "Canonical install path broken. Check checksum revocation list and PyPI metadata.",
+      "runbook": "runbooks/pypi-down.md",
+      "channels": ["github-issue", "discord"]
+    },
+    {
+      "id": "PAGES-CHECKSUM-DRIFT",
+      "metric": "synthetic.pages_checksum_match",
+      "condition": "Served HTML sha256 differs from pages-checksums.txt",
+      "severity": "SEV-1",
+      "owner_role": "on-call-primary",
+      "action": "Drift on immutable versioned path. Investigate deployment integrity.",
+      "runbook": "runbooks/pages-down.md",
+      "channels": ["github-issue", "discord", "email"]
+    },
+    {
+      "id": "ERRATA-SEV1-MISSED",
+      "metric": "errata.sev1_response_age_hours",
+      "condition": ">2h within release-window OR >8h business-hours outside window",
+      "severity": "SEV-1",
+      "owner_role": "on-call-secondary",
+      "action": "Escalate to secondary on-call.",
+      "runbook": "runbooks/bad-release.md",
+      "channels": ["github-issue", "discord"]
+    },
+    {
+      "id": "KILLSWITCH-AGE",
+      "metric": "killswitch.age_hours_without_expected_off_until",
+      "condition": ">48h enabled without expected_off_until",
+      "severity": "SEV-2",
+      "owner_role": "maintainer",
+      "action": "Resolve underlying issue or document expected_off_until.",
+      "runbook": "runbooks/smoke-failure.md",
+      "channels": ["github-issue"]
+    }
+  ]
+}

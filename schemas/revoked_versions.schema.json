@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inematds.github.io/FEC/schemas/revoked_versions.schema.json",
+  "title": "FEC Revoked Versions",
+  "description": "Source of truth for fec_sdk versions that must hard-fail on import. Mirrored to /status/revoked.json (signed) for runtime fetch.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_version",
+    "issued_at",
+    "revoked"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "manifest_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Increments each time the published manifest changes."
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional cache hint; default 24h via runtime."
+    },
+    "signature": {
+      "type": "string",
+      "description": "Sigstore/cosign or minisign signature over the canonical JSON. Optional in repo, required in published /status/revoked.json."
+    },
+    "revoked": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "package",
+          "version",
+          "reason",
+          "revoked_at",
+          "successor"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "package": {
+            "type": "string",
+            "enum": [
+              "fec-sdk"
+            ]
+          },
+          "version": {
+            "type": "string",
+            "description": "PEP 440 exact version."
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "security",
+              "data-integrity",
+              "lab-breaking",
+              "license",
+              "incorrect-eval",
+              "other"
+            ]
+          },
+          "revoked_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "successor": {
+            "type": "string",
+            "description": "Patched version users should upgrade to."
+          },
+          "advisory_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "GHSA / OSV link."
+          },
+          "details": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  }
+}

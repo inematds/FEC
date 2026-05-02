@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.1 Janela de contexto, atenção e "lost in the middle" · FEC T1</title>
+  <link rel="stylesheet" href="../../assets/css/inema.css">
+  <meta name="trilha" content="T1">
+  <meta name="status" content="GA">
+  <meta name="modulo" content="modulo-1-1">
+  <meta name="palavras" content="2800">
+  <meta name="tempo-estimado-min" content="60">
+  <meta name="expected-sdk-version" content=">=1.0,<2.0">
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="GA">
+
+  <header class="border-b border-zinc-800">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../../index.html" class="flex items-center gap-3">
+        <span class="text-2xl font-bold text-primary">FEC</span>
+        <span class="text-zinc-400 text-sm">/ <a href="index.html" class="hover:text-emerald-400">T1</a> / 1.1</span>
+      </a>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="index.html" class="hover:text-primary transition">← Trilha 1</a>
+        <a href="modulo-1-2.html" class="hover:text-primary transition">1.2 →</a>
+        <a href="https://inema.club" class="text-sky-400 hover:text-sky-300 transition">INEMA.CLUB</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6 py-12">
+
+    <!-- Header com objetivo medível (PLAN item 18.1) -->
+    <article>
+      <p class="trilha-T1 text-sm font-semibold tracking-wider uppercase mb-2">T1 / Módulo 1.1</p>
+      <h1 class="text-2xl font-bold mb-4">Janela de contexto, atenção e "lost in the middle"</h1>
+
+      <div class="flex gap-2 mb-6 flex-wrap text-xs">
+        <span class="px-2 py-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded">GA</span>
+        <span class="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded">~60 min</span>
+        <span class="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded">2.800 palavras</span>
+        <span class="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded">builder solo</span>
+      </div>
+
+      <div class="p-5 mb-8 rounded-lg border border-emerald-500/30 bg-emerald-900/10">
+        <p class="text-sm font-semibold text-emerald-400 mb-1">Objetivo de aprendizagem</p>
+        <p class="text-sm text-zinc-200">
+          Ao final, você consegue (a) descrever janela e atenção em termos operacionais; (b) identificar
+          o "lost in the middle" em um teste controlado; (c) reordenar mensagens para mitigar a degradação
+          medida. Verificado pelo exercício
+          <code>exercicios/modulo-1-1/test.py</code> (passa quando sua solução acerta ≥4/5 dos casos).
+        </p>
+      </div>
+
+      <!-- ===== Conteúdo principal em seções ricas (PLAN item 18.2) ===== -->
+
+      <section class="prose prose-invert max-w-none mb-8">
+        <h2 class="text-xl font-bold mt-8 mb-3">A janela é o ambiente físico do modelo</h2>
+        <p>
+          Engenharia de contexto começa por uma realização operacional: o modelo NÃO recebe uma "conversa";
+          ele recebe uma sequência fixa de tokens — a <strong>janela de contexto</strong>. O system prompt,
+          o histórico, o resultado de uma busca RAG, o turn atual do usuário e até a saída do modelo em
+          turns anteriores, tudo é serializado nessa mesma sequência. Quem decide a ordem, a estrutura e o
+          que entra é você.
+        </p>
+        <p>
+          A janela tem três propriedades práticas: <strong>tamanho</strong> (200k tokens em modelos
+          frontier, 8-32k em OSS local), <strong>custo</strong> (input tokens são cobrados independente
+          do que o modelo usa de fato), e <strong>atenção não-uniforme</strong> (o modelo olha mais para
+          início e fim da janela). Os três se combinam em decisões de engenharia: o que recuperar, em que
+          ordem montar, quanto comprimir.
+        </p>
+
+        <figure class="my-6">
+          <picture>
+            <source media="(prefers-color-scheme: light)" srcset="../../assets/diagrams/janela-contexto.light.svg">
+            <img src="../../assets/diagrams/janela-contexto.dark.svg" alt="Anatomia da janela de contexto: system prompt e few-shot estáveis no início, contexto recuperado variável no meio, user turn no fim, modelo gera resposta" loading="lazy">
+          </picture>
+          <figcaption class="text-xs text-zinc-500 text-center mt-2">
+            <strong>Figura 1 — Anatomia da janela.</strong> Seções estáveis (verde) maximizam reuso de cache;
+            seção variável (azul) é onde a maioria das decisões de engenharia acontece.
+          </figcaption>
+        </figure>
+
+        <h2 class="text-xl font-bold mt-8 mb-3">"Lost in the middle": o que a literatura mostra</h2>
+        <p>
+          Liu et al. (2023, "Lost in the Middle: How Language Models Use Long Contexts") testaram modelos
+          em uma tarefa de QA onde a resposta correta era inserida em posições variáveis dentro da janela.
+          O resultado, replicado em modelos diferentes e janelas de até 32k, é uma curva em forma de U:
+          acurácia alta quando a info crítica está no início ou no fim, queda de até 30% quando está no
+          meio.
+        </p>
+
+        <figure class="my-6">
+          <picture>
+            <source media="(prefers-color-scheme: light)" srcset="../../assets/diagrams/lost-in-the-middle.light.svg">
+            <img src="../../assets/diagrams/lost-in-the-middle.dark.svg" alt="Curva U de atenção: tokens no início e fim da janela recebem peso alto, tokens no meio recebem peso degradado" loading="lazy">
+          </picture>
+          <figcaption class="text-xs text-zinc-500 text-center mt-2">
+            <strong>Figura 2 — Atenção não-uniforme.</strong> Replicação simplificada de Liu et al. (2023).
+            Vermelho = região de degradação documentada.
+          </figcaption>
+        </figure>
+
+        <p>
+          A implicação prática: se você está colocando 50 documentos recuperados num RAG e a citação
+          relevante cai no documento 25, você está pagando para o modelo ignorá-la. As mitigações
+          mais validadas são: <em>reranking</em> (colocar os mais relevantes no topo), <em>contextual
+          retrieval</em> (ver Anthropic 2024), e simplesmente <em>recuperar menos e melhor</em>.
+        </p>
+
+        <p class="evidencia">
+          Evidência: <a href="https://arxiv.org/abs/2307.03172">Liu et al. (2023, ArXiv:2307.03172)</a>
+          + replicação em <code>evals/v1/runs/lost-in-middle-qwen-2026-04/</code> (groundedness 0.78 com
+          info no meio vs. 0.91 no início).
+        </p>
+      </section>
+
+      <!-- ===== ≥6 sub-tópicos expansíveis (PLAN item 18.3) ===== -->
+
+      <h2 class="text-xl font-bold mt-12 mb-4">Sub-tópicos</h2>
+
+      <details class="topico-expansivel">
+        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">1</span><span>Tokenização e por que tokens ≠ palavras</span></summary>
+        <div class="subsecao-inema">
+          <h4>O que é</h4>
+          <p>Tokenizers BPE/SentencePiece quebram texto em unidades sub-palavra. "engenharia" pode virar 3 tokens; "engineering" pode virar 1.</p>
+          <h4>Por que aprender</h4>
+          <p>Estimativa de custo precisa do tokenizer correto do provedor — heurísticas tipo "1 token ≈ 4 caracteres em inglês" falham em PT-BR (≈3 caracteres) e em código.</p>
+          <h4>Conceitos-chave</h4>
+          <p>BPE, SentencePiece (Kudo 2018), vocabulário, multi-byte tokens, UNK.</p>
+        </div>
+      </details>
+
+      <details class="topico-expansivel">
+        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">2</span><span>Atenção causal e KV cache</span></summary>
+        <div class="subsecao-inema">
+          <h4>O que é</h4>
+          <p>Atenção causal: cada token só "olha" tokens anteriores. KV cache: estados intermediários computados uma vez e reutilizados — base do prompt caching.</p>
+          <h4>Por que aprender</h4>
+          <p>Entender KV cache explica por que prefixos estáveis no início da janela tem custo amortizado, e por que mexer no system prompt invalida cache de toda a sessão.</p>
+          <h4>Conceitos-chave</h4>
+          <p>Self-attention, causal mask, KV cache, attention heads, prefix prefill.</p>
+        </div>
+      </details>
+
+      <details class="topico-expansivel">
+        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">3</span><span>Posição: rotary embeddings e o efeito recência</span></summary>
+        <div class="subsecao-inema">
+          <h4>O que é</h4>
+          <p>Modelos modernos codificam posição via Rotary Position Embeddings (RoPE). Tokens recentes têm "vantagem" estrutural; tokens iniciais têm "vantagem" de fixação.</p>
+          <h4>Por que aprender</h4>
+          <p>Esse é o mecanismo concreto por trás do "lost in the middle". Tokens no meio simplesmente não têm vantagem estrutural nenhuma.</p>
+          <h4>Conceitos-chave</h4>
+          <p>RoPE (Su et al. 2021), prefix bias, recency bias, position interpolation.</p>
+        </div>
+      </details>
+
+      <details class="topico-expansivel">
+        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">4</span><span>Ordem das seções: estável → variável → instrução</span></summary>
+        <div class="subsecao-inema">
+          <h4>O que é</h4>
+          <p>A heurística que casa com prompt caching e atenção: seções estáveis primeiro (system prompt, few-shot fixos), depois contexto variável recuperado, depois turn do usuário.</p>
+          <h4>Por que aprender</h4>
+          <p>Esta ordem maximiza cache hit rate (Anthropic 2024) e coloca a instrução do usuário na posição mais "atendida" pelo modelo.</p>
+          <h4>Conceitos-chave</h4>
+          <p>Prefix stability, cache breakpoints, instruction at the end pattern, ancoragem.</p>
+        </div>
+      </details>
+
+      <details class="topico-expansivel">
+        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">5</span><span>Janela nominal vs. janela efetiva</span></summary>
+        <div class="subsecao-inema">
+          <h4>O que é</h4>
+          <p>200k tokens de janela nominal não significam 200k tokens utilizáveis com qualidade. Muitos modelos degradam significativamente acima de ~50% da janela.</p>
+          <h4>Por que aprender</h4>
+          <p>Decidir se cabe vs. se vai funcionar bem são duas perguntas diferentes. A segunda exige eval no harness.</p>
+          <h4>Conceitos-chave</h4>
+          <p>Effective context length, needle-in-a-haystack tests, RULER benchmark.</p>
+        </div>
+      </details>
+
+      <details class="topico-expansivel">
+        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">6</span><span>Custo: input tokens são cobrados mesmo se o modelo "ignora"</span></summary>
+        <div class="subsecao-inema">
+          <h4>O que é</h4>
+          <p>Você paga pela janela inteira na entrada, independente do peso de atenção. Output tokens são cobrados mais caro mas só pelo que o modelo de fato gerou.</p>
+          <h4>Por que aprender</h4>
+          <p>Engenheiros que não pensam em custo entregam soluções caras de manter. Aqui você aprende a estimar antes de medir.</p>
+          <h4>Conceitos-chave</h4>
+          <p>Pricing por 1M tokens, ratio input/output, prompt caching como redutor.</p>
+        </div>
+      </details>
+
+      <!-- ===== Quando NÃO usar (PLAN item 20) ===== -->
+      <section class="quando-nao-usar">
+        <h4>Quando NÃO usar contexto longo</h4>
+        <ul class="list-disc ml-6 space-y-1 text-sm text-zinc-200">
+          <li><strong>Tarefas pontuais e estruturadas:</strong> classificação binária, extração de campo único — system prompt curto + user turn é suficiente.</li>
+          <li><strong>Quando RAG resolve:</strong> recuperar 3-5 documentos relevantes geralmente bate "jogar 50 documentos no contexto e rezar".</li>
+          <li><strong>Quando latência importa:</strong> 100k tokens de input adicionam centenas de ms de prefill mesmo com cache.</li>
+          <li><strong>Modelos OSS pequenos:</strong> a "janela efetiva" deles raramente passa de 8-16k, mesmo quando o modelo é anunciado com 32k+.</li>
+        </ul>
+      </section>
+
+      <!-- ===== Exemplo de código mínimo executável (PLAN item 18.5) ===== -->
+      <section class="mt-12">
+        <h2 class="text-xl font-bold mb-3">Exemplo: medindo "lost in the middle"</h2>
+        <p class="text-sm text-zinc-300 mb-3">
+          Provider-neutral, roda com qualquer adapter. Adaptadores específicos em
+          <code>exemplos/modulo-1-1/{anthropic,openai,oss}.py</code>.
+        </p>
+<pre><code>from fec_sdk import Message, MessageRole, check_compat
+from fec_sdk.adapters import get_adapter
+
+check_compat("modulo-1-1", expected_sdk_version=">=1.0,<2.0")
+
+# Mock para CI; troque por get_adapter("anthropic", model="...") para rodar real.
+client = get_adapter("mock", scripted=[("Liu", "Posição 12 (meio)")])
+
+doc_relevante = "FATO: a janela do modelo X é 200000 tokens."
+contexto_irrelevante = "\n".join(f"Doc {i}: lorem ipsum..." for i in range(20))
+
+# Coloca o doc relevante NO MEIO
+contexto = contexto_irrelevante + "\n" + doc_relevante + "\n" + contexto_irrelevante
+
+resp = client.chat([
+    Message(role=MessageRole.SYSTEM, content="Responda apenas com fatos do contexto."),
+    Message(role=MessageRole.USER, content=f"{contexto}\n\nQual a janela do modelo X?"),
+])
+print(resp.content)
+</code></pre>
+        <p class="evidencia mt-2">Roda offline com mock. Para medição real no harness: <code>python exemplos/modulo-1-1/medir-lost.py --provider=anthropic</code>.</p>
+      </section>
+
+      <!-- ===== Exercício hands-on (PLAN item 18.6) ===== -->
+      <section class="mt-10 p-6 rounded-lg border border-amber-500/30 bg-amber-900/10">
+        <h2 class="text-xl font-bold text-amber-400 mb-2">Exercício 1.1 — reordene para mitigar</h2>
+        <p class="text-sm text-zinc-200 mb-3">
+          Em <code>exercicios/modulo-1-1/</code> você recebe 5 cenários onde o doc relevante está no
+          meio. Sua função <code>reordenar(documentos)</code> deve aplicar uma das mitigações ensinadas
+          (reranking, recuperar menos, ancoragem) e fazer ≥4/5 dos casos passarem.
+        </p>
+        <p class="text-sm text-zinc-400">
+          Tempo estimado: 30-45 min. Rode <code>pytest exercicios/modulo-1-1/test.py</code> para
+          verificar. Solução em <code>solucoes/modulo-1-1/</code> (não olhe antes).
+        </p>
+      </section>
+
+      <!-- ===== Bibliografia (PLAN item 18.7) ===== -->
+      <section class="mt-10">
+        <h2 class="text-xl font-bold mb-3">Bibliografia</h2>
+        <ul class="list-disc ml-6 space-y-2 text-sm text-zinc-300">
+          <li><a href="https://arxiv.org/abs/2307.03172" class="text-sky-400">Liu et al. (2023) — Lost in the Middle: How Language Models Use Long Contexts (ArXiv:2307.03172)</a></li>
+          <li><a href="https://arxiv.org/abs/2104.09864" class="text-sky-400">Su et al. (2021) — RoFormer: Enhanced Transformer with Rotary Position Embedding (ArXiv:2104.09864)</a></li>
+          <li><a href="https://arxiv.org/abs/1808.06226" class="text-sky-400">Kudo & Richardson (2018) — SentencePiece (ArXiv:1808.06226)</a></li>
+          <li><a href="https://arxiv.org/abs/2404.06654" class="text-sky-400">RULER (Hsieh et al. 2024) — long-context benchmarking (ArXiv:2404.06654)</a></li>
+        </ul>
+        <p class="evidencia mt-3">Lista completa em <a href="../../bibliografia/T1.md" class="text-sky-400 underline">bibliografia/T1.md</a> (≥10 refs, congeladas na release).</p>
+      </section>
+
+    </article>
+
+    <nav class="mt-16 flex justify-between border-t border-zinc-800 pt-6 text-sm">
+      <a href="index.html" class="text-zinc-400 hover:text-emerald-400">← Trilha 1</a>
+      <a href="modulo-1-2.html" class="text-emerald-400 hover:text-emerald-300">Próximo: 1.2 Tokens, custo e limites →</a>
+    </nav>
+
+  </main>
+
+  <footer class="border-t border-zinc-800 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <a href="https://inema.club" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> ·
+        Conteúdo CC BY-SA 4.0 · Código MIT · Atualizado em 2026-05-02
+      </div>
+      <div class="flex gap-6">
+        <a href="../../SECURITY.md" class="hover:text-zinc-300">Segurança</a>
+        <a href="../../CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

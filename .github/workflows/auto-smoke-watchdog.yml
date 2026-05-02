@@ -1,0 +1,31 @@
+# auto-smoke-watchdog.yml — detecta auto-smoke silenciosamente desativado.
+# PLAN item 48a: hourly check via API GitHub; se >26h sem run, abre issue.
+
+name: auto-smoke-watchdog
+
+on:
+  schedule:
+    - cron: "23 * * * *"  # hourly
+  workflow_dispatch: {}
+
+permissions:
+  actions: read
+  issues: write
+
+concurrency:
+  group: auto-smoke-watchdog
+  cancel-in-progress: true
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Detect missed auto-smoke runs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/check-watchdog.py --workflow=ci-scheduled.yml --job=auto-smoke --max-age-hours=26

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inematds.github.io/FEC/schemas/checksums-revocation.schema.json",
+  "title": "FEC Release Checksum Revocation List",
+  "description": "Revoked release artifacts (zip, wheel, etc.). Consumed by audit-evals.py and synthetic-check.py.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "revoked"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "revoked": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "release",
+          "artifact",
+          "sha256",
+          "blake3",
+          "reason",
+          "revoked_at",
+          "successor"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "release": {
+            "type": "string",
+            "description": "Tag of the affected release (e.g. v1.0.0)."
+          },
+          "artifact": {
+            "type": "string",
+            "description": "Filename (e.g. fec-v1.0.0.zip)."
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "blake3": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "revoked_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "successor": {
+            "type": "string",
+            "description": "Successor release tag."
+          },
+          "advisory_url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  }
+}

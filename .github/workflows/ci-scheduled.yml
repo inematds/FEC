@@ -1,0 +1,133 @@
+# ci-scheduled.yml — diário e antes de release. Roda checks pesados e auto-smoke (Tier A).
+# PLAN itens 47, 48 (auto-smoke), 89a (synthetic), 47-axe.
+#
+# Tier A auto-smoke usa secret FEC_SMOKE_LOWPRIV em GitHub Environment 'production-smoke-low'
+# com required reviewers? NÃO — é AUTO. Ambiente sem reviewers, mas com deployment branch policy = main.
+# Cap nativo do provedor é a defesa primária; budget exhausted vira Check Run 'budget-status' = failure.
+
+name: ci-scheduled
+
+on:
+  schedule:
+    - cron: "17 6 * * *"  # 06:17 UTC = 03:17 BRT diário
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+  checks: write
+  pull-requests: read
+
+concurrency:
+  group: ci-scheduled
+  cancel-in-progress: true
+
+jobs:
+  link-check-external:
+    name: External link checker (lychee)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true  # warns, does not block (PLAN item 47)
+    steps:
+      - uses: actions/checkout@v5
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: --cache --max-cache-age 7d --no-progress './**/*.md' './**/*.html'
+
+  axe-a11y:
+    name: axe-core accessibility (blocks release)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+      - run: npm ci || npm install
+      - name: Run axe-core via Playwright
+        run: npx playwright test tests/a11y/
+
+  visual-diff:
+    name: Mermaid + visual diff (Playwright, sharded)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6]  # one per trilha
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+      - run: npm ci || npm install
+      - name: Render diagrams (build-time, dual SVG)
+        run: bash scripts/render-diagrams.sh
+      - name: Visual diff
+        run: npx playwright test tests/visual/ --shard=${{ matrix.shard }}/6
+
+  spellcheck:
+    name: Spellcheck PT-BR (warns)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+      - uses: streetsidesoftware/cspell-action@v6
+        with:
+          config: .cspell.json
+
+  lint-content-strict:
+    name: Lint content (word counts, refs ≥3, "Quando NÃO usar", evidence linked to harness)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python scripts/lint-content.py --mode=strict
+
+  auto-smoke:
+    name: Auto-smoke Tier A (low-priv, automated)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production-smoke-low  # protected, no required reviewers, branch policy = main
+    permissions:
+      contents: read
+      checks: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Check kill-switch state
+        id: killswitch
+        run: python scripts/check-killswitch.py
+      - name: Run smoke (3 providers, deterministic canaries)
+        if: steps.killswitch.outputs.enabled == 'false'
+        env:
+          FEC_SMOKE_LOWPRIV_ANTHROPIC: ${{ secrets.FEC_SMOKE_LOWPRIV_ANTHROPIC }}
+          FEC_SMOKE_LOWPRIV_OPENAI: ${{ secrets.FEC_SMOKE_LOWPRIV_OPENAI }}
+          FEC_SMOKE_LOWPRIV_GOOGLE: ${{ secrets.FEC_SMOKE_LOWPRIV_GOOGLE }}
+        run: python scripts/smoke-providers.py --tier=auto --redact-logs
+      - name: Emit budget Check Run
+        if: always()
+        run: python scripts/emit-budget-checkrun.py
+      - name: Open issue idempotently on failure
+        if: failure() && steps.killswitch.outputs.enabled == 'false'
+        run: python scripts/open-issue-idempotent.py --label=automated:smoke
+
+  synthetic-monitor:
+    name: Synthetic monitor (post-release public channels)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Synthetic check (Pages, Release assets, Zenodo, PyPI)
+        run: python scripts/synthetic-check.py

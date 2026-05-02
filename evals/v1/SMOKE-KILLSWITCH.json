@@ -1,0 +1,8 @@
+{
+  "enabled": false,
+  "reason": null,
+  "since": null,
+  "expected_off_until": null,
+  "auto_close_after_n_green": 3,
+  "_note": "CODEOWNERS-protected (item 71a). Human-edited via PR only. auto-smoke checks this at start; emits 'neutral/kill-switched' Check Run conclusion when enabled (NOT exit 0). check-rc-gates.py blocks rc→stable promotion when enabled."
+}

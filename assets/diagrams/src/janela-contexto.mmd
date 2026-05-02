@@ -1,0 +1,25 @@
+flowchart LR
+    subgraph SP["System prompt (estável)"]
+        S["Persona, regras, formato"]
+    end
+    subgraph FS["Few-shot (estável)"]
+        E1["Exemplo 1"]
+        E2["Exemplo 2"]
+    end
+    subgraph CTX["Contexto recuperado (variável)"]
+        D1["Documento A"]
+        D2["Documento B"]
+    end
+    subgraph U["User turn"]
+        Q["Pergunta"]
+    end
+
+    SP --> FS --> CTX --> U
+    U --> M["Modelo"]
+    M --> R["Resposta"]
+
+    style SP fill:#10b98122,stroke:#10b981,color:#fff
+    style FS fill:#10b98122,stroke:#10b981,color:#fff
+    style CTX fill:#3b82f622,stroke:#3b82f6,color:#fff
+    style U fill:#facc1522,stroke:#facc15,color:#fff
+    style M fill:#a855f722,stroke:#a855f7,color:#fff

@@ -1,0 +1,41 @@
+{
+  "dataset_id": "FEC-GS-RAG-v1",
+  "schema_version": "1",
+  "frozen_at": "2026-05-02",
+  "description": "Golden set de 30 perguntas para avaliar RAG em P1. Corpus: fixtures/arxiv-cs-100/. Judge: evals/v1/judges/groundedness.md.",
+  "n_examples": 30,
+  "examples": [
+    {
+      "id": "rag-001",
+      "question": "O que Liu et al. (2023) chamam de 'lost in the middle' e qual o impacto em RAG?",
+      "expected_citations": ["arxiv:2307.03172"],
+      "expected_facts": [
+        "acurácia degrada quando informação crítica está no meio da janela",
+        "modelos performam bem no início e fim da janela"
+      ],
+      "category": "core-concept"
+    },
+    {
+      "id": "rag-002",
+      "question": "Qual a diferença entre janela nominal e janela efetiva de um LLM?",
+      "expected_citations": ["arxiv:2404.06654"],
+      "expected_facts": [
+        "janela nominal é o tamanho aceito sem erro de API",
+        "janela efetiva é o tamanho onde qualidade se mantém",
+        "RULER mede janela efetiva"
+      ],
+      "category": "core-concept"
+    },
+    {
+      "id": "rag-003",
+      "question": "Como o Rotary Position Embedding (RoPE) funciona em alto nível?",
+      "expected_citations": ["arxiv:2104.09864"],
+      "expected_facts": [
+        "codifica posição via rotação de pares de dimensões",
+        "permite extrapolação parcial para sequências mais longas"
+      ],
+      "category": "mechanism"
+    }
+  ],
+  "_note": "Apenas 3 exemplos no scaffolding inicial. Os outros 27 serão preenchidos antes de P1 entrar em produção. Cada exemplo deve ter expected_citations (formato 'arxiv:XXXX.XXXXX') e expected_facts (lista de strings que o judge confere por subsequência semântica)."
+}

@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://inematds.github.io/FEC/schemas/compat.schema.json",
+  "title": "FEC Compatibility Matrix",
+  "description": "Source of truth for course \u00d7 fec_sdk \u00d7 python \u00d7 provider compatibility. Generates COMPAT.md.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "support_window",
+    "core_combinations",
+    "extended_combinations"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "support_window": {
+      "type": "object",
+      "required": [
+        "course_releases",
+        "fec_sdk_minors",
+        "python_minors",
+        "provider_sdk_minors"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "course_releases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 2
+        },
+        "fec_sdk_minors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 2
+        },
+        "python_minors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^3\\.(11|12|13|14)$"
+          },
+          "minItems": 1,
+          "maxItems": 2
+        },
+        "provider_sdk_minors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "maxItems": 2
+          }
+        }
+      }
+    },
+    "core_combinations": {
+      "type": "array",
+      "description": "\u226424 entries \u2014 tested on every ci-scheduled run.",
+      "maxItems": 24,
+      "items": {
+        "$ref": "#/$defs/combination"
+      }
+    },
+    "extended_combinations": {
+      "type": "array",
+      "description": "Tested weekly via ci-extended-compat.yml.",
+      "items": {
+        "$ref": "#/$defs/combination"
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "combination": {
+      "type": "object",
+      "required": [
+        "course_release",
+        "fec_sdk",
+        "python",
+        "provider",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "course_release": {
+          "type": "string"
+        },
+        "fec_sdk": {
+          "type": "string"
+        },
+        "python": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "object",
+          "required": [
+            "name",
+            "sdk_version"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "anthropic",
+                "openai",
+                "google",
+                "ollama",
+                "vllm"
+              ]
+            },
+            "sdk_version": {
+              "type": "string"
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "ok_with_note",
+            "not_supported",
+            "revoked"
+          ]
+        },
+        "note": {
+          "type": "string"
+        },
+        "last_tested": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    }
+  }
+}
