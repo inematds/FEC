@@ -11,105 +11,191 @@
 </head>
 <body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="GA">
 
-  <header class="border-b border-zinc-800">
-    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+  <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <a href="../../index.html" class="flex items-center gap-3">
         <span class="text-2xl font-bold text-primary">FEC</span>
-        <span class="text-zinc-400 text-sm">/ T1 Fundamentos</span>
+        <span class="text-zinc-400 text-sm hidden md:inline">Formação de Engenharia de Contexto</span>
       </a>
-      <div class="flex items-center gap-6 text-sm">
+      <div class="flex items-center gap-4 text-sm">
         <a href="../../index.html" class="hover:text-primary transition">← Trilhas</a>
         <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
-        <a href="https://inema.club" class="text-sky-400 hover:text-sky-300 transition">INEMA.CLUB</a>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
       </div>
-    </nav>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-emerald-900/30 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">TRILHA 1</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🧠 Fundamentos de Contexto</h1>
+      <p class="text-lg text-zinc-300 max-w-3xl mb-8">Os fundamentos operacionais: janela de contexto, atenção, tokens, custo. Pré-requisito de todas as outras trilhas.</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-emerald-400">2</div>
+          <div class="text-xs text-zinc-400">Módulos GA</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-emerald-400">0</div>
+          <div class="text-xs text-zinc-400">Beta</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-emerald-400">~1h</div>
+          <div class="text-xs text-zinc-400">Duração</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-emerald-400">12</div>
+          <div class="text-xs text-zinc-400">Tópicos</div>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-6 py-12">
+  <main class="max-w-4xl mx-auto px-6 py-12">
 
-    <section class="mb-10">
-      <p class="text-emerald-400 text-sm font-semibold tracking-wider uppercase mb-2">Trilha 1</p>
-      <h1 class="text-4xl md:text-5xl font-bold mb-4">Fundamentos de Contexto</h1>
-      <p class="text-lg text-zinc-300 mb-6 max-w-2xl">
-        A janela de contexto, atenção e o fenômeno "lost in the middle". Tokens, custo, e os limites práticos
-        por modelo. Esta trilha é pré-requisito de todas as outras.
-      </p>
-      <div class="flex gap-3 text-xs">
-        <span class="px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded">2 módulos GA</span>
-        <span class="px-3 py-1 bg-zinc-800 border border-zinc-700 text-zinc-300 rounded">~3-4h</span>
-        <span class="px-3 py-1 bg-zinc-800 border border-zinc-700 text-zinc-300 rounded">builder solo · eng. produto · eng. plataforma</span>
-      </div>
-    </section>
+    <h2 class="text-2xl font-bold mb-6">📚 Módulos da trilha</h2>
 
-    <!-- Resultado de aprendizagem da trilha (PLAN item 4) -->
-    <section class="mb-12 p-6 rounded-lg border border-emerald-500/30 bg-emerald-900/10">
-      <h2 class="text-xl font-bold text-emerald-400 mb-2">Ao final desta trilha, você consegue:</h2>
-      <ul class="list-disc ml-6 space-y-1 text-sm text-zinc-200">
-        <li>Decompor uma mensagem entrante em tokens, prever custo e latência aproximados.</li>
-        <li>Reconhecer o fenômeno "lost in the middle" e as estratégias de mitigação validadas no harness FEC-EVAL-v1.</li>
-        <li>Escolher o modelo certo (frontier / low-cost / OSS) para um caso dado, com base em janela, custo e capacidade.</li>
-        <li>Configurar `fec_sdk` em ambiente local e rodar o `selftest()`.</li>
-      </ul>
-    </section>
-
-    <!-- Cards de módulos (regra crítica INEMA: cada card linka para modulo-X-Y.html via "Ver Completo") -->
-    <h2 class="text-2xl font-bold mb-6">Módulos</h2>
-
-    <div class="space-y-4">
-
-      <details class="topico-expansivel border border-emerald-500/30 rounded-lg bg-zinc-900 p-5" open>
-        <summary class="cursor-pointer flex items-center gap-3 text-lg font-semibold list-none">
-          <span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">1</span>
-          <span class="text-emerald-400">1.1 — Janela de contexto, atenção e "lost in the middle"</span>
-          <span class="ml-auto text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded">GA</span>
-        </summary>
-        <div class="subsecao-inema">
-          <h4>O que é</h4>
-          <p class="text-sm text-zinc-300">A janela de contexto é a quantidade total de tokens que um modelo "lê" em uma chamada. Atenção é o mecanismo que pondera quais tokens importam para gerar cada token de saída.</p>
-          <h4 class="mt-3">Por que aprender</h4>
-          <p class="text-sm text-zinc-300">Sem entender atenção, você não sabe por que prompts longos degradam — e cai no anti-padrão de "jogar tudo no contexto" assumindo que o modelo dá peso uniforme.</p>
-          <h4 class="mt-3">Conceitos-chave</h4>
-          <p class="text-sm text-zinc-300">Janela, posição, atenção causal, "lost in the middle" (Liu et al. 2023), prefix bias.</p>
+    
+      <article class="modulo-card bg-zinc-900 rounded-xl border border-zinc-800 hover:border-emerald-500/40 mb-6 transition-colors">
+        <div class="p-6 border-b border-zinc-800">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-400 font-bold">1.1</span>
+              <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-xs font-semibold">GA</span>
+            </div>
+            <span class="text-xs text-zinc-500">~60 min · Básico</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2 text-zinc-100">🪟 Janela de contexto, atenção e "lost in the middle"</h3>
+          <p class="text-sm text-zinc-400">A anatomia operacional da janela: o que é atenção, por que tokens no meio são esquecidos, e como isso muda decisões de engenharia.</p>
         </div>
-        <div class="mt-4">
-          <a href="modulo-1-1.html" class="btn btn-primary">Ver completo →</a>
-          <span class="text-xs text-zinc-500 ml-3">~30 min leitura + 30 min lab</span>
-        </div>
-      </details>
 
-      <details class="topico-expansivel border border-emerald-500/30 rounded-lg bg-zinc-900 p-5">
-        <summary class="cursor-pointer flex items-center gap-3 text-lg font-semibold list-none">
-          <span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">2</span>
-          <span class="text-emerald-400">1.2 — Tokens, custo e limites práticos por modelo</span>
-          <span class="ml-auto text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded">GA</span>
-        </summary>
-        <div class="subsecao-inema">
-          <h4>O que é</h4>
-          <p class="text-sm text-zinc-300">Tokens são as unidades de cobrança e medida de janela. Cada provedor tem um tokenizer diferente; preço por 1M tokens varia em ~50× entre frontier e low-cost.</p>
-          <h4 class="mt-3">Por que aprender</h4>
-          <p class="text-sm text-zinc-300">Engenharia de contexto sem cálculo de custo é wishful thinking. Aqui você aprende a estimar antes de mandar a chamada.</p>
-          <h4 class="mt-3">Conceitos-chave</h4>
-          <p class="text-sm text-zinc-300">Tokenização BPE/SentencePiece, contexto efetivo vs. nominal, KV cache, billing input vs. output.</p>
+        <div class="px-3">
+          
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">1</span>
+            <span>🪟 A janela é o ambiente físico do modelo</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Tokens, não conversas</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Sequência fixa de tokens que o modelo lê em uma chamada. System prompt + histórico + contexto recuperado + user turn — tudo junto.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem essa visão, você assume que o modelo tem 'memória da conversa'. Não tem — você reconstrói a cada chamada.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Janela nominal, janela efetiva, ordem de seções, custo do input total.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">2</span>
+            <span>🎯 Atenção causal e KV cache</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— O mecanismo que pesa tokens</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada token só 'olha' tokens anteriores. Estados intermediários (KV cache) podem ser reutilizados — base do prompt caching.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Entender KV cache explica por que prefixos estáveis no início têm custo amortizado e por que mexer no system prompt invalida cache da sessão.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Self-attention, causal mask, KV cache, attention heads, prefix prefill.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">3</span>
+            <span>📍 Posição: rotary embeddings e o efeito recência</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Por que tokens recentes têm vantagem</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Modelos modernos codificam posição via Rotary Position Embeddings (RoPE). Tokens recentes têm vantagem estrutural; tokens iniciais têm vantagem de fixação.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Esse é o mecanismo concreto por trás do 'lost in the middle'. Tokens no meio simplesmente não têm vantagem estrutural nenhuma.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">RoPE (Su et al. 2021), prefix bias, recency bias, position interpolation.</span></div>
+          </div>
+        </details>
+          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
         </div>
-        <div class="mt-4">
-          <a href="modulo-1-2.html" class="btn btn-primary">Ver completo →</a>
-          <span class="text-xs text-zinc-500 ml-3">~25 min leitura + 30 min lab</span>
+
+        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+          <a href="modulo-1-1.html" class="btn px-4 py-2 text-sm bg-emerald-600 text-white hover:bg-emerald-500 rounded-lg transition-colors justify-start">
+            Ver Completo →
+          </a>
         </div>
-      </details>
+      </article>
 
-    </div>
+      <article class="modulo-card bg-zinc-900 rounded-xl border border-zinc-800 hover:border-emerald-500/40 mb-6 transition-colors">
+        <div class="p-6 border-b border-zinc-800">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-emerald-400 font-bold">1.2</span>
+              <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-xs font-semibold">GA</span>
+            </div>
+            <span class="text-xs text-zinc-500">~55 min · Básico</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2 text-zinc-100">🔢 Tokens, custo e limites práticos por modelo</h3>
+          <p class="text-sm text-zinc-400">Como contar tokens, estimar custo antes de chamar a API, e escolher entre frontier / low-cost / OSS para o caso certo.</p>
+        </div>
 
-    <section class="mt-16 p-6 rounded-lg border border-zinc-800 bg-zinc-900/50">
-      <h3 class="text-lg font-bold mb-2">Bibliografia da trilha</h3>
-      <p class="text-sm text-zinc-400 mb-3">Referências datadas, congeladas na release. Para versão atualizada, ver `bibliografia/T1.md`.</p>
-      <a href="../../bibliografia/T1.md" class="btn btn-outline">Bibliografia T1 →</a>
+        <div class="px-3">
+          
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">1</span>
+            <span>🔤 Tokenização: BPE e SentencePiece</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Por que tokens ≠ palavras</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">BPE/SentencePiece quebram texto em unidades sub-palavra aprendidas. 'engenharia' pode virar 3 tokens; 'engineering' pode virar 1.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Estimativa de custo precisa do tokenizer correto. Heurísticas universais ('1 token ≈ 4 chars') falham em PT-BR (~3 chars/token), código e emoji.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">BPE (Sennrich 2016), SentencePiece (Kudo 2018), vocabulário, multi-byte tokens, UNK.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">2</span>
+            <span>💰 Custo: input vs. output (cuidado com a ratio)</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Output é caro mas input é volume</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Output tokens custam 3-5× mais que input. Mas em janelas longas, você gasta mais em input total porque ele é grande.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Otimização incorreta — tentar reduzir output enquanto a janela está inflada — não move custo significativamente.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Pricing por 1M tokens, ratio input/output, batch discounts, prompt caching.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">3</span>
+            <span>🏗️ Os três níveis de modelo</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Frontier, low-cost, OSS local</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Frontier (~$3-15/M): raciocínio complexo, contexto grande. Low-cost (~$0.10-0.30/M): volume alto, classificação. OSS local: $0/chamada, hardware-bound.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Engenheiros pulam direto para frontier por inércia. Em volume, isso queima orçamento sem ganho.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Capability vs. context vs. cost, model routing, hierarchical inference.</span></div>
+          </div>
+        </details>
+          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        </div>
+
+        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+          <a href="modulo-1-2.html" class="btn px-4 py-2 text-sm bg-emerald-600 text-white hover:bg-emerald-500 rounded-lg transition-colors justify-start">
+            Ver Completo →
+          </a>
+        </div>
+      </article>
+
+
+    <section class="mt-12 p-6 rounded-lg border border-zinc-700 bg-zinc-900/50">
+      <h3 class="text-lg font-bold mb-2">🔬 Bibliografia da trilha</h3>
+      <p class="text-sm text-zinc-400 mb-3">Referências datadas, congeladas na release. Lista completa em <code>bibliografia/T1.md</code>.</p>
+      <a href="../../bibliografia/T1.md" class="btn px-4 py-2 border border-zinc-700 text-zinc-200 rounded hover:bg-zinc-800 transition justify-start">
+        Bibliografia T1 →
+      </a>
     </section>
 
   </main>
 
   <footer class="border-t border-zinc-800 mt-16">
     <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
-      <div><a href="https://inema.club" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> · CC BY-SA 4.0 + MIT</div>
+      <div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> ·
+        Conteúdo CC BY-SA 4.0 · Código MIT
+      </div>
       <div class="flex gap-6">
         <a href="../../SECURITY.md" class="hover:text-zinc-300">Segurança</a>
         <a href="../../CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>

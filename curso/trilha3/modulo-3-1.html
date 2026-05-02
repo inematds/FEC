@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3.1 Indexação: chunking, embeddings e BM25 híbrido · FEC T3</title>
+  <link rel="stylesheet" href="../../assets/css/inema.css">
+  <meta name="trilha" content="T3">
+  <meta name="status" content="GA">
+  <meta name="modulo" content="modulo-3-1">
+  <meta name="palavras" content="3000">
+  <meta name="tempo-estimado-min" content="60">
+  <meta name="expected-sdk-version" content=">=1.0,<2.0">
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="GA">
+
+  <!-- NAV GLOBAL -->
+  <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../../index.html" class="flex items-center gap-3">
+        <span class="text-2xl font-bold text-primary">FEC</span>
+        <span class="text-zinc-400 text-sm hidden md:inline">Formação de Engenharia de Contexto</span>
+      </a>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="index.html" class="hover:text-primary transition">← T3</a>
+        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center space-x-2 text-sm text-zinc-400">
+      <a href="../../index.html" class="hover:text-purple-400">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3</a>
+      <span>/</span>
+      <span class="text-purple-400">Módulo 3.1</span>
+    </div>
+  </nav>
+
+  <!-- HEADER COM GRADIENTE + STATS -->
+  <header class="bg-gradient-to-br from-purple-900/30 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full">MÓDULO 3.1</span>
+        <span class="px-2 py-1 bg-purple-500/20 border border-purple-500/30 text-purple-400 rounded text-xs">GA</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-zinc-100">📚 Indexação: chunking, embeddings e BM25 híbrido</h1>
+      <p class="text-lg text-zinc-300 max-w-3xl mb-8">Como transformar um corpus em um índice consultável: estratégias de chunking, embeddings densos, BM25 sparse, e por que híbrido bate ambos.</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-purple-400">6</div>
+          <div class="text-xs text-zinc-400">Tópicos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-purple-400">60</div>
+          <div class="text-xs text-zinc-400">Minutos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-purple-400">Intermediário</div>
+          <div class="text-xs text-zinc-400">Nível</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-purple-400">Prático</div>
+          <div class="text-xs text-zinc-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="max-w-4xl mx-auto px-6 py-12">
+
+    <!-- Introdução -->
+    <section class="mb-12 prose prose-invert max-w-none">
+      <p class="text-lg text-zinc-200 leading-relaxed">RAG bom é resultado de <strong class='text-purple-400'>indexação boa</strong>. Cada decisão — tamanho do chunk, modelo de embedding, índice sparse vs. denso — tem trade-offs concretos de recall, latência e custo. Aqui você aprende a navegar essas decisões.</p>
+    </section>
+
+    <!-- Conceito Principal + Dados/Dica -->
+    
+      <div class="bg-gradient-to-br from-purple-900/30 to-zinc-900 rounded-xl border border-purple-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-purple-400 mb-3 flex items-center"><span class="mr-2">🏗️</span> Pipeline canônico de indexação</h3>
+        <p class="text-zinc-300 mb-4">Cada documento entra, é processado por uma pipeline determinística e sai como N chunks indexados. Reproducibilidade vem de fixar cada passo.</p>
+        <ul class="space-y-2 text-zinc-300 text-sm"><li class='flex items-start space-x-2'><span class='text-purple-400 mt-1'>•</span><span><strong>1. Parse</strong>: extrai texto (PDF→text, HTML→text), normaliza encoding.</span></li><li class='flex items-start space-x-2'><span class='text-purple-400 mt-1'>•</span><span><strong>2. Chunk</strong>: divide com strategy + tamanho + overlap declarados.</span></li><li class='flex items-start space-x-2'><span class='text-purple-400 mt-1'>•</span><span><strong>3. Embed</strong>: passa cada chunk pelo modelo de embedding.</span></li><li class='flex items-start space-x-2'><span class='text-purple-400 mt-1'>•</span><span><strong>4. Index</strong>: armazena vetor + metadata em vector store + BM25.</span></li><li class='flex items-start space-x-2'><span class='text-purple-400 mt-1'>•</span><span><strong>5. Hash</strong>: registra sha256 do corpus para reproducibilidade.</span></li></ul>
+      </div>
+
+    
+    
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6 mb-8">
+        <h3 class="text-lg font-bold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Comece com 500 tokens + 50 overlap</h3>
+        <p class="text-zinc-300 text-sm">Para a maioria dos corpora técnicos em PT-BR, chunks de ~500 tokens com 10% overlap dão recall razoável. Ajuste depois com base em eval real, não em achismo.</p>
+      </div>
+
+
+    <!-- 6 SEÇÕES RICAS -->
+    
+      <section id="topico-1" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">1</span>
+          <div>
+            <h2 class="text-2xl font-bold">✂️ Chunking: dividir o corpus</h2>
+            <p class="text-zinc-400 text-sm mt-1">Tamanho, overlap, fronteiras semânticas</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-purple-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Quebrar documentos em pedaços (chunks) de 200-1000 tokens com overlap de 10-20%. Pode ser por caracteres, sentenças ou parágrafos.</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Chunks muito grandes diluem relevância; muito pequenos perdem contexto. Overlap evita corte abrupto entre fronteiras.</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Sliding window, semantic chunking, fronteira de seção, recursive splitter.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-2" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">2</span>
+          <div>
+            <h2 class="text-2xl font-bold">🧮 Embeddings densos: vetores semânticos</h2>
+            <p class="text-zinc-400 text-sm mt-1">Modelos sentence-transformers</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-purple-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Converte texto em vetor (768-3072 dim) onde proximidade vetorial ≈ similaridade semântica. Modelos: bge, mpnet, OpenAI ada/text-3.</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Captura sinônimos e paráfrase que BM25 perde ('automóvel' vs 'carro'). Base do retrieval moderno.</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Cosine similarity, dual encoder, MTEB benchmark, dimensionalidade.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-3" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">3</span>
+          <div>
+            <h2 class="text-2xl font-bold">🔤 BM25: o sparse clássico que ainda manda</h2>
+            <p class="text-zinc-400 text-sm mt-1">TF-IDF refinado</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-purple-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Algoritmo probabilístico de relevância baseado em frequência de termo (TF) e raridade (IDF). Não usa ML.</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Robusto, rápido, captura match exato (números, IDs, nomes próprios) que embeddings densas erram.</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">TF-IDF, BM25, sparse vector, lexical match, rare term boost.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-4" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">4</span>
+          <div>
+            <h2 class="text-2xl font-bold">🤝 Híbrido: BM25 + denso, fusão por RRF</h2>
+            <p class="text-zinc-400 text-sm mt-1">O melhor dos dois</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-purple-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Roda ambos em paralelo, funde rankings via Reciprocal Rank Fusion (RRF) ou peso linear (alpha).</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Ganhos consistentes em benchmarks (BEIR). Cada método cobre falhas do outro: BM25 pega match exato, denso pega paráfrase.</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">RRF, alpha-fusion, hybrid search, ColBERT (alternativa late-interaction).</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-5" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">5</span>
+          <div>
+            <h2 class="text-2xl font-bold">🗂️ Vector stores: o que escolher</h2>
+            <p class="text-zinc-400 text-sm mt-1">FAISS, pgvector, Qdrant, Pinecone</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-purple-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Bancos de dados otimizados para nearest-neighbor search em vetores. Local (FAISS, pgvector) ou hosted (Qdrant Cloud, Pinecone).</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Sem isso, busca em 100k embeddings vira O(n) inviável. Vector stores fazem ANN (HNSW, IVF) em ms.</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">ANN (approximate nearest neighbor), HNSW, IVF, recall@k, índice em memória vs. disco.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-6" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl flex-shrink-0">6</span>
+          <div>
+            <h2 class="text-2xl font-bold">🏷️ Metadata e filtros: além do match semântico</h2>
+            <p class="text-zinc-400 text-sm mt-1">Filtragem antes/depois do retrieval</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-purple-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Anexar metadados a cada chunk (data, autor, categoria, idioma) e filtrar por eles antes ou depois da busca vetorial.</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Pergunta 'eventos de 2024' não deve trazer chunks de 2019, mesmo que semanticamente similares. Filtros resolvem.</p>
+          </div>
+          <div>
+            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Metadata filtering, pre-filter, post-filter, namespace.</p>
+          </div>
+        </div>
+      </section>
+
+
+    <!-- Sub-tópicos expansíveis (resumo navegável) -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">📑 Resumo navegável dos tópicos</h2>
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6">
+        
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-bold flex items-center justify-center">1</span>
+            <span>✂️ Chunking: dividir o corpus</span>
+            <span class="text-zinc-500 text-xs ml-2">— Tamanho, overlap, fronteiras semânticas</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Quebrar documentos em pedaços (chunks) de 200-1000 tokens com overlap de 10-20%. Pode ser por caracteres, sentenças ou parágrafos.</span></div>
+            <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Chunks muito grandes diluem relevância; muito pequenos perdem contexto. Overlap evita corte abrupto entre fronteiras.</span></div>
+            <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Sliding window, semantic chunking, fronteira de seção, recursive splitter.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-bold flex items-center justify-center">2</span>
+            <span>🧮 Embeddings densos: vetores semânticos</span>
+            <span class="text-zinc-500 text-xs ml-2">— Modelos sentence-transformers</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Converte texto em vetor (768-3072 dim) onde proximidade vetorial ≈ similaridade semântica. Modelos: bge, mpnet, OpenAI ada/text-3.</span></div>
+            <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Captura sinônimos e paráfrase que BM25 perde ('automóvel' vs 'carro'). Base do retrieval moderno.</span></div>
+            <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Cosine similarity, dual encoder, MTEB benchmark, dimensionalidade.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-bold flex items-center justify-center">3</span>
+            <span>🔤 BM25: o sparse clássico que ainda manda</span>
+            <span class="text-zinc-500 text-xs ml-2">— TF-IDF refinado</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Algoritmo probabilístico de relevância baseado em frequência de termo (TF) e raridade (IDF). Não usa ML.</span></div>
+            <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Robusto, rápido, captura match exato (números, IDs, nomes próprios) que embeddings densas erram.</span></div>
+            <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">TF-IDF, BM25, sparse vector, lexical match, rare term boost.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-bold flex items-center justify-center">4</span>
+            <span>🤝 Híbrido: BM25 + denso, fusão por RRF</span>
+            <span class="text-zinc-500 text-xs ml-2">— O melhor dos dois</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Roda ambos em paralelo, funde rankings via Reciprocal Rank Fusion (RRF) ou peso linear (alpha).</span></div>
+            <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Ganhos consistentes em benchmarks (BEIR). Cada método cobre falhas do outro: BM25 pega match exato, denso pega paráfrase.</span></div>
+            <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">RRF, alpha-fusion, hybrid search, ColBERT (alternativa late-interaction).</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-bold flex items-center justify-center">5</span>
+            <span>🗂️ Vector stores: o que escolher</span>
+            <span class="text-zinc-500 text-xs ml-2">— FAISS, pgvector, Qdrant, Pinecone</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Bancos de dados otimizados para nearest-neighbor search em vetores. Local (FAISS, pgvector) ou hosted (Qdrant Cloud, Pinecone).</span></div>
+            <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem isso, busca em 100k embeddings vira O(n) inviável. Vector stores fazem ANN (HNSW, IVF) em ms.</span></div>
+            <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">ANN (approximate nearest neighbor), HNSW, IVF, recall@k, índice em memória vs. disco.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-bold flex items-center justify-center">6</span>
+            <span>🏷️ Metadata e filtros: além do match semântico</span>
+            <span class="text-zinc-500 text-xs ml-2">— Filtragem antes/depois do retrieval</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Anexar metadados a cada chunk (data, autor, categoria, idioma) e filtrar por eles antes ou depois da busca vetorial.</span></div>
+            <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Pergunta 'eventos de 2024' não deve trazer chunks de 2019, mesmo que semanticamente similares. Filtros resolvem.</span></div>
+            <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Metadata filtering, pre-filter, post-filter, namespace.</span></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Fazer vs Evitar -->
+    
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Hash do corpus + versão da pipeline em metadata</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Híbrido (BM25 + denso) com RRF como default</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Filtros de metadata (data, idioma, fonte)</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Chunks com fronteira semântica (parágrafo)</span></li></ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Re-indexar e perder reproducibilidade</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Confiar só em embeddings densas</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Match puramente semântico em corpus heterogêneo</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Cortar no meio de sentença ou fórmula</span></li></ul>
+        </div>
+      </div>
+
+
+    <!-- Quando NÃO usar -->
+    
+      <div class="quando-nao-usar bg-red-900/10 rounded-xl border border-red-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-red-400 mb-3 flex items-center"><span class="mr-2">🚫</span> Quando NÃO usar</h3>
+        <ul class="space-y-2"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Quando contexto longo basta</strong>: corpus pequeno (&lt;50k tokens) cabe direto na janela.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Quando a query exige raciocínio multi-hop</strong>: agente (T4) funciona melhor que RAG estático.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Quando o corpus muda a cada chamada</strong>: indexar não vale a pena; passe contexto direto.</span></li></ul>
+      </div>
+
+
+    <!-- Exemplo de código -->
+    
+      <div class="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-purple-400 mb-3 flex items-center"><span class="mr-2">💻</span> Exemplo de código</h3>
+        <pre class="bg-zinc-950 border border-zinc-800 p-4 rounded text-sm overflow-x-auto"><code>from fec_sdk import check_compat
+check_compat("modulo-3-1")
+
+# Pseudo-código provider-neutral
+from fec_sdk.indexing import Pipeline, Chunker, EmbedderHTTP, BM25
+
+pipeline = Pipeline([
+    Chunker(size=500, overlap=50, strategy="paragraph"),
+    EmbedderHTTP(model="bge-large-en-v1.5"),
+])
+
+# Indexa todos os docs
+for doc in corpus:
+    chunks = pipeline.run(doc)
+    vector_store.add(chunks, metadata={"doc_id": doc.id, "date": doc.date})
+
+# BM25 em paralelo
+bm25 = BM25(chunks)
+# Híbrido: query → top-50 BM25 ∪ top-50 denso → RRF → top-10</code></pre>
+      </div>
+
+
+    <!-- Exercício -->
+    
+      <div class="bg-amber-900/10 rounded-xl border border-amber-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">🏋️</span> Exercício hands-on</h3>
+        <p class="text-zinc-300 text-sm">Indexe um corpus de 100 abstracts ArXiv (em <code>fixtures/arxiv-cs-100/</code>) com pipeline determinística. Eval de recall@10 deve atingir ≥0.7 no golden FEC-GS-RAG-v1. Em <code>exercicios/modulo-3-1/</code>.</p>
+      </div>
+
+
+    <!-- Bibliografia -->
+    
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-purple-400 mb-3 flex items-center"><span class="mr-2">📚</span> Bibliografia</h3>
+        <ul class="space-y-2 text-zinc-300"><li class="text-sm"><strong>Robertson & Zaragoza (2009)</strong> — <a href="https://www.staff.city.ac.uk/~sbrp622/papers/foundations_bm25_review.pdf" class="text-sky-400 hover:text-sky-300 underline">BM25 and Beyond</a></li><li class="text-sm"><strong>Reimers & Gurevych (2019)</strong> — <a href="https://arxiv.org/abs/1908.10084" class="text-sky-400 hover:text-sky-300 underline">Sentence-BERT</a></li><li class="text-sm"><strong>Cormack et al. (2009)</strong> — <a href="https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf" class="text-sky-400 hover:text-sky-300 underline">Reciprocal Rank Fusion (RRF)</a></li><li class="text-sm"><strong>Thakur et al. (2021)</strong> — <a href="https://arxiv.org/abs/2104.08663" class="text-sky-400 hover:text-sky-300 underline">BEIR benchmark</a></li></ul>
+      </div>
+
+
+    <!-- Resumo Final + Navegação -->
+    
+      <section class="mb-12">
+        <div class="bg-gradient-to-br from-purple-900/40 via-zinc-900 to-zinc-900 rounded-xl border border-purple-500/30 p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">🎯</span> Resumo do Módulo</h2>
+          <ul class="space-y-3 mb-8"><li class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><span class="text-zinc-300"><strong>Chunking</strong>: 500 tokens + overlap, fronteira semântica.</span></li><li class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><span class="text-zinc-300"><strong>Embeddings densas</strong> capturam paráfrase; <strong>BM25</strong> pega match exato.</span></li><li class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><span class="text-zinc-300"><strong>Híbrido com RRF</strong> bate ambos consistentemente.</span></li><li class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><span class="text-zinc-300"><strong>Vector stores</strong> usam ANN (HNSW, IVF) para escalar.</span></li><li class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><span class="text-zinc-300"><strong>Metadata + filtros</strong> são tão importantes quanto similaridade.</span></li></ul>
+          <div class="bg-zinc-900/50 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-purple-400 mb-2">Próximo Módulo:</h3>
+            <p class="text-zinc-300 text-sm">Recuperação e reranking</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="index.html" class="btn flex-1 text-center px-6 py-3 bg-zinc-800 text-zinc-300 rounded-lg font-semibold hover:bg-zinc-700 transition-colors justify-start">← Voltar para Trilha</a>
+            <a href="modulo-3-2" class="btn flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors justify-start">Próximo Módulo →</a>
+          </div>
+        </div>
+      </section>
+
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-zinc-800 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> ·
+        Conteúdo CC BY-SA 4.0 · Código MIT · Atualizado em 2026-05-02
+      </div>
+      <div class="flex gap-6">
+        <a href="../../SECURITY.md" class="hover:text-zinc-300">Segurança</a>
+        <a href="../../CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

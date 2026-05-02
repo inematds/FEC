@@ -4,240 +4,426 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1.2 Tokens, custo e limites práticos · FEC T1</title>
+  <title>1.2 Tokens, custo e limites práticos por modelo · FEC T1</title>
   <link rel="stylesheet" href="../../assets/css/inema.css">
   <meta name="trilha" content="T1">
   <meta name="status" content="GA">
   <meta name="modulo" content="modulo-1-2">
-  <meta name="palavras" content="2600">
+  <meta name="palavras" content="3000">
   <meta name="tempo-estimado-min" content="55">
   <meta name="expected-sdk-version" content=">=1.0,<2.0">
 </head>
 <body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="GA">
 
-  <header class="border-b border-zinc-800">
-    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+  <!-- NAV GLOBAL -->
+  <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <a href="../../index.html" class="flex items-center gap-3">
         <span class="text-2xl font-bold text-primary">FEC</span>
-        <span class="text-zinc-400 text-sm">/ <a href="index.html" class="hover:text-emerald-400">T1</a> / 1.2</span>
+        <span class="text-zinc-400 text-sm hidden md:inline">Formação de Engenharia de Contexto</span>
       </a>
       <div class="flex items-center gap-4 text-sm">
-        <a href="modulo-1-1.html" class="hover:text-primary transition">← 1.1</a>
-        <a href="../trilha2/index.html" class="hover:text-primary transition">T2 →</a>
-        <a href="https://inema.club" class="text-sky-400 hover:text-sky-300 transition">INEMA.CLUB</a>
+        <a href="index.html" class="hover:text-primary transition">← T1</a>
+        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
       </div>
-    </nav>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center space-x-2 text-sm text-zinc-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400">Módulo 1.2</span>
+    </div>
+  </nav>
+
+  <!-- HEADER COM GRADIENTE + STATS -->
+  <header class="bg-gradient-to-br from-emerald-900/30 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full">MÓDULO 1.2</span>
+        <span class="px-2 py-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded text-xs">GA</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-zinc-100">🔢 Tokens, custo e limites práticos por modelo</h1>
+      <p class="text-lg text-zinc-300 max-w-3xl mb-8">Como contar tokens, estimar custo antes de chamar a API, e escolher entre frontier / low-cost / OSS para o caso certo.</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-zinc-400">Tópicos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-emerald-400">55</div>
+          <div class="text-xs text-zinc-400">Minutos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-emerald-400">Básico</div>
+          <div class="text-xs text-zinc-400">Nível</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-emerald-400">Prático</div>
+          <div class="text-xs text-zinc-400">Tipo</div>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <main class="max-w-3xl mx-auto px-6 py-12">
+  <!-- CONTEÚDO -->
+  <main class="max-w-4xl mx-auto px-6 py-12">
 
-    <article>
-      <p class="trilha-T1 text-sm font-semibold tracking-wider uppercase mb-2">T1 / Módulo 1.2</p>
-      <h1 class="text-2xl font-bold mb-4">Tokens, custo e limites práticos por modelo</h1>
+    <!-- Introdução -->
+    <section class="mb-12 prose prose-invert max-w-none">
+      <p class="text-lg text-zinc-200 leading-relaxed">Engenharia de contexto sem cálculo de custo é wishful thinking. Cada provedor tem um tokenizer próprio, cada modelo tem um preço diferente, e a diferença entre frontier e low-cost pode ser de <strong class='text-emerald-400'>50× no custo</strong> por 1M tokens. Aqui você aprende a estimar antes de pagar — e a escolher o modelo certo para a tarefa.</p>
+    </section>
 
-      <div class="flex gap-2 mb-6 flex-wrap text-xs">
-        <span class="px-2 py-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded">GA</span>
-        <span class="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded">~55 min</span>
-        <span class="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded">2.600 palavras</span>
-        <span class="px-2 py-1 bg-zinc-800 border border-zinc-700 rounded">eng. produto</span>
+    <!-- Conceito Principal + Dados/Dica -->
+    
+      <div class="bg-gradient-to-br from-emerald-900/30 to-zinc-900 rounded-xl border border-emerald-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-emerald-400 mb-3 flex items-center"><span class="mr-2">🧮</span> Estimar custo ANTES de chamar</h3>
+        <p class="text-zinc-300 mb-4">Use o tokenizer offline do provedor para calcular tokens de uma chamada antes de mandar. Custos não-triviais devem ser orçados, não chutados.</p>
+        <ul class="space-y-2 text-zinc-300 text-sm"><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>•</span><span>Anthropic: <code>client.messages.count_tokens()</code> ou Anthropic Tokenizer.</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>•</span><span>OpenAI: biblioteca <code>tiktoken</code> roda local sem chamar API.</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>•</span><span>Google: <code>model.count_tokens()</code> também local.</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>•</span><span>OSS: tokenizer do HuggingFace (<code>AutoTokenizer.from_pretrained</code>).</span></li></ul>
       </div>
 
-      <div class="p-5 mb-8 rounded-lg border border-emerald-500/30 bg-emerald-900/10">
-        <p class="text-sm font-semibold text-emerald-400 mb-1">Objetivo de aprendizagem</p>
-        <p class="text-sm text-zinc-200">
-          Ao final, você consegue (a) estimar custo de uma chamada antes de fazê-la, com erro &lt;15%;
-          (b) escolher entre frontier / low-cost / OSS para um caso dado; (c) usar prompt caching
-          para reduzir custo em cenários de prefixo estável.
-          Verificado em <code>exercicios/modulo-1-2/test.py</code>.
-        </p>
+    
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-blue-400 mb-3 flex items-center"><span class="mr-2">📊</span> Comparação real de custo (2026-Q2, ordens de grandeza)</h3>
+        <ul class="space-y-2"><li class='text-sm text-zinc-300'><strong>Frontier (ex: Claude Sonnet 4.6):</strong> ~$3 input / $15 output por 1M tokens.</li><li class='text-sm text-zinc-300'><strong>Low-cost (ex: GPT-5 mini):</strong> ~$0.15 input / $0.60 output por 1M tokens.</li><li class='text-sm text-zinc-300'><strong>Cache hit (Anthropic):</strong> 10% do preço normal — economiza 90%.</li><li class='text-sm text-zinc-300'><strong>OSS local (qwen2.5-7b):</strong> $0 por chamada (custo de hardware amortizado).</li></ul>
       </div>
 
-      <section class="prose prose-invert max-w-none mb-8">
-        <h2 class="text-xl font-bold mt-8 mb-3">Tokens não são palavras</h2>
-        <p>
-          Cada provedor tem um tokenizer próprio. "engenharia de contexto" pode virar 5 tokens em
-          um modelo Anthropic e 7 em outro. Heurísticas universais ("1 token ≈ 4 caracteres em inglês")
-          erram bastante em PT-BR, em código, em emoji, e em qualquer texto técnico denso.
-          Para estimar custo com confiança, você usa o tokenizer real do provedor (via SDK).
-        </p>
+    
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6 mb-8">
+        <h3 class="text-lg font-bold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Regra dos 80%</h3>
+        <p class="text-zinc-300 text-sm">Se a tarefa é estruturada (classificação, extração) E o input cabe em &lt;8k tokens, low-cost ou OSS resolvem 80% dos casos com 1/20 do custo. Só vá para frontier quando precisar do reasoning.</p>
+      </div>
 
-        <h2 class="text-xl font-bold mt-8 mb-3">Os três níveis de modelo (e quando usar cada)</h2>
-        <table class="w-full text-sm my-6 border-collapse">
-          <caption class="text-xs text-zinc-500 mb-2 text-left">
-            <strong>Tabela 1 — Categorias de modelo na FEC</strong> (PLAN seção 6, modelos pinados em <code>evals/v1/models.json</code>).
-          </caption>
-          <thead>
-            <tr class="border-b border-zinc-700">
-              <th class="text-left p-2">Categoria</th>
-              <th class="text-left p-2">Custo relativo</th>
-              <th class="text-left p-2">Janela típica</th>
-              <th class="text-left p-2">Quando usar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-zinc-800">
-              <td class="p-2 text-emerald-400">Frontier</td>
-              <td class="p-2">$3-15 / M tokens</td>
-              <td class="p-2">200k+</td>
-              <td class="p-2">Raciocínio complexo, multi-passo, tarefas que exigem capacidade.</td>
-            </tr>
-            <tr class="border-b border-zinc-800">
-              <td class="p-2 text-blue-400">Low-cost (mini)</td>
-              <td class="p-2">$0.10-0.30 / M</td>
-              <td class="p-2">128k+</td>
-              <td class="p-2">Volume alto, classificação, extração, tarefas estruturadas.</td>
-            </tr>
-            <tr>
-              <td class="p-2 text-amber-400">OSS local</td>
-              <td class="p-2">$0 (custo de hardware)</td>
-              <td class="p-2">8-32k confiável</td>
-              <td class="p-2">Privacidade, sem rede, custo zero por chamada, latência local.</td>
-            </tr>
-          </tbody>
-        </table>
 
-        <h2 class="text-xl font-bold mt-8 mb-3">Janela nominal vs. janela efetiva</h2>
-        <p>
-          "200k tokens" no marketing significa "o modelo aceita 200k tokens de input sem erro de API".
-          Não significa "o modelo usa 200k tokens com a mesma qualidade". O benchmark
-          <a href="https://arxiv.org/abs/2404.06654" class="text-sky-400">RULER</a> (Hsieh et al. 2024)
-          mede janela efetiva: muitos modelos com 128k nominal degradam significativamente acima de 32-64k.
-          Antes de assumir que cabe e funciona, mensure no harness.
-        </p>
+    <!-- 6 SEÇÕES RICAS -->
+    
+      <section id="topico-1" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">1</span>
+          <div>
+            <h2 class="text-2xl font-bold">🔤 Tokenização: BPE e SentencePiece</h2>
+            <p class="text-zinc-400 text-sm mt-1">Por que tokens ≠ palavras</p>
+          </div>
+        </div>
 
-        <p class="evidencia">
-          Evidência: RULER reports + replicação interna em <code>evals/v1/runs/effective-context-2026-04/</code>.
-        </p>
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-emerald-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">BPE/SentencePiece quebram texto em unidades sub-palavra aprendidas. 'engenharia' pode virar 3 tokens; 'engineering' pode virar 1.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Estimativa de custo precisa do tokenizer correto. Heurísticas universais ('1 token ≈ 4 chars') falham em PT-BR (~3 chars/token), código e emoji.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">BPE (Sennrich 2016), SentencePiece (Kudo 2018), vocabulário, multi-byte tokens, UNK.</p>
+          </div>
+        </div>
       </section>
 
-      <h2 class="text-xl font-bold mt-12 mb-4">Sub-tópicos</h2>
-
-      <details class="topico-expansivel">
-        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">1</span><span>Como contar tokens (sem chamar a API)</span></summary>
-        <div class="subsecao-inema">
-          <h4>O que é</h4>
-          <p>Cada SDK expõe um count_tokens (ou tokenizer) local. <code>anthropic.client.messages.count_tokens()</code>, <code>tiktoken</code> da OpenAI, etc.</p>
-          <h4>Por que aprender</h4>
-          <p>Você pode estimar custo localmente antes de mandar. Sem isso, planejamento de orçamento é chute.</p>
-          <h4>Conceitos-chave</h4>
-          <p>tokenizer offline, BPE pré-treinado, count vs. encode.</p>
+      <section id="topico-2" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">2</span>
+          <div>
+            <h2 class="text-2xl font-bold">💰 Custo: input vs. output (cuidado com a ratio)</h2>
+            <p class="text-zinc-400 text-sm mt-1">Output é caro mas input é volume</p>
+          </div>
         </div>
-      </details>
 
-      <details class="topico-expansivel">
-        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">2</span><span>Custo input vs. output (cuidado com a ratio)</span></summary>
-        <div class="subsecao-inema">
-          <h4>O que é</h4>
-          <p>Output tokens são tipicamente 3-5× mais caros que input. Mas em janelas longas, você paga mais em input total.</p>
-          <h4>Por que aprender</h4>
-          <p>Otimização incorreta — tentar reduzir output enquanto a janela está inflada — não move custo.</p>
-          <h4>Conceitos-chave</h4>
-          <p>Pricing tier, ratio i/o, batch discounts.</p>
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-emerald-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Output tokens custam 3-5× mais que input. Mas em janelas longas, você gasta mais em input total porque ele é grande.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Otimização incorreta — tentar reduzir output enquanto a janela está inflada — não move custo significativamente.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Pricing por 1M tokens, ratio input/output, batch discounts, prompt caching.</p>
+          </div>
         </div>
-      </details>
-
-      <details class="topico-expansivel">
-        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">3</span><span>Prompt caching: como obter desconto real</span></summary>
-        <div class="subsecao-inema">
-          <h4>O que é</h4>
-          <p>Anthropic e OpenAI oferecem cache de prefixo. Tokens cacheados custam ~10% do preço normal de input.</p>
-          <h4>Por que aprender</h4>
-          <p>Em chat com system prompt + few-shot grandes, cache pode reduzir custo de input em 80-90%. Detalhado em T5.2.</p>
-          <h4>Conceitos-chave</h4>
-          <p>Cache breakpoint, TTL, hit rate, prefix stability.</p>
-        </div>
-      </details>
-
-      <details class="topico-expansivel">
-        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">4</span><span>Latência: prefill vs. decode</span></summary>
-        <div class="subsecao-inema">
-          <h4>O que é</h4>
-          <p>Prefill é o tempo para o modelo "ler" o input. Decode é o tempo para gerar tokens. Janela longa = prefill longo.</p>
-          <h4>Por que aprender</h4>
-          <p>Para UX de chat ao vivo, prefill domina o "tempo até primeiro token". Cache reduz drasticamente.</p>
-          <h4>Conceitos-chave</h4>
-          <p>TTFT (time to first token), tokens/sec, KV cache reuse.</p>
-        </div>
-      </details>
-
-      <details class="topico-expansivel">
-        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">5</span><span>Limites por janela: quando cair para low-cost ou OSS</span></summary>
-        <div class="subsecao-inema">
-          <h4>O que é</h4>
-          <p>Heurística: se a tarefa é estruturada e o input cabe em &lt;8k tokens, low-cost ou OSS tipicamente bastam. Frontier é para raciocínio complexo OU contexto realmente grande.</p>
-          <h4>Por que aprender</h4>
-          <p>Engenheiros pulam direto para frontier por inércia. Em volume, isso queima orçamento.</p>
-          <h4>Conceitos-chave</h4>
-          <p>Capability vs. context vs. cost, model routing.</p>
-        </div>
-      </details>
-
-      <details class="topico-expansivel">
-        <summary><span class="topico-numero bg-emerald-500/20 border border-emerald-500/30 text-emerald-400">6</span><span>OSS local: matriz de hardware</span></summary>
-        <div class="subsecao-inema">
-          <h4>O que é</h4>
-          <p>Qwen2.5-7B em q4 cabe em 16GB RAM. Llama-3.1-8B-instruct também. Modelos &gt;13B começam a exigir GPU. Ver <code>OLLAMA-MATRIZ.md</code>.</p>
-          <h4>Por que aprender</h4>
-          <p>O caminho gratuito do curso usa OSS — entenda o que cabe na sua máquina antes de tentar T4.3.</p>
-          <h4>Conceitos-chave</h4>
-          <p>Quantização (q4, q5, q8), tamanho VRAM/RAM, throughput CPU vs. GPU.</p>
-        </div>
-      </details>
-
-      <section class="quando-nao-usar">
-        <h4>Quando NÃO otimizar custo</h4>
-        <ul class="list-disc ml-6 space-y-1 text-sm text-zinc-200">
-          <li><strong>Quando a chamada é única ou rara:</strong> custo total é trivial; gaste seu tempo em qualidade, não em centavos.</li>
-          <li><strong>Em prototipagem inicial:</strong> use frontier para estabelecer o teto de qualidade; otimizar depois.</li>
-          <li><strong>Quando otimização frita qualidade:</strong> se trocar para low-cost cai groundedness em 20% mas reduz custo em 30%, você não está economizando.</li>
-        </ul>
       </section>
 
-      <section class="mt-12">
-        <h2 class="text-xl font-bold mb-3">Exemplo: estimar custo antes de chamar</h2>
-<pre><code>from fec_sdk import check_compat
+      <section id="topico-3" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">3</span>
+          <div>
+            <h2 class="text-2xl font-bold">🏗️ Os três níveis de modelo</h2>
+            <p class="text-zinc-400 text-sm mt-1">Frontier, low-cost, OSS local</p>
+          </div>
+        </div>
 
-check_compat("modulo-1-2", expected_sdk_version=">=1.0,<2.0")
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-emerald-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Frontier (~$3-15/M): raciocínio complexo, contexto grande. Low-cost (~$0.10-0.30/M): volume alto, classificação. OSS local: $0/chamada, hardware-bound.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Engenheiros pulam direto para frontier por inércia. Em volume, isso queima orçamento sem ganho.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Capability vs. context vs. cost, model routing, hierarchical inference.</p>
+          </div>
+        </div>
+      </section>
 
-# Sem chamar a API: estimativa por tokenizer local.
-# (Implementação completa em exemplos/modulo-1-2/estimar.py)
+      <section id="topico-4" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">4</span>
+          <div>
+            <h2 class="text-2xl font-bold">⏱️ Latência: prefill vs. decode</h2>
+            <p class="text-zinc-400 text-sm mt-1">TTFT em janelas longas</p>
+          </div>
+        </div>
 
-system_prompt = "Você é um assistente conciso." * 1
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-emerald-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Prefill é o tempo para o modelo 'ler' o input. Decode é o tempo de geração. Janela longa = prefill longo = TTFT (time-to-first-token) grande.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Para UX de chat ao vivo, prefill domina o 'tempo até primeiro token'. Cache reduz drasticamente — entender isso é entender UX real.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">TTFT, tokens/sec, KV cache reuse, streaming.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-5" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">5</span>
+          <div>
+            <h2 class="text-2xl font-bold">🔁 Prompt caching: como obter desconto real</h2>
+            <p class="text-zinc-400 text-sm mt-1">10% do preço para tokens cacheados</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-emerald-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Anthropic e OpenAI oferecem cache de prefixo. Tokens cacheados custam ~10% do preço normal de input.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Em chat com system prompt + few-shot grandes, cache pode reduzir custo de input em 80-90%. Detalhado em T5.2.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Cache breakpoint, TTL, hit rate, prefix stability.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-6" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl flex-shrink-0">6</span>
+          <div>
+            <h2 class="text-2xl font-bold">🆓 OSS local: a matriz de hardware</h2>
+            <p class="text-zinc-400 text-sm mt-1">O que cabe na sua máquina</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-emerald-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Qwen2.5-7B q4 cabe em 16GB RAM. Llama-3.1-8B-instruct também. Modelos >13B exigem GPU. Detalhes em <code>OLLAMA-MATRIZ.md</code>.</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">O caminho gratuito do curso usa OSS — entenda o que cabe antes de tentar T4.3 (multi-agente).</p>
+          </div>
+          <div>
+            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Quantização (q4, q5, q8), VRAM/RAM, throughput CPU vs. GPU, vLLM.</p>
+          </div>
+        </div>
+      </section>
+
+
+    <!-- Sub-tópicos expansíveis (resumo navegável) -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">📑 Resumo navegável dos tópicos</h2>
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6">
+        
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">1</span>
+            <span>🔤 Tokenização: BPE e SentencePiece</span>
+            <span class="text-zinc-500 text-xs ml-2">— Por que tokens ≠ palavras</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">BPE/SentencePiece quebram texto em unidades sub-palavra aprendidas. 'engenharia' pode virar 3 tokens; 'engineering' pode virar 1.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Estimativa de custo precisa do tokenizer correto. Heurísticas universais ('1 token ≈ 4 chars') falham em PT-BR (~3 chars/token), código e emoji.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">BPE (Sennrich 2016), SentencePiece (Kudo 2018), vocabulário, multi-byte tokens, UNK.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">2</span>
+            <span>💰 Custo: input vs. output (cuidado com a ratio)</span>
+            <span class="text-zinc-500 text-xs ml-2">— Output é caro mas input é volume</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Output tokens custam 3-5× mais que input. Mas em janelas longas, você gasta mais em input total porque ele é grande.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Otimização incorreta — tentar reduzir output enquanto a janela está inflada — não move custo significativamente.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Pricing por 1M tokens, ratio input/output, batch discounts, prompt caching.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">3</span>
+            <span>🏗️ Os três níveis de modelo</span>
+            <span class="text-zinc-500 text-xs ml-2">— Frontier, low-cost, OSS local</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Frontier (~$3-15/M): raciocínio complexo, contexto grande. Low-cost (~$0.10-0.30/M): volume alto, classificação. OSS local: $0/chamada, hardware-bound.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Engenheiros pulam direto para frontier por inércia. Em volume, isso queima orçamento sem ganho.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Capability vs. context vs. cost, model routing, hierarchical inference.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">4</span>
+            <span>⏱️ Latência: prefill vs. decode</span>
+            <span class="text-zinc-500 text-xs ml-2">— TTFT em janelas longas</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Prefill é o tempo para o modelo 'ler' o input. Decode é o tempo de geração. Janela longa = prefill longo = TTFT (time-to-first-token) grande.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para UX de chat ao vivo, prefill domina o 'tempo até primeiro token'. Cache reduz drasticamente — entender isso é entender UX real.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">TTFT, tokens/sec, KV cache reuse, streaming.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">5</span>
+            <span>🔁 Prompt caching: como obter desconto real</span>
+            <span class="text-zinc-500 text-xs ml-2">— 10% do preço para tokens cacheados</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Anthropic e OpenAI oferecem cache de prefixo. Tokens cacheados custam ~10% do preço normal de input.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em chat com system prompt + few-shot grandes, cache pode reduzir custo de input em 80-90%. Detalhado em T5.2.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Cache breakpoint, TTL, hit rate, prefix stability.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">6</span>
+            <span>🆓 OSS local: a matriz de hardware</span>
+            <span class="text-zinc-500 text-xs ml-2">— O que cabe na sua máquina</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Qwen2.5-7B q4 cabe em 16GB RAM. Llama-3.1-8B-instruct também. Modelos >13B exigem GPU. Detalhes em <code>OLLAMA-MATRIZ.md</code>.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">O caminho gratuito do curso usa OSS — entenda o que cabe antes de tentar T4.3 (multi-agente).</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Quantização (q4, q5, q8), VRAM/RAM, throughput CPU vs. GPU, vLLM.</span></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Fazer vs Evitar -->
+    
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Estimar tokens com tokenizer offline antes de mandar</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Usar low-cost para tarefas estruturadas em volume</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Habilitar prompt caching em chats com prefixo grande</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Pinar versão exata do modelo (com data)</span></li></ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Chutar 'mais ou menos' o tamanho da janela</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Mandar tudo para frontier por inércia</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Reescrever o system prompt a cada turn (invalida cache)</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Apontar para apelido genérico que pode mudar</span></li></ul>
+        </div>
+      </div>
+
+
+    <!-- Quando NÃO usar -->
+    
+      <div class="quando-nao-usar bg-red-900/10 rounded-xl border border-red-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-red-400 mb-3 flex items-center"><span class="mr-2">🚫</span> Quando NÃO usar</h3>
+        <ul class="space-y-2"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Quando a chamada é única ou rara</strong>: custo total é trivial; gaste seu tempo em qualidade, não em centavos.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Em prototipagem inicial</strong>: use frontier para estabelecer o teto de qualidade; otimize depois.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Quando otimização frita qualidade</strong>: trocar frontier por low-cost que cai groundedness em 20% NÃO é economia.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Quando privacidade exige local</strong>: custo deixa de ser o critério; OSS é a única opção.</span></li></ul>
+      </div>
+
+
+    <!-- Exemplo de código -->
+    
+      <div class="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-emerald-400 mb-3 flex items-center"><span class="mr-2">💻</span> Exemplo de código</h3>
+        <pre class="bg-zinc-950 border border-zinc-800 p-4 rounded text-sm overflow-x-auto"><code>from fec_sdk import check_compat
+check_compat("modulo-1-2", expected_sdk_version="&gt;=1.0,&lt;2.0")
+
+# Estimativa local — sem chamar API
+system_prompt = "Você é um assistente conciso."
 user_query = "Resuma este texto em 3 bullets."
-contexto = open("documento.txt").read()  # exemplo
+contexto = open("documento.txt").read()
 
-# Aproximação grosseira para PT-BR: ~3 chars/token. Tokenizer real do provedor é melhor.
-tokens_est = (len(system_prompt) + len(user_query) + len(contexto)) // 3
-custo_input  = tokens_est * 3.00 / 1_000_000   # $3 / M (frontier hipotético)
-custo_output = 200 * 15.00 / 1_000_000          # 200 tokens de saída × $15/M
+# PT-BR: ~3 chars/token (use tokenizer real do provedor para precisão)
+tokens_input  = (len(system_prompt) + len(user_query) + len(contexto)) // 3
+tokens_output = 200  # estimativa do tamanho da resposta
 
-print(f"Estimado: ~{tokens_est} tokens input → ${custo_input + custo_output:.4f}")
-</code></pre>
-        <p class="evidencia mt-2">Para tokenizador real, ver <code>exemplos/modulo-1-2/estimar.py</code> (usa adapter do provedor).</p>
+# Frontier hipotético
+custo_frontier  = tokens_input * 3.00 / 1_000_000 + tokens_output * 15.00 / 1_000_000
+# Low-cost
+custo_low_cost  = tokens_input * 0.15 / 1_000_000 + tokens_output * 0.60 / 1_000_000
+
+print(f"Frontier: ${custo_frontier:.4f} | Low-cost: ${custo_low_cost:.4f}")</code></pre>
+      </div>
+
+
+    <!-- Exercício -->
+    
+      <div class="bg-amber-900/10 rounded-xl border border-amber-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">🏋️</span> Exercício hands-on</h3>
+        <p class="text-zinc-300 text-sm">Em <code>exercicios/modulo-1-2/</code>: dado um conjunto de chamadas LLM, decida qual modelo (frontier/low-cost/OSS) usar para minimizar custo mantendo qualidade. Teste em <code>pytest exercicios/modulo-1-2/test.py</code>.</p>
+      </div>
+
+
+    <!-- Bibliografia -->
+    
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-emerald-400 mb-3 flex items-center"><span class="mr-2">📚</span> Bibliografia</h3>
+        <ul class="space-y-2 text-zinc-300"><li class="text-sm"><strong>Sennrich et al. (2016)</strong> — <a href="https://arxiv.org/abs/1508.07909" class="text-sky-400 hover:text-sky-300 underline">Neural Machine Translation of Rare Words with Subword Units (BPE)</a></li><li class="text-sm"><strong>Kudo & Richardson (2018)</strong> — <a href="https://arxiv.org/abs/1808.06226" class="text-sky-400 hover:text-sky-300 underline">SentencePiece: simple subword tokenizer</a></li><li class="text-sm"><strong>Hsieh et al. (2024)</strong> — <a href="https://arxiv.org/abs/2404.06654" class="text-sky-400 hover:text-sky-300 underline">RULER: long-context benchmark</a></li><li class="text-sm"><strong>Anthropic (2024)</strong> — <a href="https://docs.anthropic.com" class="text-sky-400 hover:text-sky-300 underline">Prompt caching with Claude</a></li></ul>
+      </div>
+
+
+    <!-- Resumo Final + Navegação -->
+    
+      <section class="mb-12">
+        <div class="bg-gradient-to-br from-emerald-900/40 via-zinc-900 to-zinc-900 rounded-xl border border-emerald-500/30 p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">🎯</span> Resumo do Módulo</h2>
+          <ul class="space-y-3 mb-8"><li class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><span class="text-zinc-300"><strong>Tokens não são palavras</strong> — use tokenizer do provedor para estimativa.</span></li><li class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><span class="text-zinc-300"><strong>Output 3-5× mais caro</strong> que input, mas input domina em janelas longas.</span></li><li class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><span class="text-zinc-300"><strong>Três níveis de modelo</strong>: frontier, low-cost, OSS — cada um para um caso.</span></li><li class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><span class="text-zinc-300"><strong>Prompt caching</strong> reduz input cacheado para 10% do preço.</span></li><li class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><span class="text-zinc-300"><strong>OSS local</strong> é viável para muitos labs do curso (ver OLLAMA-MATRIZ.md).</span></li></ul>
+          <div class="bg-zinc-900/50 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-emerald-400 mb-2">Próximo Módulo:</h3>
+            <p class="text-zinc-300 text-sm">T2 — Engenharia da Mensagem</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="index.html" class="btn flex-1 text-center px-6 py-3 bg-zinc-800 text-zinc-300 rounded-lg font-semibold hover:bg-zinc-700 transition-colors justify-start">← Voltar para Trilha</a>
+            <a href="../trilha2/index.html" class="btn flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors justify-start">Próximo Módulo →</a>
+          </div>
+        </div>
       </section>
 
-      <section class="mt-10">
-        <h2 class="text-xl font-bold mb-3">Bibliografia</h2>
-        <ul class="list-disc ml-6 space-y-2 text-sm text-zinc-300">
-          <li>Hsieh et al. (2024) — RULER long-context benchmark, ArXiv:2404.06654.</li>
-          <li>Anthropic (2024) — Prompt caching with Claude.</li>
-          <li>Kudo & Richardson (2018) — SentencePiece, ArXiv:1808.06226.</li>
-          <li><a href="../../bibliografia/T1.md" class="text-sky-400 underline">Bibliografia completa T1</a></li>
-        </ul>
-      </section>
-
-    </article>
-
-    <nav class="mt-16 flex justify-between border-t border-zinc-800 pt-6 text-sm">
-      <a href="modulo-1-1.html" class="text-zinc-400 hover:text-emerald-400">← 1.1 Janela e atenção</a>
-      <a href="../trilha2/index.html" class="text-blue-400 hover:text-blue-300">T2 Engenharia da Mensagem →</a>
-    </nav>
 
   </main>
 
+  <!-- FOOTER -->
   <footer class="border-t border-zinc-800 mt-16">
     <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
-      <div><a href="https://inema.club" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> · CC BY-SA 4.0 + MIT · 2026-05-02</div>
+      <div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> ·
+        Conteúdo CC BY-SA 4.0 · Código MIT · Atualizado em 2026-05-02
+      </div>
       <div class="flex gap-6">
         <a href="../../SECURITY.md" class="hover:text-zinc-300">Segurança</a>
         <a href="../../CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6.2 Operacionalização avançada: A/B, canários, rollback (beta) · FEC T6</title>
+  <link rel="stylesheet" href="../../assets/css/inema.css">
+  <meta name="trilha" content="T6">
+  <meta name="status" content="beta">
+  <meta name="modulo" content="modulo-6-2">
+  <meta name="palavras" content="3000">
+  <meta name="tempo-estimado-min" content="65">
+  <meta name="expected-sdk-version" content=">=1.0,<2.0">
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="beta">
+
+  <!-- NAV GLOBAL -->
+  <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../../index.html" class="flex items-center gap-3">
+        <span class="text-2xl font-bold text-primary">FEC</span>
+        <span class="text-zinc-400 text-sm hidden md:inline">Formação de Engenharia de Contexto</span>
+      </a>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="index.html" class="hover:text-primary transition">← T6</a>
+        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center space-x-2 text-sm text-zinc-400">
+      <a href="../../index.html" class="hover:text-rose-400">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-rose-400">Trilha 6</a>
+      <span>/</span>
+      <span class="text-rose-400">Módulo 6.2</span>
+    </div>
+  </nav>
+
+  <!-- HEADER COM GRADIENTE + STATS -->
+  <header class="bg-gradient-to-br from-rose-900/30 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="inline-block px-3 py-1 bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-full">MÓDULO 6.2</span>
+        <span class="px-2 py-1 bg-rose-500/20 border border-rose-500/30 text-rose-400 rounded text-xs">beta</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-zinc-100">🚀 Operacionalização avançada: A/B, canários, rollback (beta)</h1>
+      <p class="text-lg text-zinc-300 max-w-3xl mb-8">Levar para produção: A/B em prompt, canários por modelo, rollback, observabilidade contínua. O que se aprende rodando, não no laboratório.</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-rose-400">6</div>
+          <div class="text-xs text-zinc-400">Tópicos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-rose-400">65</div>
+          <div class="text-xs text-zinc-400">Minutos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-rose-400">Avançado</div>
+          <div class="text-xs text-zinc-400">Nível</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-rose-400">Avançado</div>
+          <div class="text-xs text-zinc-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="max-w-4xl mx-auto px-6 py-12">
+
+    <!-- Introdução -->
+    <section class="mb-12 prose prose-invert max-w-none">
+      <p class="text-lg text-zinc-200 leading-relaxed">Tudo que você aprendeu até aqui se prova em <strong class='text-rose-400'>produção</strong>. Aqui você vê padrões para deploy seguro: A/B, canário, rollback rápido, observabilidade. Este módulo é <em>beta</em> — práticas amadurecem com a indústria.</p>
+    </section>
+
+    <!-- Conceito Principal + Dados/Dica -->
+    
+      <div class="bg-gradient-to-br from-rose-900/30 to-zinc-900 rounded-xl border border-rose-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-rose-400 mb-3 flex items-center"><span class="mr-2">🚦</span> Anatomia do deploy seguro de LLM</h3>
+        <p class="text-zinc-300 mb-4">Não é sobre ter coragem — é sobre ter os switches certos antes de precisar deles.</p>
+        <ul class="space-y-2 text-zinc-300 text-sm"><li class='flex items-start space-x-2'><span class='text-rose-400 mt-1'>•</span><span><strong>1. A/B em pequena %</strong> com métrica primária e timeline.</span></li><li class='flex items-start space-x-2'><span class='text-rose-400 mt-1'>•</span><span><strong>2. Canário</strong>: 5% → 25% → 100% se métricas OK.</span></li><li class='flex items-start space-x-2'><span class='text-rose-400 mt-1'>•</span><span><strong>3. Rollback</strong> hot, em &lt;1 min.</span></li><li class='flex items-start space-x-2'><span class='text-rose-400 mt-1'>•</span><span><strong>4. Kill switch</strong> independente do rollback.</span></li><li class='flex items-start space-x-2'><span class='text-rose-400 mt-1'>•</span><span><strong>5. Eval contínuo</strong> + alertas.</span></li></ul>
+      </div>
+
+    
+    
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6 mb-8">
+        <h3 class="text-lg font-bold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Implemente kill switch antes de qualquer rollout</h3>
+        <p class="text-zinc-300 text-sm">Não confie em rollback. Kill switch deve estar em produção e testado antes da primeira liberação. Sem isso, você está exposto a desastre.</p>
+      </div>
+
+
+    <!-- 6 SEÇÕES RICAS -->
+    
+      <section id="topico-1" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl flex-shrink-0">1</span>
+          <div>
+            <h2 class="text-2xl font-bold">🆎 A/B em prompt: variant + métrica primária</h2>
+            <p class="text-zinc-400 text-sm mt-1">Decisão por dado, não opinião</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-rose-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Roteia % do tráfego para variant. Mede métrica primária (groundedness, satisfação) com significância estatística.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Mudanças em prompt são frequentes; A/B distingue 'achei que melhorou' de 'melhorou medido'.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">A/B test, variant routing, statistical significance, sample size.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-2" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl flex-shrink-0">2</span>
+          <div>
+            <h2 class="text-2xl font-bold">🐤 Canário: rollout incremental</h2>
+            <p class="text-zinc-400 text-sm mt-1">5% → 25% → 100%</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-rose-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Liberar mudança para 5% do tráfego, observar métricas + custo + erro. Subir gradualmente se OK.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Mudança de modelo (de Claude 4.5 para 4.6) pode quebrar 5% dos casos. Canário pega antes do fan-out.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Canary release, progressive rollout, blast radius, kill switch.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-3" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl flex-shrink-0">3</span>
+          <div>
+            <h2 class="text-2xl font-bold">↩️ Rollback rápido: pré-requisito de canário</h2>
+            <p class="text-zinc-400 text-sm mt-1">1 click</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-rose-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Botão 'voltar' que reverte para versão anterior em segundos. Versão anterior precisa estar 'quente' (warm cache).</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Sem rollback, canário é teatro. Quando dá problema, você precisa MUITO de voltar rápido.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Hot rollback, warm standby, version pinning, traffic shift.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-4" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl flex-shrink-0">4</span>
+          <div>
+            <h2 class="text-2xl font-bold">📈 Observabilidade contínua: o que monitorar</h2>
+            <p class="text-zinc-400 text-sm mt-1">Métricas + alertas</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-rose-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Dashboards: latência p50/p95, erro rate, custo, hit de cache, qualidade (LLM-judge contínuo). Alertas em desvios.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Em produção, problemas se manifestam por números antes de virarem reclamação. Instrumentação detecta cedo.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">SLO, SLI, alerting, dashboard, distribution shift detection.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-5" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl flex-shrink-0">5</span>
+          <div>
+            <h2 class="text-2xl font-bold">🛑 Kill switch: parar feature instantaneamente</h2>
+            <p class="text-zinc-400 text-sm mt-1">Botão de emergência</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-rose-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Flag de configuração que desabilita a feature LLM. Tráfego volta para fallback estático ou erro educativo.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Modelo do provedor pode degradar do nada. Kill switch dá tempo de investigar sem disaster.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Feature flag, kill switch, fallback, graceful degradation.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-6" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl flex-shrink-0">6</span>
+          <div>
+            <h2 class="text-2xl font-bold">🔁 Eval contínuo em produção</h2>
+            <p class="text-zinc-400 text-sm mt-1">Não só pré-deploy</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-rose-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">% pequena do tráfego é avaliada em tempo real (LLM-judge automático). Detecta drift sem esperar reclamação.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Modelos provider mudam; corpus muda; usuários mudam. Eval só pré-deploy envelhece.</p>
+          </div>
+          <div>
+            <span class="text-rose-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Production eval, live judge, drift detection, sampling rate.</p>
+          </div>
+        </div>
+      </section>
+
+
+    <!-- Sub-tópicos expansíveis (resumo navegável) -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">📑 Resumo navegável dos tópicos</h2>
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6">
+        
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">1</span>
+            <span>🆎 A/B em prompt: variant + métrica primária</span>
+            <span class="text-zinc-500 text-xs ml-2">— Decisão por dado, não opinião</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Roteia % do tráfego para variant. Mede métrica primária (groundedness, satisfação) com significância estatística.</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Mudanças em prompt são frequentes; A/B distingue 'achei que melhorou' de 'melhorou medido'.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">A/B test, variant routing, statistical significance, sample size.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">2</span>
+            <span>🐤 Canário: rollout incremental</span>
+            <span class="text-zinc-500 text-xs ml-2">— 5% → 25% → 100%</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Liberar mudança para 5% do tráfego, observar métricas + custo + erro. Subir gradualmente se OK.</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Mudança de modelo (de Claude 4.5 para 4.6) pode quebrar 5% dos casos. Canário pega antes do fan-out.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Canary release, progressive rollout, blast radius, kill switch.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">3</span>
+            <span>↩️ Rollback rápido: pré-requisito de canário</span>
+            <span class="text-zinc-500 text-xs ml-2">— 1 click</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Botão 'voltar' que reverte para versão anterior em segundos. Versão anterior precisa estar 'quente' (warm cache).</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem rollback, canário é teatro. Quando dá problema, você precisa MUITO de voltar rápido.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Hot rollback, warm standby, version pinning, traffic shift.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">4</span>
+            <span>📈 Observabilidade contínua: o que monitorar</span>
+            <span class="text-zinc-500 text-xs ml-2">— Métricas + alertas</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Dashboards: latência p50/p95, erro rate, custo, hit de cache, qualidade (LLM-judge contínuo). Alertas em desvios.</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em produção, problemas se manifestam por números antes de virarem reclamação. Instrumentação detecta cedo.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">SLO, SLI, alerting, dashboard, distribution shift detection.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">5</span>
+            <span>🛑 Kill switch: parar feature instantaneamente</span>
+            <span class="text-zinc-500 text-xs ml-2">— Botão de emergência</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Flag de configuração que desabilita a feature LLM. Tráfego volta para fallback estático ou erro educativo.</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Modelo do provedor pode degradar do nada. Kill switch dá tempo de investigar sem disaster.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Feature flag, kill switch, fallback, graceful degradation.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">6</span>
+            <span>🔁 Eval contínuo em produção</span>
+            <span class="text-zinc-500 text-xs ml-2">— Não só pré-deploy</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">% pequena do tráfego é avaliada em tempo real (LLM-judge automático). Detecta drift sem esperar reclamação.</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Modelos provider mudam; corpus muda; usuários mudam. Eval só pré-deploy envelhece.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Production eval, live judge, drift detection, sampling rate.</span></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Fazer vs Evitar -->
+    
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>A/B com métrica primária e sample size calculado</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Canário 5% → 25% → 100% por dia</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Kill switch testado e documentado</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Eval contínuo em produção sampling 1-5%</span></li></ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Eyeballing 'parece melhor'</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Big bang rollout</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>'Vamos torcer pra não dar problema'</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Eval só em CI</span></li></ul>
+        </div>
+      </div>
+
+
+    <!-- Quando NÃO usar -->
+    
+      <div class="quando-nao-usar bg-red-900/10 rounded-xl border border-red-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-red-400 mb-3 flex items-center"><span class="mr-2">🚫</span> Quando NÃO usar</h3>
+        <ul class="space-y-2"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Volume baixo</strong>: A/B precisa de N significativo; com pouco tráfego, espera mais.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Mudança trivial e auditada</strong>: typo de prompt não precisa de canário.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Sem instrumentação básica</strong>: implemente tracing ANTES de pensar em rollout sofisticado.</span></li></ul>
+      </div>
+
+
+    <!-- Exemplo de código -->
+    
+      <div class="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-rose-400 mb-3 flex items-center"><span class="mr-2">💻</span> Exemplo de código</h3>
+        <pre class="bg-zinc-950 border border-zinc-800 p-4 rounded text-sm overflow-x-auto"><code># Esquema de feature flag + canário
+from random import random
+
+def chamar_modelo(query: str, user_id: str) -&gt; str:
+    # Kill switch — flag externo (ex.: ConfigCat, LaunchDarkly, env var)
+    if feature_flag("llm_enabled") is False:
+        return fallback_estatico(query)
+
+    # Canário: 5% recebe variant nova
+    if hash(user_id) % 100 &lt; 5:
+        variant = "v1.1.0"
+    else:
+        variant = "v1.0.0"  # estável
+
+    resposta = pipeline_llm(query, variant=variant)
+
+    # Eval contínuo: 1% do tráfego é judgeado
+    if random() &lt; 0.01:
+        score = judge_async(query, resposta)
+        emit_metric("groundedness", score, tags={"variant": variant})
+
+    return resposta</code></pre>
+      </div>
+
+
+    <!-- Exercício -->
+    
+      <div class="bg-amber-900/10 rounded-xl border border-amber-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">🏋️</span> Exercício hands-on</h3>
+        <p class="text-zinc-300 text-sm">Adicione A/B + canário + kill switch + eval contínuo ao P5 (pipeline em produção). Demonstre rollback em 1 min. Em <code>projetos/P5/</code>.</p>
+      </div>
+
+
+    <!-- Bibliografia -->
+    
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-rose-400 mb-3 flex items-center"><span class="mr-2">📚</span> Bibliografia</h3>
+        <ul class="space-y-2 text-zinc-300"><li class="text-sm"><strong>Google SRE Book</strong> — <a href="https://sre.google/sre-book/" class="text-sky-400 hover:text-sky-300 underline">Production rollout best practices</a></li><li class="text-sm"><strong>Honeycomb</strong> — <a href="https://www.honeycomb.io" class="text-sky-400 hover:text-sky-300 underline">Observability for LLM systems</a></li><li class="text-sm"><strong>Arize AI</strong> — <a href="https://arize.com/llm-observability" class="text-sky-400 hover:text-sky-300 underline">ML observability</a></li><li class="text-sm"><strong>Anthropic (2024)</strong> — <a href="https://www.anthropic.com" class="text-sky-400 hover:text-sky-300 underline">Building safer agentic systems</a></li></ul>
+      </div>
+
+
+    <!-- Resumo Final + Navegação -->
+    
+      <section class="mb-12">
+        <div class="bg-gradient-to-br from-rose-900/40 via-zinc-900 to-zinc-900 rounded-xl border border-rose-500/30 p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">🎯</span> Resumo do Módulo</h2>
+          <ul class="space-y-3 mb-8"><li class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><span class="text-zinc-300"><strong>A/B em prompt</strong> com métrica primária e significância.</span></li><li class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><span class="text-zinc-300"><strong>Canário</strong> 5%→25%→100% — não big bang.</span></li><li class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><span class="text-zinc-300"><strong>Kill switch</strong> antes de qualquer rollout.</span></li><li class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><span class="text-zinc-300"><strong>Rollback hot</strong> &lt;1 min — pré-requisito de canário.</span></li><li class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><span class="text-zinc-300"><strong>Eval contínuo</strong> em produção captura drift.</span></li></ul>
+          <div class="bg-zinc-900/50 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-rose-400 mb-2">Próximo Módulo:</h3>
+            <p class="text-zinc-300 text-sm">Projeto Final P5 — Pipeline em produção</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="index.html" class="btn flex-1 text-center px-6 py-3 bg-zinc-800 text-zinc-300 rounded-lg font-semibold hover:bg-zinc-700 transition-colors justify-start">← Voltar para Trilha</a>
+            <a href="../../projetos/P5/README.md" class="btn flex-1 text-center px-6 py-3 bg-rose-600 text-white rounded-lg font-semibold hover:bg-rose-500 transition-colors justify-start">Próximo Módulo →</a>
+          </div>
+        </div>
+      </section>
+
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-zinc-800 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> ·
+        Conteúdo CC BY-SA 4.0 · Código MIT · Atualizado em 2026-05-02
+      </div>
+      <div class="flex gap-6">
+        <a href="../../SECURITY.md" class="hover:text-zinc-300">Segurança</a>
+        <a href="../../CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

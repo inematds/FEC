@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5.2 Prompt caching e context distillation (beta) · FEC T5</title>
+  <link rel="stylesheet" href="../../assets/css/inema.css">
+  <meta name="trilha" content="T5">
+  <meta name="status" content="beta">
+  <meta name="modulo" content="modulo-5-2">
+  <meta name="palavras" content="3000">
+  <meta name="tempo-estimado-min" content="65">
+  <meta name="expected-sdk-version" content=">=1.0,<2.0">
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="beta">
+
+  <!-- NAV GLOBAL -->
+  <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../../index.html" class="flex items-center gap-3">
+        <span class="text-2xl font-bold text-primary">FEC</span>
+        <span class="text-zinc-400 text-sm hidden md:inline">Formação de Engenharia de Contexto</span>
+      </a>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="index.html" class="hover:text-primary transition">← T5</a>
+        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center space-x-2 text-sm text-zinc-400">
+      <a href="../../index.html" class="hover:text-teal-400">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-teal-400">Trilha 5</a>
+      <span>/</span>
+      <span class="text-teal-400">Módulo 5.2</span>
+    </div>
+  </nav>
+
+  <!-- HEADER COM GRADIENTE + STATS -->
+  <header class="bg-gradient-to-br from-teal-900/30 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="inline-block px-3 py-1 bg-teal-500/20 text-teal-400 text-xs font-semibold rounded-full">MÓDULO 5.2</span>
+        <span class="px-2 py-1 bg-teal-500/20 border border-teal-500/30 text-teal-400 rounded text-xs">beta</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-zinc-100">⚡ Prompt caching e context distillation (beta)</h1>
+      <p class="text-lg text-zinc-300 max-w-3xl mb-8">Como reduzir custo em 80-90% com prompt caching. Quando context distillation (treinar um modelo pequeno) substitui contexto.</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-teal-400">6</div>
+          <div class="text-xs text-zinc-400">Tópicos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-teal-400">65</div>
+          <div class="text-xs text-zinc-400">Minutos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-teal-400">Avançado</div>
+          <div class="text-xs text-zinc-400">Nível</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-teal-400">Avançado</div>
+          <div class="text-xs text-zinc-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="max-w-4xl mx-auto px-6 py-12">
+
+    <!-- Introdução -->
+    <section class="mb-12 prose prose-invert max-w-none">
+      <p class="text-lg text-zinc-200 leading-relaxed">Prompt caching é a alavanca de custo mais subestimada: <strong class='text-teal-400'>10% do preço para tokens cacheados</strong>. Em chats com prefix grande, isso é redução de 80-90% real. Context distillation vai além: substitui contexto longo por modelo treinado. Ambos têm trade-offs concretos.</p>
+    </section>
+
+    <!-- Conceito Principal + Dados/Dica -->
+    
+      <div class="bg-gradient-to-br from-teal-900/30 to-zinc-900 rounded-xl border border-teal-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-teal-400 mb-3 flex items-center"><span class="mr-2">💰</span> Hierarquia de otimização de custo</h3>
+        <p class="text-zinc-300 mb-4">Antes de invocar técnicas avançadas, esgote as simples. Caching é low-hanging fruit; distillation é trabalho pesado.</p>
+        <ul class="space-y-2 text-zinc-300 text-sm"><li class='flex items-start space-x-2'><span class='text-teal-400 mt-1'>•</span><span><strong>1. Reduzir tokens</strong>: prompts mais curtos, RAG bom em vez de contexto longo.</span></li><li class='flex items-start space-x-2'><span class='text-teal-400 mt-1'>•</span><span><strong>2. Trocar de modelo</strong>: low-cost onde frontier é desnecessário.</span></li><li class='flex items-start space-x-2'><span class='text-teal-400 mt-1'>•</span><span><strong>3. Prompt caching</strong>: ganha 80% sem mudar capability.</span></li><li class='flex items-start space-x-2'><span class='text-teal-400 mt-1'>•</span><span><strong>4. Compressão</strong>: lossy mas eficaz em casos certos.</span></li><li class='flex items-start space-x-2'><span class='text-teal-400 mt-1'>•</span><span><strong>5. Distillation</strong>: trabalho de ML, ganho permanente.</span></li></ul>
+      </div>
+
+    
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-blue-400 mb-3 flex items-center"><span class="mr-2">📊</span> Anthropic Prompt Caching (2024)</h3>
+        <ul class="space-y-2"><li class='text-sm text-zinc-300'><strong>~10%</strong> do preço normal para tokens lidos do cache.</li><li class='text-sm text-zinc-300'><strong>5 min de TTL</strong> (Anthropic) — chamadas espaçadas perdem cache.</li><li class='text-sm text-zinc-300'><strong>Hit rate típico em chats:</strong> 70-95% se prefix bem estruturado.</li></ul>
+      </div>
+
+    
+
+    <!-- 6 SEÇÕES RICAS -->
+    
+      <section id="topico-1" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl flex-shrink-0">1</span>
+          <div>
+            <h2 class="text-2xl font-bold">💰 Prompt caching (Anthropic, OpenAI)</h2>
+            <p class="text-zinc-400 text-sm mt-1">10% do preço para hits</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-teal-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Provedor cacheia o prefixo da janela. Próxima chamada com mesmo prefixo: tokens cacheados custam ~10% do normal.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Em chat com system prompt + few-shot grandes, redução real de 80-90% no custo de input.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Prompt cache, cache_control, cache breakpoints, TTL (5min Anthropic), hit rate.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-2" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl flex-shrink-0">2</span>
+          <div>
+            <h2 class="text-2xl font-bold">🎯 Cache breakpoints: onde marcar</h2>
+            <p class="text-zinc-400 text-sm mt-1">Estável vs variável</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-teal-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Você marca pontos do prompt como 'cacheável'. Anthropic: até 4 breakpoints. OpenAI: automático para prefixos &gt;1024 tokens.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Cache só vale se o prefixo até o breakpoint for ESTÁVEL. Mexer no system prompt invalida tudo daquele ponto pra frente.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Cache anchor, prefix stability, partial invalidation.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-3" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl flex-shrink-0">3</span>
+          <div>
+            <h2 class="text-2xl font-bold">📊 Medir hit rate: você está economizando?</h2>
+            <p class="text-zinc-400 text-sm mt-1">Métrica explícita</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-teal-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Cada chamada retorna métricas: tokens lidos do cache vs. tokens novos. Hit rate = cached / total.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Sem medir hit rate, você não sabe se cache está funcionando. Pequena mudança no prefix derruba hit para 0.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Hit rate, cache miss, cache invalidation, observability.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-4" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl flex-shrink-0">4</span>
+          <div>
+            <h2 class="text-2xl font-bold">🧪 Context distillation: substituir contexto por modelo</h2>
+            <p class="text-zinc-400 text-sm mt-1">Treinar pequeno</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-teal-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Treinar (fine-tune) um modelo pequeno usando inputs e outputs do modelo grande com contexto longo. Modelo pequeno aprende sem precisar do contexto.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Para tarefa fixada e volume alto, distillation reduz custo dramaticamente — sem precisar do contexto a cada chamada.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Knowledge distillation, fine-tuning, teacher-student, dataset curation.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-5" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl flex-shrink-0">5</span>
+          <div>
+            <h2 class="text-2xl font-bold">📦 Compressão por sumarização</h2>
+            <p class="text-zinc-400 text-sm mt-1">LLMLingua, sumário do contexto</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-teal-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Comprimir contexto longo em representação mais densa antes de mandar (via sumarização ou modelo de compressão).</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Para tarefas onde detalhe completo não é crítico, compressão reduz tokens sem cair muito a qualidade.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">LLMLingua (Jiang 2023), compression ratio, lossy compression.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-6" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl flex-shrink-0">6</span>
+          <div>
+            <h2 class="text-2xl font-bold">⚠️ Quando caching/distillation NÃO valem</h2>
+            <p class="text-zinc-400 text-sm mt-1">Casos onde não compensa</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-teal-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Cache não vale com prefix instável. Distillation não vale com tarefa que muda rápido. Compressão não vale com tarefa que exige fidelidade.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Cada técnica tem zona de aplicabilidade — assumir que sempre vale é o erro mais comum.</p>
+          </div>
+          <div>
+            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Applicability, regression risk, distillation drift.</p>
+          </div>
+        </div>
+      </section>
+
+
+    <!-- Sub-tópicos expansíveis (resumo navegável) -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">📑 Resumo navegável dos tópicos</h2>
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6">
+        
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">1</span>
+            <span>💰 Prompt caching (Anthropic, OpenAI)</span>
+            <span class="text-zinc-500 text-xs ml-2">— 10% do preço para hits</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Provedor cacheia o prefixo da janela. Próxima chamada com mesmo prefixo: tokens cacheados custam ~10% do normal.</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em chat com system prompt + few-shot grandes, redução real de 80-90% no custo de input.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Prompt cache, cache_control, cache breakpoints, TTL (5min Anthropic), hit rate.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">2</span>
+            <span>🎯 Cache breakpoints: onde marcar</span>
+            <span class="text-zinc-500 text-xs ml-2">— Estável vs variável</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Você marca pontos do prompt como 'cacheável'. Anthropic: até 4 breakpoints. OpenAI: automático para prefixos &gt;1024 tokens.</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Cache só vale se o prefixo até o breakpoint for ESTÁVEL. Mexer no system prompt invalida tudo daquele ponto pra frente.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Cache anchor, prefix stability, partial invalidation.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">3</span>
+            <span>📊 Medir hit rate: você está economizando?</span>
+            <span class="text-zinc-500 text-xs ml-2">— Métrica explícita</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada chamada retorna métricas: tokens lidos do cache vs. tokens novos. Hit rate = cached / total.</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem medir hit rate, você não sabe se cache está funcionando. Pequena mudança no prefix derruba hit para 0.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Hit rate, cache miss, cache invalidation, observability.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">4</span>
+            <span>🧪 Context distillation: substituir contexto por modelo</span>
+            <span class="text-zinc-500 text-xs ml-2">— Treinar pequeno</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Treinar (fine-tune) um modelo pequeno usando inputs e outputs do modelo grande com contexto longo. Modelo pequeno aprende sem precisar do contexto.</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para tarefa fixada e volume alto, distillation reduz custo dramaticamente — sem precisar do contexto a cada chamada.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Knowledge distillation, fine-tuning, teacher-student, dataset curation.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">5</span>
+            <span>📦 Compressão por sumarização</span>
+            <span class="text-zinc-500 text-xs ml-2">— LLMLingua, sumário do contexto</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Comprimir contexto longo em representação mais densa antes de mandar (via sumarização ou modelo de compressão).</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para tarefas onde detalhe completo não é crítico, compressão reduz tokens sem cair muito a qualidade.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">LLMLingua (Jiang 2023), compression ratio, lossy compression.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">6</span>
+            <span>⚠️ Quando caching/distillation NÃO valem</span>
+            <span class="text-zinc-500 text-xs ml-2">— Casos onde não compensa</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cache não vale com prefix instável. Distillation não vale com tarefa que muda rápido. Compressão não vale com tarefa que exige fidelidade.</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Cada técnica tem zona de aplicabilidade — assumir que sempre vale é o erro mais comum.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Applicability, regression risk, distillation drift.</span></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Fazer vs Evitar -->
+    
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Marcar cache_control após system prompt + few-shot</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Medir hit rate em produção</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Estabilizar system prompt antes de cachear</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Distillation com eval rigoroso vs modelo grande</span></li></ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Sem caching habilitado em prefixos repetidos</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Assumir que cache 'está funcionando'</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Mexer no prefix invalidando cache</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Distillation que regrede silenciosamente</span></li></ul>
+        </div>
+      </div>
+
+
+    <!-- Quando NÃO usar -->
+    
+      <div class="quando-nao-usar bg-red-900/10 rounded-xl border border-red-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-red-400 mb-3 flex items-center"><span class="mr-2">🚫</span> Quando NÃO usar</h3>
+        <ul class="space-y-2"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Prefix muda a cada turn</strong>: cache nunca hita.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Volume baixo</strong>: economia absoluta é trivial; complexidade não vale.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Tarefa que muda rápido</strong>: distillation envelhece, modelo grande adapta.</span></li></ul>
+      </div>
+
+
+    <!-- Exemplo de código -->
+    
+      <div class="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-teal-400 mb-3 flex items-center"><span class="mr-2">💻</span> Exemplo de código</h3>
+        <pre class="bg-zinc-950 border border-zinc-800 p-4 rounded text-sm overflow-x-auto"><code># Anthropic prompt caching (esquemático)
+import anthropic
+
+client = anthropic.Anthropic()
+
+system_grande = """Você é um assistente especializado...
+[10k tokens de regras, exemplos, etc.]"""
+
+# Marcar cache_control no fim do prefix estável
+resp = client.messages.create(
+    model="claude-sonnet-4-6@2026-04",
+    system=[
+        {"type": "text", "text": system_grande,
+         "cache_control": {"type": "ephemeral"}}
+    ],
+    messages=[{"role": "user", "content": "pergunta atual"}],
+    max_tokens=500,
+)
+
+# resp.usage tem: input_tokens, cache_creation_input_tokens, cache_read_input_tokens
+hit_rate = resp.usage.cache_read_input_tokens / (
+    resp.usage.cache_read_input_tokens + resp.usage.cache_creation_input_tokens
+)</code></pre>
+      </div>
+
+
+    <!-- Exercício -->
+    
+      <div class="bg-amber-900/10 rounded-xl border border-amber-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">🏋️</span> Exercício hands-on</h3>
+        <p class="text-zinc-300 text-sm">Em chat de 20 turns com system prompt de 5k tokens, meça custo SEM cache e COM cache. Hit rate alvo: ≥80%. Em <code>exercicios/modulo-5-2/</code> ou simulação por gravação.</p>
+      </div>
+
+
+    <!-- Bibliografia -->
+    
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-teal-400 mb-3 flex items-center"><span class="mr-2">📚</span> Bibliografia</h3>
+        <ul class="space-y-2 text-zinc-300"><li class="text-sm"><strong>Anthropic (2024)</strong> — <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching" class="text-sky-400 hover:text-sky-300 underline">Prompt caching with Claude</a></li><li class="text-sm"><strong>OpenAI (2024)</strong> — <a href="https://platform.openai.com/docs/guides/prompt-caching" class="text-sky-400 hover:text-sky-300 underline">Prompt caching</a></li><li class="text-sm"><strong>Hinton et al. (2015)</strong> — <a href="https://arxiv.org/abs/1503.02531" class="text-sky-400 hover:text-sky-300 underline">Distilling Knowledge in a Neural Network</a></li><li class="text-sm"><strong>Jiang et al. (2023)</strong> — <a href="https://arxiv.org/abs/2310.05736" class="text-sky-400 hover:text-sky-300 underline">LLMLingua: Compressing Prompts</a></li></ul>
+      </div>
+
+
+    <!-- Resumo Final + Navegação -->
+    
+      <section class="mb-12">
+        <div class="bg-gradient-to-br from-teal-900/40 via-zinc-900 to-zinc-900 rounded-xl border border-teal-500/30 p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">🎯</span> Resumo do Módulo</h2>
+          <ul class="space-y-3 mb-8"><li class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><span class="text-zinc-300"><strong>Prompt caching</strong>: 10% do preço para hits — ganho real 80%.</span></li><li class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><span class="text-zinc-300"><strong>Hit rate</strong> precisa ser MEDIDO; pequena mudança derruba.</span></li><li class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><span class="text-zinc-300"><strong>Distillation</strong> substitui contexto longo por modelo treinado.</span></li><li class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><span class="text-zinc-300"><strong>Compressão</strong> é lossy — eval obrigatório.</span></li><li class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><span class="text-zinc-300"><strong>Hierarquia de otimização</strong>: simples primeiro, complexo depois.</span></li></ul>
+          <div class="bg-zinc-900/50 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-teal-400 mb-2">Próximo Módulo:</h3>
+            <p class="text-zinc-300 text-sm">T6 — Avaliação e Produção</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="index.html" class="btn flex-1 text-center px-6 py-3 bg-zinc-800 text-zinc-300 rounded-lg font-semibold hover:bg-zinc-700 transition-colors justify-start">← Voltar para Trilha</a>
+            <a href="../trilha6/index.html" class="btn flex-1 text-center px-6 py-3 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-500 transition-colors justify-start">Próximo Módulo →</a>
+          </div>
+        </div>
+      </section>
+
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-zinc-800 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> ·
+        Conteúdo CC BY-SA 4.0 · Código MIT · Atualizado em 2026-05-02
+      </div>
+      <div class="flex gap-6">
+        <a href="../../SECURITY.md" class="hover:text-zinc-300">Segurança</a>
+        <a href="../../CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

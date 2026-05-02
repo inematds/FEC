@@ -10,56 +10,198 @@
   <meta name="status" content="GA">
 </head>
 <body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="GA">
-  <header class="border-b border-zinc-800">
-    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="../../index.html" class="flex items-center gap-3"><span class="text-2xl font-bold text-primary">FEC</span><span class="text-zinc-400 text-sm">/ T6 Avaliação</span></a>
-      <div class="flex items-center gap-6 text-sm"><a href="../../index.html" class="hover:text-primary">← Trilhas</a><a href="https://inema.club" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></div>
-    </nav>
-  </header>
-  <main class="max-w-5xl mx-auto px-6 py-12">
-    <section class="mb-10">
-      <p class="text-rose-400 text-sm font-semibold tracking-wider uppercase mb-2">Trilha 6</p>
-      <h1 class="text-4xl md:text-5xl font-bold mb-4">Avaliação e Produção</h1>
-      <p class="text-lg text-zinc-300 mb-6 max-w-2xl">Golden sets, LLM-as-judge e seus vieses, tracing, prompt injection, custo, A/B em produção.</p>
-      <div class="flex gap-3 text-xs">
-        <span class="px-3 py-1 bg-rose-500/20 border border-rose-500/30 text-rose-400 rounded">1 GA + 1 beta</span>
+
+  <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../../index.html" class="flex items-center gap-3">
+        <span class="text-2xl font-bold text-primary">FEC</span>
+        <span class="text-zinc-400 text-sm hidden md:inline">Formação de Engenharia de Contexto</span>
+      </a>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="../../index.html" class="hover:text-primary transition">← Trilhas</a>
+        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
       </div>
-    </section>
-
-    <h2 class="text-2xl font-bold mb-6">Módulos</h2>
-    <div class="space-y-4">
-      <details class="topico-expansivel border border-rose-500/30 rounded-lg bg-zinc-900 p-5" open>
-        <summary class="cursor-pointer flex items-center gap-3 text-lg font-semibold list-none">
-          <span class="topico-numero bg-rose-500/20 border border-rose-500/30 text-rose-400">1</span>
-          <span class="text-rose-400">6-1 — Evals e observabilidade</span>
-          <span class="ml-auto text-xs px-2 py-0.5 bg-rose-500/20 text-rose-400 rounded">GA</span>
-        </summary>
-        <div class="subsecao-inema">
-          <h4>O que é</h4><p class="text-sm">Conteúdo do sub-tópico em desenvolvimento.</p>
-          <h4 class="mt-3">Por que aprender</h4><p class="text-sm">Justificativa pedagógica em desenvolvimento.</p>
-          <h4 class="mt-3">Conceitos-chave</h4><p class="text-sm">Lista de termos em desenvolvimento.</p>
-        </div>
-        <div class="mt-4"><span class="text-xs text-zinc-500">⏳ Módulo em produção. Ver T1 para piloto completo.</span></div>
-      </details>
-      <details class="topico-expansivel border border-rose-500/30 rounded-lg bg-zinc-900 p-5">
-        <summary class="cursor-pointer flex items-center gap-3 text-lg font-semibold list-none">
-          <span class="topico-numero bg-rose-500/20 border border-rose-500/30 text-rose-400">2</span>
-          <span class="text-rose-400">6-2 — Operacionalização avançada</span>
-          <span class="ml-auto text-xs px-2 py-0.5 bg-rose-500/20 text-rose-400 rounded">beta</span>
-        </summary>
-        <div class="subsecao-inema">
-          <h4>O que é</h4><p class="text-sm">Conteúdo do sub-tópico em desenvolvimento.</p>
-          <h4 class="mt-3">Por que aprender</h4><p class="text-sm">Justificativa pedagógica em desenvolvimento.</p>
-          <h4 class="mt-3">Conceitos-chave</h4><p class="text-sm">Lista de termos em desenvolvimento.</p>
-        </div>
-        <div class="mt-4"><span class="text-xs text-zinc-500">⏳ Módulo em produção. Ver T1 para piloto completo.</span></div>
-      </details>
     </div>
+  </nav>
 
-    <section class="mt-12 p-6 rounded-lg border border-amber-500/30 bg-amber-900/10">
-      <h3 class="text-amber-400 font-bold mb-2">⚠️ Conteúdo em desenvolvimento</h3>
-      <p class="text-sm text-zinc-200">Esta trilha está sendo escrita. T1 é o piloto completo. T2-T6 entram em ondas conforme o cronograma do <a href="../../PLAN.md" class="text-sky-400 underline">PLAN.md</a>.</p>
+  <header class="bg-gradient-to-br from-rose-900/30 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6">
+      <span class="inline-block px-3 py-1 bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-full mb-4">TRILHA 6</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📊 Avaliação e Produção</h1>
+      <p class="text-lg text-zinc-300 max-w-3xl mb-8">Golden sets, LLM-as-judge, tracing, prompt injection sandboxed, A/B em produção e rollback.</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-rose-400">1</div>
+          <div class="text-xs text-zinc-400">Módulos GA</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-rose-400">1</div>
+          <div class="text-xs text-zinc-400">Beta</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-rose-400">~2h</div>
+          <div class="text-xs text-zinc-400">Duração</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-rose-400">12</div>
+          <div class="text-xs text-zinc-400">Tópicos</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-12">
+
+    <h2 class="text-2xl font-bold mb-6">📚 Módulos da trilha</h2>
+
+    
+      <article class="modulo-card bg-zinc-900 rounded-xl border border-zinc-800 hover:border-rose-500/40 mb-6 transition-colors">
+        <div class="p-6 border-b border-zinc-800">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-rose-400 font-bold">6.1</span>
+              <span class="px-2 py-0.5 bg-rose-500/20 text-rose-400 rounded text-xs font-semibold">GA</span>
+            </div>
+            <span class="text-xs text-zinc-500">~70 min · Avançado</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2 text-zinc-100">📊 Evals: golden sets, LLM-as-judge e tracing</h3>
+          <p class="text-sm text-zinc-400">A disciplina que costura T1-T5: golden sets, métricas, LLM-as-judge (e seus vieses), tracing estruturado, prompt injection sandboxed.</p>
+        </div>
+
+        <div class="px-3">
+          
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">1</span>
+            <span>🎯 Golden set: o que entra, o que não</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Curadoria deliberada</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Conjunto fixo de exemplos com gabarito. Cobertura: casos típicos + edge cases + adversariais. Tamanho: 30-200.</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem golden set, você não tem como medir se o sistema melhorou ou regrediu. Curadoria é trabalho real.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Golden set, edge cases, adversarial examples, distribution coverage, frozen set.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">2</span>
+            <span>📐 Métricas por tipo de tarefa</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Não existe métrica universal</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Classificação: accuracy, F1. Geração: BLEU, ROUGE. RAG: groundedness, citation accuracy. Agente: task completion.</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Métrica errada esconde regressão. Para cada tarefa, escolher 1 primária + 1-2 secundárias.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Primary metric, secondary metrics, distribution-level vs example-level.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">3</span>
+            <span>⚖️ LLM-as-judge: poderoso e enviesado</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Calibração obrigatória</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Usar um modelo para julgar saída de outro. Útil para qualidade subjetiva (groundedness, helpfulness).</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Permite eval em escala. Mas tem vieses (favorece outputs longos, bias de posição em comparação) — calibrar com humanos.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">LLM judge, calibration, Cohen's kappa, position bias, length bias.</span></div>
+          </div>
+        </details>
+          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        </div>
+
+        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+          <a href="modulo-6-1.html" class="btn px-4 py-2 text-sm bg-rose-600 text-white hover:bg-rose-500 rounded-lg transition-colors justify-start">
+            Ver Completo →
+          </a>
+        </div>
+      </article>
+
+      <article class="modulo-card bg-zinc-900 rounded-xl border border-zinc-800 hover:border-rose-500/40 mb-6 transition-colors">
+        <div class="p-6 border-b border-zinc-800">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-rose-400 font-bold">6.2</span>
+              <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded text-xs font-semibold">beta</span>
+            </div>
+            <span class="text-xs text-zinc-500">~65 min · Avançado</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-2 text-zinc-100">🚀 Operacionalização avançada: A/B, canários, rollback (beta)</h3>
+          <p class="text-sm text-zinc-400">Levar para produção: A/B em prompt, canários por modelo, rollback, observabilidade contínua. O que se aprende rodando, não no laboratório.</p>
+        </div>
+
+        <div class="px-3">
+          
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">1</span>
+            <span>🆎 A/B em prompt: variant + métrica primária</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Decisão por dado, não opinião</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Roteia % do tráfego para variant. Mede métrica primária (groundedness, satisfação) com significância estatística.</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Mudanças em prompt são frequentes; A/B distingue 'achei que melhorou' de 'melhorou medido'.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">A/B test, variant routing, statistical significance, sample size.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">2</span>
+            <span>🐤 Canário: rollout incremental</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— 5% → 25% → 100%</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Liberar mudança para 5% do tráfego, observar métricas + custo + erro. Subir gradualmente se OK.</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Mudança de modelo (de Claude 4.5 para 4.6) pode quebrar 5% dos casos. Canário pega antes do fan-out.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Canary release, progressive rollout, blast radius, kill switch.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center justify-center">3</span>
+            <span>↩️ Rollback rápido: pré-requisito de canário</span>
+            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— 1 click</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <span class="text-zinc-300">Botão 'voltar' que reverte para versão anterior em segundos. Versão anterior precisa estar 'quente' (warm cache).</span></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem rollback, canário é teatro. Quando dá problema, você precisa MUITO de voltar rápido.</span></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Hot rollback, warm standby, version pinning, traffic shift.</span></div>
+          </div>
+        </details>
+          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        </div>
+
+        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+          <a href="modulo-6-2.html" class="btn px-4 py-2 text-sm bg-rose-600 text-white hover:bg-rose-500 rounded-lg transition-colors justify-start">
+            Ver Completo →
+          </a>
+        </div>
+      </article>
+
+
+    <section class="mt-12 p-6 rounded-lg border border-zinc-700 bg-zinc-900/50">
+      <h3 class="text-lg font-bold mb-2">🔬 Bibliografia da trilha</h3>
+      <p class="text-sm text-zinc-400 mb-3">Referências datadas, congeladas na release. Lista completa em <code>bibliografia/T6.md</code>.</p>
+      <a href="../../bibliografia/T6.md" class="btn px-4 py-2 border border-zinc-700 text-zinc-200 rounded hover:bg-zinc-800 transition justify-start">
+        Bibliografia T6 →
+      </a>
     </section>
+
   </main>
-  <footer class="border-t border-zinc-800 mt-16"><div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500"><a href="https://inema.club" class="text-sky-400">INEMA.CLUB</a> · CC BY-SA 4.0 + MIT</div></footer>
-</body></html>
+
+  <footer class="border-t border-zinc-800 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> ·
+        Conteúdo CC BY-SA 4.0 · Código MIT
+      </div>
+      <div class="flex gap-6">
+        <a href="../../SECURITY.md" class="hover:text-zinc-300">Segurança</a>
+        <a href="../../CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4.1 Tool/function calling provider-neutral · FEC T4</title>
+  <link rel="stylesheet" href="../../assets/css/inema.css">
+  <meta name="trilha" content="T4">
+  <meta name="status" content="GA">
+  <meta name="modulo" content="modulo-4-1">
+  <meta name="palavras" content="3000">
+  <meta name="tempo-estimado-min" content="65">
+  <meta name="expected-sdk-version" content=">=1.0,<2.0">
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="GA">
+
+  <!-- NAV GLOBAL -->
+  <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../../index.html" class="flex items-center gap-3">
+        <span class="text-2xl font-bold text-primary">FEC</span>
+        <span class="text-zinc-400 text-sm hidden md:inline">Formação de Engenharia de Contexto</span>
+      </a>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="index.html" class="hover:text-primary transition">← T4</a>
+        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center space-x-2 text-sm text-zinc-400">
+      <a href="../../index.html" class="hover:text-amber-400">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-amber-400">Trilha 4</a>
+      <span>/</span>
+      <span class="text-amber-400">Módulo 4.1</span>
+    </div>
+  </nav>
+
+  <!-- HEADER COM GRADIENTE + STATS -->
+  <header class="bg-gradient-to-br from-amber-900/30 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full">MÓDULO 4.1</span>
+        <span class="px-2 py-1 bg-amber-500/20 border border-amber-500/30 text-amber-400 rounded text-xs">GA</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-zinc-100">🛠️ Tool/function calling provider-neutral</h1>
+      <p class="text-lg text-zinc-300 max-w-3xl mb-8">Como o modelo invoca funções estruturadas. JSON Schema como contrato, tratamento de erro, sandbox obrigatório.</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-amber-400">6</div>
+          <div class="text-xs text-zinc-400">Tópicos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-amber-400">65</div>
+          <div class="text-xs text-zinc-400">Minutos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-amber-400">Intermediário</div>
+          <div class="text-xs text-zinc-400">Nível</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-amber-400">Hands-on</div>
+          <div class="text-xs text-zinc-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="max-w-4xl mx-auto px-6 py-12">
+
+    <!-- Introdução -->
+    <section class="mb-12 prose prose-invert max-w-none">
+      <p class="text-lg text-zinc-200 leading-relaxed">Tool calling transforma o LLM em <strong class='text-amber-400'>orquestrador de funções</strong>. O modelo decide qual chamar, com quais argumentos, e usa o resultado para continuar. Aqui você aprende a desenhar tools robustos — JSON Schema bem definido, erro tipado, sandbox obrigatório.</p>
+    </section>
+
+    <!-- Conceito Principal + Dados/Dica -->
+    
+      <div class="bg-gradient-to-br from-amber-900/30 to-zinc-900 rounded-xl border border-amber-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">🛠️</span> Tool é interface: schema + executor</h3>
+        <p class="text-zinc-300 mb-4">Cada tool tem dois lados: o schema que o LLM lê, e o executor que roda quando chamado. Ambos vivem juntos.</p>
+        <ul class="space-y-2 text-zinc-300 text-sm"><li class='flex items-start space-x-2'><span class='text-amber-400 mt-1'>•</span><span><strong>Schema</strong>: nome, descrição, JSON Schema dos params.</span></li><li class='flex items-start space-x-2'><span class='text-amber-400 mt-1'>•</span><span><strong>Executor</strong>: função Python que recebe args validados, retorna resultado.</span></li><li class='flex items-start space-x-2'><span class='text-amber-400 mt-1'>•</span><span><strong>Sandbox</strong>: executor roda jailed se tocar FS/rede.</span></li><li class='flex items-start space-x-2'><span class='text-amber-400 mt-1'>•</span><span><strong>Erro</strong>: tipo claro (retry-able, fatal, partial).</span></li></ul>
+      </div>
+
+    
+    
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6 mb-8">
+        <h3 class="text-lg font-bold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Description é prompt — itere</h3>
+        <p class="text-zinc-300 text-sm">Comece com descrição básica. Em casos onde o modelo escolhe errado, refine a descrição (não a lógica do tool). Eval no harness mostra impacto.</p>
+      </div>
+
+
+    <!-- 6 SEÇÕES RICAS -->
+    
+      <section id="topico-1" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">1</span>
+          <div>
+            <h2 class="text-2xl font-bold">📋 JSON Schema: o contrato do tool</h2>
+            <p class="text-zinc-400 text-sm mt-1">Tipo, descrição, validação</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Cada tool tem schema declarativo: nome, descrição, parâmetros tipados (string, number, enum, etc.) com required.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Schema bom = chamada confiável. Modelo usa descrição para escolher e schema para formatar argumentos.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">JSON Schema 2020-12, parameter validation, required fields, oneOf.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-2" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">2</span>
+          <div>
+            <h2 class="text-2xl font-bold">✏️ Descrição do tool: o prompt do prompt</h2>
+            <p class="text-zinc-400 text-sm mt-1">Onde a magia acontece</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Texto livre que descreve quando usar o tool. É lido pelo LLM ao decidir ferramenta.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Modelos escolhem tool com base na descrição. 'busca_web' vs 'busca_web_para_eventos_recentes_e_notícias' muda comportamento.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Tool description, disambiguation, when-to-use clauses.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-3" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">3</span>
+          <div>
+            <h2 class="text-2xl font-bold">🚦 Erro tipado: sucesso, retry, abort</h2>
+            <p class="text-zinc-400 text-sm mt-1">Como o tool comunica falha</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Resultado do tool inclui campo de status. Modelo lê e decide retry, fallback ou parar.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Sem tipo de erro, modelo tenta de novo cegamente ou desiste. Estrutura permite recovery inteligente.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Result types, ToolError, retry-able vs fatal, exponential backoff.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-4" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">4</span>
+          <div>
+            <h2 class="text-2xl font-bold">🔒 Sandbox obrigatório (PLAN item 62a)</h2>
+            <p class="text-zinc-400 text-sm mt-1">Filesystem, processo, rede</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Toda tool que toca FS/rede/processo roda dentro de FilesystemSandbox + NetworkPolicy do fec_sdk.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Prompt injection consegue fazer tool ler ~/.aws/credentials se não houver sandbox. PLAN item 62a é gate de GA.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Path traversal, deny-by-default, allowlist, jail.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-5" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">5</span>
+          <div>
+            <h2 class="text-2xl font-bold">🔄 Loop: tool → resultado → próximo passo</h2>
+            <p class="text-zinc-400 text-sm mt-1">ReAct simplificado</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Modelo decide chamar tool → executa → resultado vira mensagem do role 'tool' → modelo continua.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Esse é o building block de agentes. Um loop simples já resolve muitas tarefas.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Tool result message, role=tool, tool_use_id, conversation continuation.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-6" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">6</span>
+          <div>
+            <h2 class="text-2xl font-bold">🎚️ Tool choice: forçar ou deixar o modelo decidir</h2>
+            <p class="text-zinc-400 text-sm mt-1">auto, any, specific</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Parâmetro que controla quando o modelo pode chamar tool: auto (decide), any (deve chamar algum), specific (deve chamar X).</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Em alguns fluxos você QUER forçar uso de tool (ex.: extract). Em outros, deixar livre é melhor.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">tool_choice, parallel tool calls, required tool.</p>
+          </div>
+        </div>
+      </section>
+
+
+    <!-- Sub-tópicos expansíveis (resumo navegável) -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">📑 Resumo navegável dos tópicos</h2>
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6">
+        
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">1</span>
+            <span>📋 JSON Schema: o contrato do tool</span>
+            <span class="text-zinc-500 text-xs ml-2">— Tipo, descrição, validação</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada tool tem schema declarativo: nome, descrição, parâmetros tipados (string, number, enum, etc.) com required.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Schema bom = chamada confiável. Modelo usa descrição para escolher e schema para formatar argumentos.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">JSON Schema 2020-12, parameter validation, required fields, oneOf.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">2</span>
+            <span>✏️ Descrição do tool: o prompt do prompt</span>
+            <span class="text-zinc-500 text-xs ml-2">— Onde a magia acontece</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Texto livre que descreve quando usar o tool. É lido pelo LLM ao decidir ferramenta.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Modelos escolhem tool com base na descrição. 'busca_web' vs 'busca_web_para_eventos_recentes_e_notícias' muda comportamento.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Tool description, disambiguation, when-to-use clauses.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">3</span>
+            <span>🚦 Erro tipado: sucesso, retry, abort</span>
+            <span class="text-zinc-500 text-xs ml-2">— Como o tool comunica falha</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Resultado do tool inclui campo de status. Modelo lê e decide retry, fallback ou parar.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem tipo de erro, modelo tenta de novo cegamente ou desiste. Estrutura permite recovery inteligente.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Result types, ToolError, retry-able vs fatal, exponential backoff.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">4</span>
+            <span>🔒 Sandbox obrigatório (PLAN item 62a)</span>
+            <span class="text-zinc-500 text-xs ml-2">— Filesystem, processo, rede</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Toda tool que toca FS/rede/processo roda dentro de FilesystemSandbox + NetworkPolicy do fec_sdk.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Prompt injection consegue fazer tool ler ~/.aws/credentials se não houver sandbox. PLAN item 62a é gate de GA.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Path traversal, deny-by-default, allowlist, jail.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">5</span>
+            <span>🔄 Loop: tool → resultado → próximo passo</span>
+            <span class="text-zinc-500 text-xs ml-2">— ReAct simplificado</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Modelo decide chamar tool → executa → resultado vira mensagem do role 'tool' → modelo continua.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Esse é o building block de agentes. Um loop simples já resolve muitas tarefas.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Tool result message, role=tool, tool_use_id, conversation continuation.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">6</span>
+            <span>🎚️ Tool choice: forçar ou deixar o modelo decidir</span>
+            <span class="text-zinc-500 text-xs ml-2">— auto, any, specific</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Parâmetro que controla quando o modelo pode chamar tool: auto (decide), any (deve chamar algum), specific (deve chamar X).</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em alguns fluxos você QUER forçar uso de tool (ex.: extract). Em outros, deixar livre é melhor.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">tool_choice, parallel tool calls, required tool.</span></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Fazer vs Evitar -->
+    
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Sandbox obrigatório para tools com side-effect</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Erro tipado com retry-able vs fatal</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Description com 'when to use' explícito</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Validar JSON Schema dos args antes de executar</span></li></ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'><code>os.system(arg)</code> direto</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Levantar exceção genérica</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Description vaga: 'busca informação'</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Confiar que o modelo preencheu certo</span></li></ul>
+        </div>
+      </div>
+
+
+    <!-- Quando NÃO usar -->
+    
+      <div class="quando-nao-usar bg-red-900/10 rounded-xl border border-red-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-red-400 mb-3 flex items-center"><span class="mr-2">🚫</span> Quando NÃO usar</h3>
+        <ul class="space-y-2"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Tarefa pode ser feita só com prompt</strong>: tool adiciona complexidade desnecessária.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Modelo OSS pequeno sem suporte estável a tool</strong>: força adapter ou mock.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Latência crítica</strong>: tool call adiciona 1+ roundtrip.</span></li></ul>
+      </div>
+
+
+    <!-- Exemplo de código -->
+    
+      <div class="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">💻</span> Exemplo de código</h3>
+        <pre class="bg-zinc-950 border border-zinc-800 p-4 rounded text-sm overflow-x-auto"><code>from fec_sdk import Message, MessageRole, Tool, ToolResult
+from fec_sdk.adapters import get_adapter
+from fec_sdk.sandbox import FilesystemSandbox
+
+tool_ler_arquivo = Tool(
+    name="ler_arquivo",
+    description="Lê arquivo .txt ou .md em path RELATIVO ao sandbox.",
+    parameters={
+        "type": "object",
+        "properties": {"path": {"type": "string"}},
+        "required": ["path"],
+    }
+)
+
+with FilesystemSandbox() as fs:
+    fs.write_text("nota.md", "FEC v1.0")
+
+    client = get_adapter("mock")
+    resp = client.chat(
+        [Message(role=MessageRole.USER, content="Leia nota.md")],
+        tools=[tool_ler_arquivo],
+    )
+
+    if resp.tool_calls:
+        for call in resp.tool_calls:
+            try:
+                conteudo = fs.read_text(call.arguments["path"])
+                resultado = ToolResult(tool_call_id=call.id, content=conteudo)
+            except Exception as e:
+                resultado = ToolResult(tool_call_id=call.id, content=str(e), is_error=True)</code></pre>
+      </div>
+
+
+    <!-- Exercício -->
+    
+      <div class="bg-amber-900/10 rounded-xl border border-amber-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">🏋️</span> Exercício hands-on</h3>
+        <p class="text-zinc-300 text-sm">Defina 3 tools (ler arquivo, calcular, buscar termo) com sandbox e schema. Bateria <code>tests/sandbox/</code> deve passar em todos. Em <code>exercicios/modulo-4-1/</code>.</p>
+      </div>
+
+
+    <!-- Bibliografia -->
+    
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">📚</span> Bibliografia</h3>
+        <ul class="space-y-2 text-zinc-300"><li class="text-sm"><strong>OpenAI (2023)</strong> — <a href="https://platform.openai.com/docs/guides/function-calling" class="text-sky-400 hover:text-sky-300 underline">Function calling guide</a></li><li class="text-sm"><strong>Anthropic (2024)</strong> — <a href="https://docs.anthropic.com/en/docs/tool-use" class="text-sky-400 hover:text-sky-300 underline">Tool use with Claude</a></li><li class="text-sm"><strong>JSON Schema</strong> — <a href="https://json-schema.org/draft/2020-12/release-notes.html" class="text-sky-400 hover:text-sky-300 underline">JSON Schema 2020-12 spec</a></li><li class="text-sm"><strong>Schick et al. (2023)</strong> — <a href="https://arxiv.org/abs/2302.04761" class="text-sky-400 hover:text-sky-300 underline">Toolformer: Language Models Can Teach Themselves to Use Tools</a></li></ul>
+      </div>
+
+
+    <!-- Resumo Final + Navegação -->
+    
+      <section class="mb-12">
+        <div class="bg-gradient-to-br from-amber-900/40 via-zinc-900 to-zinc-900 rounded-xl border border-amber-500/30 p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">🎯</span> Resumo do Módulo</h2>
+          <ul class="space-y-3 mb-8"><li class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><span class="text-zinc-300"><strong>Tool = schema + executor</strong>; ambos vivem juntos.</span></li><li class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><span class="text-zinc-300"><strong>JSON Schema</strong> como contrato; validar args antes de executar.</span></li><li class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><span class="text-zinc-300"><strong>Description</strong> é o prompt do prompt — itere com eval.</span></li><li class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><span class="text-zinc-300"><strong>Sandbox</strong> obrigatório (PLAN item 62a) para FS/rede/processo.</span></li><li class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><span class="text-zinc-300"><strong>Erro tipado</strong>: retry-able vs fatal; modelo recupera melhor.</span></li></ul>
+          <div class="bg-zinc-900/50 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-amber-400 mb-2">Próximo Módulo:</h3>
+            <p class="text-zinc-300 text-sm">Agentes single (ReAct, planner/executor)</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="index.html" class="btn flex-1 text-center px-6 py-3 bg-zinc-800 text-zinc-300 rounded-lg font-semibold hover:bg-zinc-700 transition-colors justify-start">← Voltar para Trilha</a>
+            <a href="modulo-4-2" class="btn flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors justify-start">Próximo Módulo →</a>
+          </div>
+        </div>
+      </section>
+
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-zinc-800 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> ·
+        Conteúdo CC BY-SA 4.0 · Código MIT · Atualizado em 2026-05-02
+      </div>
+      <div class="flex gap-6">
+        <a href="../../SECURITY.md" class="hover:text-zinc-300">Segurança</a>
+        <a href="../../CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

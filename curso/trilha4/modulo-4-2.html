@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4.2 Agentes single: ReAct e planner/executor · FEC T4</title>
+  <link rel="stylesheet" href="../../assets/css/inema.css">
+  <meta name="trilha" content="T4">
+  <meta name="status" content="GA">
+  <meta name="modulo" content="modulo-4-2">
+  <meta name="palavras" content="3000">
+  <meta name="tempo-estimado-min" content="70">
+  <meta name="expected-sdk-version" content=">=1.0,<2.0">
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="GA">
+
+  <!-- NAV GLOBAL -->
+  <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="../../index.html" class="flex items-center gap-3">
+        <span class="text-2xl font-bold text-primary">FEC</span>
+        <span class="text-zinc-400 text-sm hidden md:inline">Formação de Engenharia de Contexto</span>
+      </a>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="index.html" class="hover:text-primary transition">← T4</a>
+        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <nav class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center space-x-2 text-sm text-zinc-400">
+      <a href="../../index.html" class="hover:text-amber-400">Início</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-amber-400">Trilha 4</a>
+      <span>/</span>
+      <span class="text-amber-400">Módulo 4.2</span>
+    </div>
+  </nav>
+
+  <!-- HEADER COM GRADIENTE + STATS -->
+  <header class="bg-gradient-to-br from-amber-900/30 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full">MÓDULO 4.2</span>
+        <span class="px-2 py-1 bg-amber-500/20 border border-amber-500/30 text-amber-400 rounded text-xs">GA</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-zinc-100">🤖 Agentes single: ReAct e planner/executor</h1>
+      <p class="text-lg text-zinc-300 max-w-3xl mb-8">Agente é loop tool→pensa→tool. ReAct, planner/executor, controle de loop, e como debugar via tracing.</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-amber-400">6</div>
+          <div class="text-xs text-zinc-400">Tópicos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-amber-400">70</div>
+          <div class="text-xs text-zinc-400">Minutos</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-amber-400">Avançado</div>
+          <div class="text-xs text-zinc-400">Nível</div>
+        </div>
+        <div class="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
+          <div class="text-xl font-bold text-amber-400">Hands-on</div>
+          <div class="text-xs text-zinc-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="max-w-4xl mx-auto px-6 py-12">
+
+    <!-- Introdução -->
+    <section class="mb-12 prose prose-invert max-w-none">
+      <p class="text-lg text-zinc-200 leading-relaxed">Agente é o próximo passo após tool calling: <strong class='text-amber-400'>loop autônomo</strong> de pensar→agir até concluir. ReAct é o padrão dominante; planner/executor é alternativa para tarefas estruturadas. Aqui você aprende a controlar o loop — sem isso, agente vira disaster de custo.</p>
+    </section>
+
+    <!-- Conceito Principal + Dados/Dica -->
+    
+      <div class="bg-gradient-to-br from-amber-900/30 to-zinc-900 rounded-xl border border-amber-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">🔁</span> Anatomia de um agente robusto</h3>
+        <p class="text-zinc-300 mb-4">Não é só 'modelo + tools'. É um sistema com instrumentação, limites e recovery — como qualquer sistema de produção.</p>
+        <ul class="space-y-2 text-zinc-300 text-sm"><li class='flex items-start space-x-2'><span class='text-amber-400 mt-1'>•</span><span><strong>Loop core</strong>: ReAct ou planner/executor.</span></li><li class='flex items-start space-x-2'><span class='text-amber-400 mt-1'>•</span><span><strong>Limites</strong>: max_iterations, max_tokens, timeout.</span></li><li class='flex items-start space-x-2'><span class='text-amber-400 mt-1'>•</span><span><strong>Tracing</strong>: cada step estruturado.</span></li><li class='flex items-start space-x-2'><span class='text-amber-400 mt-1'>•</span><span><strong>Recovery</strong>: retry, abort, fallback.</span></li><li class='flex items-start space-x-2'><span class='text-amber-400 mt-1'>•</span><span><strong>Sandbox</strong>: tools sempre jailed.</span></li></ul>
+      </div>
+
+    
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-blue-400 mb-3 flex items-center"><span class="mr-2">📊</span> Yao et al. (2022) — ReAct</h3>
+        <ul class="space-y-2"><li class='text-sm text-zinc-300'><strong>+34%</strong> em HotpotQA com ReAct vs CoT puro.</li><li class='text-sm text-zinc-300'><strong>Reasoning trace explícito</strong> é o que dá ganho — facilita debug humano também.</li><li class='text-sm text-zinc-300'><strong>Loops longos degradam</strong>: tarefas além de 8-10 steps quase sempre regridem.</li></ul>
+      </div>
+
+    
+
+    <!-- 6 SEÇÕES RICAS -->
+    
+      <section id="topico-1" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">1</span>
+          <div>
+            <h2 class="text-2xl font-bold">🧭 ReAct: Reason + Act</h2>
+            <p class="text-zinc-400 text-sm mt-1">Yao et al. 2022</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Loop: modelo pensa em texto livre ('Pensamento: preciso buscar X') → decide tool ('Ação: search(X)') → recebe resultado ('Observação: ...') → repete.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Padrão simples e eficaz. Pensamento explícito facilita debug e melhora qualidade em tarefas multi-passo.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">ReAct (Yao 2022), Thought-Action-Observation, scratchpad, reasoning trace.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-2" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">2</span>
+          <div>
+            <h2 class="text-2xl font-bold">📐 Planner / Executor: separar plano de execução</h2>
+            <p class="text-zinc-400 text-sm mt-1">Decomposição prévia</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Primeiro passo: LLM gera plano em N passos. Segundo passo: executor segue passo por passo.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Para tarefas estruturadas conhecidas (workflows), plano explícito é mais auditável que ReAct.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Plan-and-execute, BabyAGI, hierarchical planning.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-3" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">3</span>
+          <div>
+            <h2 class="text-2xl font-bold">⛔ Controle de loop: max_iterations, max_tokens</h2>
+            <p class="text-zinc-400 text-sm mt-1">Limites duros</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Agente tem budget explícito: máximo de iterações, máximo de tokens, timeout total.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Sem isso, agente loopa em produção e queima orçamento. Limite duro é seguro.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Max iterations, token budget, wall-clock timeout, infinite loop detection.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-4" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">4</span>
+          <div>
+            <h2 class="text-2xl font-bold">🔍 Tracing por step: a chave para debug</h2>
+            <p class="text-zinc-400 text-sm mt-1">Cada decisão fica registrada</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Cada step do agente vira entry estruturada (timestamp, tool, args, result, next). Salvo em traces/.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Sem tracing, debugar agente em produção é impossível. P2 do curso exige.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Step trace, OpenTelemetry, structured logging, step replay.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-5" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">5</span>
+          <div>
+            <h2 class="text-2xl font-bold">🛡️ Recovery: tool error, JSON inválido, loop</h2>
+            <p class="text-zinc-400 text-sm mt-1">Padrões de robustez</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Estratégias para quando algo dá errado: retry com fix, abort com mensagem, fallback para LLM puro.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Em produção, ferramentas falham, JSON vem malformado, modelos respondem fora do schema. Sem recovery, agente quebra.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Retry policies, JSON repair, graceful degradation, partial success.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="topico-6" class="mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl flex-shrink-0">6</span>
+          <div>
+            <h2 class="text-2xl font-bold">💸 Orçamento de custo por agente</h2>
+            <p class="text-zinc-400 text-sm mt-1">Budget cap antes de loop</p>
+          </div>
+        </div>
+
+        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <div>
+            <span class="text-amber-400 font-semibold">O que é:</span>
+            <p class="text-zinc-300 text-sm mt-1">Antes de iniciar o agente, declarar 'esta tarefa custa no máximo X tokens / Y dólares'. Aborta se atingir.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Por que aprender:</span>
+            <p class="text-zinc-300 text-sm mt-1">Cap nativo de provedor é última linha; cap explícito no agente é controle real.</p>
+          </div>
+          <div>
+            <span class="text-amber-400 font-semibold">Conceitos-chave:</span>
+            <p class="text-zinc-300 text-sm mt-1">Per-task budget, cost estimation, soft limit, hard limit.</p>
+          </div>
+        </div>
+      </section>
+
+
+    <!-- Sub-tópicos expansíveis (resumo navegável) -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-4">📑 Resumo navegável dos tópicos</h2>
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6">
+        
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">1</span>
+            <span>🧭 ReAct: Reason + Act</span>
+            <span class="text-zinc-500 text-xs ml-2">— Yao et al. 2022</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Loop: modelo pensa em texto livre ('Pensamento: preciso buscar X') → decide tool ('Ação: search(X)') → recebe resultado ('Observação: ...') → repete.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Padrão simples e eficaz. Pensamento explícito facilita debug e melhora qualidade em tarefas multi-passo.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">ReAct (Yao 2022), Thought-Action-Observation, scratchpad, reasoning trace.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">2</span>
+            <span>📐 Planner / Executor: separar plano de execução</span>
+            <span class="text-zinc-500 text-xs ml-2">— Decomposição prévia</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Primeiro passo: LLM gera plano em N passos. Segundo passo: executor segue passo por passo.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para tarefas estruturadas conhecidas (workflows), plano explícito é mais auditável que ReAct.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Plan-and-execute, BabyAGI, hierarchical planning.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">3</span>
+            <span>⛔ Controle de loop: max_iterations, max_tokens</span>
+            <span class="text-zinc-500 text-xs ml-2">— Limites duros</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Agente tem budget explícito: máximo de iterações, máximo de tokens, timeout total.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem isso, agente loopa em produção e queima orçamento. Limite duro é seguro.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Max iterations, token budget, wall-clock timeout, infinite loop detection.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">4</span>
+            <span>🔍 Tracing por step: a chave para debug</span>
+            <span class="text-zinc-500 text-xs ml-2">— Cada decisão fica registrada</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada step do agente vira entry estruturada (timestamp, tool, args, result, next). Salvo em traces/.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem tracing, debugar agente em produção é impossível. P2 do curso exige.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Step trace, OpenTelemetry, structured logging, step replay.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">5</span>
+            <span>🛡️ Recovery: tool error, JSON inválido, loop</span>
+            <span class="text-zinc-500 text-xs ml-2">— Padrões de robustez</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Estratégias para quando algo dá errado: retry com fix, abort com mensagem, fallback para LLM puro.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em produção, ferramentas falham, JSON vem malformado, modelos respondem fora do schema. Sem recovery, agente quebra.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Retry policies, JSON repair, graceful degradation, partial success.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3">
+          <summary class="cursor-pointer flex items-center gap-3 text-base font-semibold list-none">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">6</span>
+            <span>💸 Orçamento de custo por agente</span>
+            <span class="text-zinc-500 text-xs ml-2">— Budget cap antes de loop</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-sm">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Antes de iniciar o agente, declarar 'esta tarefa custa no máximo X tokens / Y dólares'. Aborta se atingir.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Cap nativo de provedor é última linha; cap explícito no agente é controle real.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Per-task budget, cost estimation, soft limit, hard limit.</span></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Fazer vs Evitar -->
+    
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>max_iterations sempre declarado (ex.: 10)</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Tracing estruturado por step</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Tools com erro tipado para recovery inteligente</span></li><li class='flex items-start space-x-2'><span class='text-emerald-400 mt-1'>✓</span><span class='text-sm'>Budget de custo explícito por tarefa</span></li></ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4>
+          <ul class="space-y-3 text-zinc-300"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Loop sem limite — disaster em produção</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Print debug ad hoc</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Exceção genérica que para o agente</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>✗</span><span class='text-sm'>Confiar só no cap do provedor</span></li></ul>
+        </div>
+      </div>
+
+
+    <!-- Quando NÃO usar -->
+    
+      <div class="quando-nao-usar bg-red-900/10 rounded-xl border border-red-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-red-400 mb-3 flex items-center"><span class="mr-2">🚫</span> Quando NÃO usar</h3>
+        <ul class="space-y-2"><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Tarefa one-shot estruturada</strong>: prompt + tool calling resolve sem loop.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Latência crítica (UX live)</strong>: agente faz N roundtrips, latência multiplica.</span></li><li class='flex items-start space-x-2'><span class='text-red-400 mt-1'>•</span><span class='text-sm text-zinc-300'><strong>Sem tracing</strong>: agente sem instrumentação é dívida técnica imediata.</span></li></ul>
+      </div>
+
+
+    <!-- Exemplo de código -->
+    
+      <div class="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">💻</span> Exemplo de código</h3>
+        <pre class="bg-zinc-950 border border-zinc-800 p-4 rounded text-sm overflow-x-auto"><code>from fec_sdk import Message, MessageRole
+from fec_sdk.adapters import get_adapter
+
+def react_agent(query: str, tools, max_iter: int = 10) -&gt; str:
+    msgs = [Message(role=MessageRole.USER, content=query)]
+    client = get_adapter("mock")
+    trace = []
+
+    for step in range(max_iter):
+        resp = client.chat(msgs, tools=tools)
+        trace.append({"step": step, "content": resp.content,
+                      "tool_calls": [tc.model_dump() for tc in resp.tool_calls]})
+
+        if not resp.tool_calls:
+            return resp.content  # agente decidiu parar
+
+        # Executa cada tool e adiciona resultado
+        for call in resp.tool_calls:
+            result = executar_tool(call)  # com sandbox, retry, etc.
+            msgs.append(Message(role=MessageRole.TOOL, content=str(result), name=call.name))
+
+    return "max_iterations excedido"  # fallback explícito</code></pre>
+      </div>
+
+
+    <!-- Exercício -->
+    
+      <div class="bg-amber-900/10 rounded-xl border border-amber-500/30 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">🏋️</span> Exercício hands-on</h3>
+        <p class="text-zinc-300 text-sm">Implemente ReAct agent com 3 tools + max_iterations + tracing estruturado. Bateria de 30 traços-canário (golden FEC-GS-AGENT-v1) deve passar 30/30 sem loop infinito. Em <code>exercicios/modulo-4-2/</code>.</p>
+      </div>
+
+
+    <!-- Bibliografia -->
+    
+      <div class="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-8">
+        <h3 class="text-lg font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">📚</span> Bibliografia</h3>
+        <ul class="space-y-2 text-zinc-300"><li class="text-sm"><strong>Yao et al. (2022)</strong> — <a href="https://arxiv.org/abs/2210.03629" class="text-sky-400 hover:text-sky-300 underline">ReAct: Synergizing Reasoning and Acting</a></li><li class="text-sm"><strong>Wang et al. (2023)</strong> — <a href="https://arxiv.org/abs/2305.04091" class="text-sky-400 hover:text-sky-300 underline">Plan-and-Solve Prompting</a></li><li class="text-sm"><strong>Anthropic (2024)</strong> — <a href="https://www.anthropic.com/research/building-effective-agents" class="text-sky-400 hover:text-sky-300 underline">Building Effective Agents</a></li><li class="text-sm"><strong>OpenAI (2024)</strong> — <a href="https://openai.com/index/practices-for-governing-agentic-ai-systems" class="text-sky-400 hover:text-sky-300 underline">Practices for Governing Agentic AI Systems</a></li></ul>
+      </div>
+
+
+    <!-- Resumo Final + Navegação -->
+    
+      <section class="mb-12">
+        <div class="bg-gradient-to-br from-amber-900/40 via-zinc-900 to-zinc-900 rounded-xl border border-amber-500/30 p-8">
+          <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">🎯</span> Resumo do Módulo</h2>
+          <ul class="space-y-3 mb-8"><li class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><span class="text-zinc-300"><strong>Agente é loop</strong>: ReAct (pensa-age) ou planner/executor.</span></li><li class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><span class="text-zinc-300"><strong>max_iterations</strong> obrigatório — sem isso, loop em produção.</span></li><li class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><span class="text-zinc-300"><strong>Tracing por step</strong> é pré-requisito de debugability.</span></li><li class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><span class="text-zinc-300"><strong>Recovery</strong>: retry, abort, fallback — não exceção crua.</span></li><li class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><span class="text-zinc-300"><strong>Budget</strong> de custo explícito por tarefa.</span></li></ul>
+          <div class="bg-zinc-900/50 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-amber-400 mb-2">Próximo Módulo:</h3>
+            <p class="text-zinc-300 text-sm">Multi-agente e MCP (beta)</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="index.html" class="btn flex-1 text-center px-6 py-3 bg-zinc-800 text-zinc-300 rounded-lg font-semibold hover:bg-zinc-700 transition-colors justify-start">← Voltar para Trilha</a>
+            <a href="modulo-4-3" class="btn flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors justify-start">Próximo Módulo →</a>
+          </div>
+        </div>
+      </section>
+
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-zinc-800 mt-16">
+    <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> ·
+        Conteúdo CC BY-SA 4.0 · Código MIT · Atualizado em 2026-05-02
+      </div>
+      <div class="flex gap-6">
+        <a href="../../SECURITY.md" class="hover:text-zinc-300">Segurança</a>
+        <a href="../../CONTRIBUTING.md" class="hover:text-zinc-300">Contribuir</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
