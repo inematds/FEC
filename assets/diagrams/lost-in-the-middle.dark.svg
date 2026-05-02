@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" width="100%" height="auto" role="img" aria-labelledby="lim-title lim-desc" font-family="Inter, system-ui, sans-serif">
+  <title id="lim-title">Lost in the middle — atenção não-uniforme</title>
+  <desc id="lim-desc">Tokens no início e fim da janela recebem peso de atenção alto (verde); tokens no meio recebem peso degradado (vermelho). Acurácia cai ~30% quando informação crítica está no meio (Liu et al. 2023).</desc>
+
+  <defs>
+    <marker id="arr-d2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#a1a1aa"/>
+    </marker>
+    <marker id="arr-deg-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" fill-opacity="0.5"/>
+    </marker>
+  </defs>
+
+  <!-- Título da janela -->
+  <text x="20" y="30" font-size="13" font-weight="700" fill="#e4e4e7">Janela de contexto (10k tokens)</text>
+
+  <!-- Bloco início (alta atenção) -->
+  <g>
+    <rect x="20" y="60" width="180" height="100" rx="8"
+          fill="#10b98144" stroke="#10b981" stroke-width="2.5"/>
+    <text x="110" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#34d399">Tokens 1 — 1k</text>
+    <text x="110" y="112" text-anchor="middle" font-size="11" fill="#a7f3d0">início</text>
+    <text x="110" y="132" text-anchor="middle" font-size="14" font-weight="700" fill="#34d399">atenção ALTA ✓</text>
+    <text x="110" y="150" text-anchor="middle" font-size="10" fill="#a7f3d0">prefix bias</text>
+  </g>
+
+  <!-- Bloco meio (atenção degradada) — em vermelho -->
+  <g>
+    <rect x="220" y="60" width="460" height="100" rx="8"
+          fill="#ef444444" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="6,4"/>
+    <text x="450" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#fca5a5">Tokens 1k — 9k</text>
+    <text x="450" y="112" text-anchor="middle" font-size="11" fill="#fecaca">meio (zona de degradação)</text>
+    <text x="450" y="132" text-anchor="middle" font-size="14" font-weight="700" fill="#fca5a5">atenção BAIXA ✗</text>
+    <text x="450" y="150" text-anchor="middle" font-size="10" fill="#fecaca">aqui o modelo "esquece"</text>
+  </g>
+
+  <!-- Bloco fim (alta atenção) -->
+  <g>
+    <rect x="700" y="60" width="180" height="100" rx="8"
+          fill="#10b98144" stroke="#10b981" stroke-width="2.5"/>
+    <text x="790" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="#34d399">Tokens 9k — 10k</text>
+    <text x="790" y="112" text-anchor="middle" font-size="11" fill="#a7f3d0">fim</text>
+    <text x="790" y="132" text-anchor="middle" font-size="14" font-weight="700" fill="#34d399">atenção ALTA ✓</text>
+    <text x="790" y="150" text-anchor="middle" font-size="10" fill="#a7f3d0">recency bias</text>
+  </g>
+
+  <!-- Setas para resposta -->
+  <line x1="110" y1="160" x2="430" y2="280" stroke="#10b981" stroke-width="2.5" marker-end="url(#arr-d2)"/>
+  <text x="170" y="240" font-size="11" fill="#34d399" font-weight="600">peso ✓</text>
+
+  <line x1="450" y1="160" x2="450" y2="280" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arr-deg-d)" opacity="0.5"/>
+  <text x="460" y="225" font-size="11" fill="#fca5a5" font-weight="600">peso ✗ degradado</text>
+
+  <line x1="790" y1="160" x2="470" y2="280" stroke="#10b981" stroke-width="2.5" marker-end="url(#arr-d2)"/>
+  <text x="700" y="240" font-size="11" fill="#34d399" font-weight="600">peso ✓</text>
+
+  <!-- Resposta -->
+  <g>
+    <rect x="370" y="285" width="160" height="50" rx="25" fill="#facc1533" stroke="#facc15" stroke-width="2.5"/>
+    <text x="450" y="316" text-anchor="middle" font-size="14" font-weight="700" fill="#facc15">Resposta</text>
+  </g>
+
+  <!-- Nota de evidência -->
+  <g>
+    <rect x="100" y="375" width="700" height="60" rx="8"
+          fill="#27272a" stroke="#71717a" stroke-width="1.5"/>
+    <text x="120" y="400" font-size="12" font-weight="700" fill="#fafafa">📄 Liu et al. (2023, ArXiv:2307.03172):</text>
+    <text x="120" y="420" font-size="12" fill="#d4d4d8">acurácia em QA cai até 30% quando a informação crítica está no meio da janela.</text>
+  </g>
+</svg>
