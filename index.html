@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Formação de Engenharia de Contexto — curso master em PT-BR sobre engenharia de contexto para LLMs. Padrões agnósticos de provedor, exercícios testáveis, projetos cumulativos.">
   <title>FEC — Formação de Engenharia de Contexto</title>
-  <link rel="stylesheet" href="assets/css/inema.css">
+  <link rel="stylesheet" href="assets/css/inema.css?v=2a7d0678">
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 </head>
 <body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen">
@@ -16,17 +16,23 @@
     ⚠️ Versão em desenvolvimento — release v1.0.0 prevista para maio/2026.
   </div> -->
 
-  <header class="border-b border-zinc-800">
-    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-3">
+  <header class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+    <nav class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-3 flex-shrink-0">
         <span class="text-2xl font-bold text-primary">FEC</span>
-        <span class="text-zinc-400 hidden md:inline">Formação de Engenharia de Contexto</span>
+        <span class="text-zinc-400 hidden xl:inline text-sm">Engenharia de Contexto</span>
       </a>
-      <div class="flex items-center gap-6 text-sm">
-        <a href="curso/trilha1/index.html" class="hover:text-primary transition">Começar</a>
-        <a href="ESCOPO.md" class="hover:text-primary transition">Escopo</a>
-        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
-        <a href="https://inema.club" class="text-sky-400 hover:text-sky-300 transition">INEMA.CLUB</a>
+      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto">
+        <a href="curso/trilha1/index.html" class="px-2.5 py-1 rounded border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition whitespace-nowrap" title="T1 Fundamentos">T1 · Fundamentos</a>
+        <a href="curso/trilha2/index.html" class="px-2.5 py-1 rounded border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition whitespace-nowrap" title="T2 Mensagem">T2 · Mensagem</a>
+        <a href="curso/trilha3/index.html" class="px-2.5 py-1 rounded border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 transition whitespace-nowrap" title="T3 RAG">T3 · RAG</a>
+        <a href="curso/trilha4/index.html" class="px-2.5 py-1 rounded border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 transition whitespace-nowrap" title="T4 Tools/Agentes">T4 · Agentes</a>
+        <a href="curso/trilha5/index.html" class="px-2.5 py-1 rounded border border-teal-500/30 text-teal-400 hover:bg-teal-500/20 transition whitespace-nowrap" title="T5 Memória">T5 · Memória</a>
+        <a href="curso/trilha6/index.html" class="px-2.5 py-1 rounded border border-rose-500/30 text-rose-400 hover:bg-rose-500/20 transition whitespace-nowrap" title="T6 Avaliação">T6 · Avaliação</a>
+      </div>
+      <div class="flex items-center gap-3 text-sm flex-shrink-0">
+        <a href="https://github.com/inematds/FEC" class="hidden lg:inline text-zinc-400 hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" class="text-sky-400 hover:text-sky-300 font-medium transition">INEMA.CLUB</a>
       </div>
     </nav>
   </header>

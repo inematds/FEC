@@ -23,6 +23,18 @@ REPO = Path(__file__).resolve().parent.parent
 
 CSP = "default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests"
 
+
+def _css_version() -> str:
+    """Hash curto do CSS atual — usado em ?v= para cache busting."""
+    css = REPO / "assets/css/inema.css"
+    if not css.exists():
+        return "dev"
+    import hashlib
+    return hashlib.sha256(css.read_bytes()).hexdigest()[:8]
+
+
+CSS_V = _css_version()
+
 # Trilha cor → variante numérica do Tailwind (-400 dark, escuro -700/-800 light) e RGB
 COR_INFO = {
     "emerald": {"text": "emerald-400", "bg20": "emerald-500/20", "bg10": "emerald-500/10", "border": "emerald-500/30", "from": "emerald-900/30", "rgb": "5, 150, 105", "light": "#059669"},
@@ -241,7 +253,7 @@ def render_modulo(m: dict) -> str:
   <meta http-equiv="Content-Security-Policy" content="{CSP}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{m["numero"]} {m["titulo"]} · FEC T{m["trilha"]}</title>
-  <link rel="stylesheet" href="../../assets/css/inema.css">
+  <link rel="stylesheet" href="../../assets/css/inema.css?v={CSS_V}">
   <meta name="trilha" content="T{m['trilha']}">
   <meta name="status" content="{m['status']}">
   <meta name="modulo" content="{m['id']}">
@@ -253,15 +265,23 @@ def render_modulo(m: dict) -> str:
 
   <!-- NAV GLOBAL -->
   <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="../../index.html" class="flex items-center gap-3">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
+      <a href="../../index.html" class="flex items-center gap-3 flex-shrink-0">
         <span class="text-2xl font-bold text-primary">FEC</span>
-        <span class="text-zinc-400 text-sm hidden md:inline">Formação de Engenharia de Contexto</span>
+        <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
       </a>
-      <div class="flex items-center gap-4 text-sm">
-        <a href="index.html" class="hover:text-primary transition">← T{m['trilha']}</a>
-        <a href="https://github.com/inematds/FEC" class="hover:text-primary transition">GitHub</a>
-        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto">
+        <a href="../trilha1/index.html" class="px-2.5 py-1 rounded border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition whitespace-nowrap{' bg-emerald-500/20' if m['trilha']==1 else ''}" title="T1 Fundamentos">T1 · Fundamentos</a>
+        <a href="../trilha2/index.html" class="px-2.5 py-1 rounded border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition whitespace-nowrap{' bg-blue-500/20' if m['trilha']==2 else ''}" title="T2 Mensagem">T2 · Mensagem</a>
+        <a href="../trilha3/index.html" class="px-2.5 py-1 rounded border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 transition whitespace-nowrap{' bg-purple-500/20' if m['trilha']==3 else ''}" title="T3 RAG">T3 · RAG</a>
+        <a href="../trilha4/index.html" class="px-2.5 py-1 rounded border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 transition whitespace-nowrap{' bg-amber-500/20' if m['trilha']==4 else ''}" title="T4 Tools/Agentes">T4 · Agentes</a>
+        <a href="../trilha5/index.html" class="px-2.5 py-1 rounded border border-teal-500/30 text-teal-400 hover:bg-teal-500/20 transition whitespace-nowrap{' bg-teal-500/20' if m['trilha']==5 else ''}" title="T5 Memória">T5 · Memória</a>
+        <a href="../trilha6/index.html" class="px-2.5 py-1 rounded border border-rose-500/30 text-rose-400 hover:bg-rose-500/20 transition whitespace-nowrap{' bg-rose-500/20' if m['trilha']==6 else ''}" title="T6 Avaliação">T6 · Avaliação</a>
+      </div>
+      <div class="flex items-center gap-3 text-sm flex-shrink-0">
+        <a href="index.html" class="md:hidden text-{cor}-400">← T{m['trilha']}</a>
+        <a href="https://github.com/inematds/FEC" class="hidden lg:inline text-zinc-400 hover:text-primary transition">GitHub</a>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 font-medium transition">INEMA.CLUB</a>
       </div>
     </div>
   </nav>
