@@ -178,7 +178,7 @@ def render_modulo(m: dict) -> str:
     )
     resumo_html = f"""
       <section class="mb-12">
-        <div class="bg-gradient-to-br from-{cor}-900/40 via-zinc-900 to-zinc-900 rounded-xl border border-{cor}-500/30 p-8">
+        <div class="bg-gradient-to-br from-{cor}-900/55 via-zinc-900 to-zinc-900 rounded-xl border border-{cor}-500/30 p-8">
           <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">🎯</span> Resumo do Módulo</h2>
           <ul class="space-y-3 mb-8">{resumo_items}</ul>
           <div class="bg-zinc-900/50 rounded-lg p-4 mb-6">
@@ -238,7 +238,7 @@ def render_modulo(m: dict) -> str:
   </nav>
 
   <!-- HEADER COM GRADIENTE + STATS -->
-  <header class="bg-gradient-to-br from-{cor}-900/30 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
+  <header class="bg-gradient-to-br from-{cor}-900/45 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
     <div class="max-w-6xl mx-auto px-6">
       <div class="flex items-center gap-3 mb-4">
         <span class="inline-block px-3 py-1 bg-{cor}-500/20 text-{cor}-400 text-xs font-semibold rounded-full">MÓDULO {m['numero']}</span>

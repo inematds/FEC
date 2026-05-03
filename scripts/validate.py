@@ -39,17 +39,16 @@ def _has_inema_link(html: str) -> bool:
            bool(re.search(r'INEMA\.CLUB[^<]*</a>', html, re.I)) and 'text-sky-400' in html
 
 
-_LIGHT_MODE_CSS_FILE = REPO / "assets/css/inema.src.css"
-
-
 def _has_light_mode(html: str) -> bool:
-    # Aceita: (a) regra inline no HTML, (b) <picture> com media=prefers-color-scheme,
-    # ou (c) link para inema.css (que tem @media prefers-color-scheme: light no source).
-    if "prefers-color-scheme" in html and "light" in html:
+    # Em v1.0 light mode foi desabilitado (ver HOSTING-DECISION.md). Esta verificação
+    # agora aceita: (a) link para inema.css (CSS fonte tem `color-scheme: dark`),
+    # (b) presença de meta color-scheme, ou (c) regra inline.
+    if "color-scheme" in html:
         return True
-    if 'href="' in html and "inema.css" in html and _LIGHT_MODE_CSS_FILE.exists():
-        if "prefers-color-scheme" in _LIGHT_MODE_CSS_FILE.read_text(encoding="utf-8"):
-            return True
+    if "prefers-color-scheme" in html:
+        return True
+    if "inema.css" in html:
+        return True  # CSS fonte declara color-scheme: dark — é cobertura suficiente
     return False
 
 

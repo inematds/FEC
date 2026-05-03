@@ -117,7 +117,7 @@ def render_trilha(num: int) -> str:
     </div>
   </nav>
 
-  <header class="bg-gradient-to-br from-{cor}-900/30 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
+  <header class="bg-gradient-to-br from-{cor}-900/45 via-zinc-900 to-zinc-900 py-12 border-b border-zinc-800">
     <div class="max-w-6xl mx-auto px-6">
       <span class="inline-block px-3 py-1 bg-{cor}-500/20 text-{cor}-400 text-xs font-semibold rounded-full mb-4">TRILHA {num}</span>
       <h1 class="text-3xl sm:text-4xl font-bold mb-4">{t['emoji']} {t['nome']}</h1>
