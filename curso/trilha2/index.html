@@ -13,11 +13,15 @@
 
   <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
     <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-      <a href="../../index.html" class="flex items-center gap-3 flex-shrink-0">
-        <span class="text-2xl font-bold text-primary">FEC</span>
-        <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
-      </a>
-      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto">
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <a href="../../index.html" class="flex items-center gap-3">
+          <span class="text-2xl font-bold text-primary">FEC</span>
+          <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
+        </a>
+        <span class="text-zinc-700">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto px-4">
         <a href="../trilha1/index.html" class="px-2.5 py-1 rounded border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition whitespace-nowrap" title="T1 Fundamentos">T1 · Fundamentos</a>
         <a href="../trilha2/index.html" class="px-2.5 py-1 rounded border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition whitespace-nowrap bg-blue-500/20" title="T2 Mensagem">T2 · Mensagem</a>
         <a href="../trilha3/index.html" class="px-2.5 py-1 rounded border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 transition whitespace-nowrap" title="T3 RAG">T3 · RAG</a>
@@ -28,7 +32,6 @@
       <div class="flex items-center gap-3 text-sm flex-shrink-0">
         <a href="../../index.html" class="md:hidden text-zinc-400">← Trilhas</a>
         <a href="https://github.com/inematds/FEC" class="hidden lg:inline text-zinc-400 hover:text-primary transition">GitHub</a>
-        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 font-medium transition">INEMA.CLUB</a>
       </div>
     </div>
   </nav>
@@ -61,7 +64,26 @@
   </header>
 
   <main class="max-w-6xl mx-auto px-6 py-12">
-   <div class="max-w-4xl mx-auto">
+
+    <!-- O que esta trilha explora (resumo rico) -->
+    <section class="mb-12 bg-gradient-to-br from-blue-900/20 to-zinc-900 rounded-xl border border-blue-500/30 p-6 md:p-8">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="md:col-span-2">
+          <h3 class="text-xl font-bold text-blue-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Objetivo desta trilha</h3>
+          <p class="text-zinc-200 mb-6 leading-relaxed">Tratar prompt como código: estrutura, versionamento, eval automatizado.</p>
+          <h3 class="text-xl font-bold text-blue-400 mb-3 flex items-center"><span class="mr-2">🔍</span> O que você vai explorar</h3>
+          <ul class="space-y-2">
+            <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">▸</span><span class="text-sm text-zinc-300">Anatomia da mensagem em 5 seções estáveis.</span></li><li class="flex items-start gap-2"><span class="text-blue-400 mt-1">▸</span><span class="text-sm text-zinc-300">System prompt, few-shot canônico, formato declarativo XML/JSON.</span></li><li class="flex items-start gap-2"><span class="text-blue-400 mt-1">▸</span><span class="text-sm text-zinc-300">Padrão FEC de ordem: estável → variável → âncora → user turn.</span></li><li class="flex items-start gap-2"><span class="text-blue-400 mt-1">▸</span><span class="text-sm text-zinc-300">Ancoragem dupla; chain-of-thought quando vale.</span></li><li class="flex items-start gap-2"><span class="text-blue-400 mt-1">▸</span><span class="text-sm text-zinc-300">Prompts versionados em arquivo (Jinja2/templates), SemVer aplicado.</span></li><li class="flex items-start gap-2"><span class="text-blue-400 mt-1">▸</span><span class="text-sm text-zinc-300">Eval primer: golden set + mini-eval em toda mudança de prompt.</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="bg-zinc-900/60 rounded-lg p-4 border border-zinc-800">
+            <h4 class="text-blue-400 font-semibold mb-2 text-sm">👤 Para quem</h4>
+            <p class="text-zinc-300 text-sm">Quem pretende manter prompts em produção, não 'tunar pra demo'.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <h2 class="text-2xl font-bold mb-6">📚 Módulos da trilha</h2>
 
@@ -73,54 +95,92 @@
               <span class="text-blue-400 font-bold">2.1</span>
               <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded text-xs font-semibold">GA</span>
             </div>
-            <span class="text-xs text-zinc-500">~55 min · Intermediário</span>
+            <span class="text-xs text-zinc-500">~55 min · Intermediário · Prático</span>
           </div>
           <h3 class="text-2xl font-bold mb-2 text-zinc-100">✉️ Estrutura da mensagem: system, few-shot, XML/JSON, ancoragem</h3>
           <p class="text-sm text-zinc-400">A anatomia de um prompt bem-engenhado: 5 seções estáveis, formato declarativo, exemplos few-shot e por que ancoragem do user turn no fim importa.</p>
         </div>
 
-        <div class="px-3">
+        <div class="divide-y divide-zinc-800/50 px-3 py-2">
           
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center">1</span>
-            <span>🎭 System prompt: persona e regras</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— O contrato do modelo</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="flex-1"><span>🎭 System prompt: persona e regras</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— O contrato do modelo</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Mensagem do tipo 'system' que define persona, regras, formato de saída e restrições. Estável entre turns — alvo prioritário do prompt caching.</span></div>
             <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem system prompt explícito, o modelo improvisa o comportamento a cada chamada. Você perde controle e reprodutibilidade.</span></div>
             <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Persona, role, regras, formato de saída, prompt cache anchor.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center">2</span>
-            <span>📚 Few-shot: ensinando por exemplo</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— 2-N exemplos canônicos</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="flex-1"><span>📚 Few-shot: ensinando por exemplo</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— 2-N exemplos canônicos</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Padrão de incluir 2-N exemplos input→output no prompt para guiar o modelo. Funciona melhor que descrição abstrata para tarefas com formato específico.</span></div>
             <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">In-context learning: o modelo extrapola do padrão dos exemplos. Para classificação, extração estruturada e tradução, few-shot consistentemente bate zero-shot.</span></div>
             <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">In-context learning, GPT-3 paper (Brown et al. 2020), exemplo canônico, ordem dos exemplos.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center">3</span>
-            <span>🏷️ Formato declarativo: XML, JSON, Markdown</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Tags que ancoram</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="flex-1"><span>🏷️ Formato declarativo: XML, JSON, Markdown</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Tags que ancoram</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Usar tags XML (<code>&lt;documento&gt;</code>, <code>&lt;pergunta&gt;</code>) ou JSON Schema declara seções e ajuda o modelo a separá-las.</span></div>
             <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Modelos modernos foram fine-tunados em prompts com estrutura. XML reduz confusão entre 'o que é instrução' e 'o que é dado'.</span></div>
             <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">XML tags, JSON Schema, structured outputs, delimitadores.</span></div>
           </div>
         </details>
-          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="flex-1"><span>📍 Ordem das seções: estável → variável → instrução</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— O padrão FEC</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">System prompt e few-shot fixos primeiro (cacheáveis); contexto recuperado depois (variável); instrução do usuário no fim.</span></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Maximiza cache hit rate e coloca a pergunta na zona de atenção alta (recência).</span></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Cache stability, instruction-at-end, anchoring, prefix-suffix split.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="flex-1"><span>🪢 Ancoragem: repita a pergunta antes E depois</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Mitigação contra lost-in-middle</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Quando o contexto recuperado é grande, repetir a pergunta no início E no fim do bloco de contexto reduz a chance de o modelo esquecer.</span></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Liu et al. (2023) mostra que info no meio é menos atendida. Ancoragem é uma das mitigações validadas.</span></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Anchoring, repetition prompt, query injection.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="flex-1"><span>🔧 Chain-of-thought: pensar antes de responder</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Raciocínio explícito</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Padrão de pedir ao modelo para 'pensar passo a passo' antes da resposta final. Tags como <code>&lt;raciocinio&gt;</code> antes de <code>&lt;resposta&gt;</code>.</span></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em problemas multi-passo (matemática, lógica), CoT melhora acurácia significativamente. Wei et al. (2022).</span></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">CoT (Wei 2022), zero-shot CoT (Kojima 2022), reasoning models, scratchpad.</span></div>
+          </div>
+        </details>
         </div>
 
-        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+        <div class="p-4 bg-zinc-800/30 flex justify-start gap-3 border-t border-zinc-800">
+          <button data-modal="modal-2-1" class="btn px-4 py-2 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors justify-start">
+            Ver em Modal
+          </button>
           <a href="modulo-2-1.html" class="btn px-4 py-2 text-sm bg-blue-600 text-white hover:bg-blue-500 rounded-lg transition-colors justify-start">
             Ver Completo →
           </a>
@@ -134,54 +194,92 @@
               <span class="text-blue-400 font-bold">2.2</span>
               <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded text-xs font-semibold">GA</span>
             </div>
-            <span class="text-xs text-zinc-500">~60 min · Intermediário</span>
+            <span class="text-xs text-zinc-500">~60 min · Intermediário · Prático</span>
           </div>
           <h3 class="text-2xl font-bold mb-2 text-zinc-100">📝 Templates, versionamento de prompt e eval primer</h3>
           <p class="text-sm text-zinc-400">Prompts viram código: têm versão, diff, teste. Toda mudança em prompt deve passar por mini-eval no harness antes de ir para produção.</p>
         </div>
 
-        <div class="px-3">
+        <div class="divide-y divide-zinc-800/50 px-3 py-2">
           
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center">1</span>
-            <span>📦 Prompt como código: template + variáveis</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Separar dado de prompt</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="flex-1"><span>📦 Prompt como código: template + variáveis</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Separar dado de prompt</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Padrão template com placeholders (Jinja2, f-string, mustache). O prompt fica em arquivo versionado; dados entram no momento da chamada.</span></div>
             <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Prompts hardcoded em código Python ficam impossíveis de revisar e versionar. Templates externos permitem PR review do prompt isoladamente.</span></div>
             <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Template engine, variáveis, schema de input, sanitização.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center">2</span>
-            <span>🔢 Versionamento: SemVer aplicado a prompts</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— v1.0.0 do prompt</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="flex-1"><span>🔢 Versionamento: SemVer aplicado a prompts</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— v1.0.0 do prompt</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Major: mudança que invalida saídas anteriores (formato, persona). Minor: capability nova compatível. Patch: correção de typo, clareza.</span></div>
             <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem versionamento, regressão silenciosa é certeza. Você muda 'só uma palavra' e quebra 30% dos casos sem perceber.</span></div>
             <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">SemVer, prompt diff, breaking change, hash de prompt.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center">3</span>
-            <span>🎯 Golden set: o conjunto de validação</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— 20-50 exemplos canônicos</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="flex-1"><span>🎯 Golden set: o conjunto de validação</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— 20-50 exemplos canônicos</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Conjunto fixado de input → output esperado, usado para medir se o prompt continua funcionando após mudança.</span></div>
             <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">É o teste automatizado do prompt. Sem golden set, 'A/B' vira 'achei que melhorou'.</span></div>
             <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Golden set, regression test, eval frozen, harness.</span></div>
           </div>
         </details>
-          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="flex-1"><span>⚖️ Eval primer: medir antes de mergear</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— A regra que enraíza em T6</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Toda mudança em prompt entra com mini-eval contra o golden set. Métrica primária + 1-2 secundárias. Diff documentado.</span></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Disciplina anti-regressão. Sem isso, o prompt vai sendo 'melhorado' ad hoc até parar de funcionar.</span></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Mini-eval, A/B no harness, statistical significance, eval cost.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="flex-1"><span>📊 Métricas: exact match, BLEU, LLM-as-judge</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Escolha pela tarefa</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Exact match para classificação. BLEU/ROUGE para tradução/sumarização. LLM-as-judge para qualidade subjetiva (com cuidado dos vieses).</span></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Cada tipo de tarefa pede sua métrica. LLM-as-judge é poderoso mas tem vieses — detalhado em T6.1.</span></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Exact match, BLEU, ROUGE, LLM-as-judge, judge bias.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="flex-1"><span>🔁 Iterativa, não one-shot: o ciclo do prompt</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Hipótese → eval → diff</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Ciclo: hipótese de mudança → escrever variant → rodar contra golden → comparar métricas → decidir.</span></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Prompt engineering não é arte intuitiva — é ciência empírica. Ciclos rápidos e medidos batem 'feeling'.</span></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Hypothesis-driven, eval cycle, prompt diff, A/B significant.</span></div>
+          </div>
+        </details>
         </div>
 
-        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+        <div class="p-4 bg-zinc-800/30 flex justify-start gap-3 border-t border-zinc-800">
+          <button data-modal="modal-2-2" class="btn px-4 py-2 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors justify-start">
+            Ver em Modal
+          </button>
           <a href="modulo-2-2.html" class="btn px-4 py-2 text-sm bg-blue-600 text-white hover:bg-blue-500 rounded-lg transition-colors justify-start">
             Ver Completo →
           </a>
@@ -197,8 +295,62 @@
       </a>
     </section>
 
-   </div>
+    <!-- Outras trilhas (mapa do curso) -->
+    <section class="mt-12">
+      <h3 class="text-lg font-bold mb-4">🗺️ Outras trilhas</h3>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        
+        <a href="../trilha1/index.html" class="block p-4 rounded-lg border border-emerald-500/30 bg-gradient-to-br from-emerald-900/40 to-zinc-900 hover:from-emerald-900/60 transition">
+          <div class="text-emerald-400 text-xs font-semibold mb-1">T1</div>
+          <div class="text-sm font-bold text-zinc-100">🧠 Fundamentos de Contexto</div>
+        </a>
+        <a href="../trilha3/index.html" class="block p-4 rounded-lg border border-purple-500/30 bg-gradient-to-br from-purple-900/40 to-zinc-900 hover:from-purple-900/60 transition">
+          <div class="text-purple-400 text-xs font-semibold mb-1">T3</div>
+          <div class="text-sm font-bold text-zinc-100">📚 RAG e Recuperação</div>
+        </a>
+        <a href="../trilha4/index.html" class="block p-4 rounded-lg border border-amber-500/30 bg-gradient-to-br from-amber-900/40 to-zinc-900 hover:from-amber-900/60 transition">
+          <div class="text-amber-400 text-xs font-semibold mb-1">T4</div>
+          <div class="text-sm font-bold text-zinc-100">🛠️ Tools, Agentes e Multi-Agente</div>
+        </a>
+        <a href="../trilha5/index.html" class="block p-4 rounded-lg border border-teal-500/30 bg-gradient-to-br from-teal-900/40 to-zinc-900 hover:from-teal-900/60 transition">
+          <div class="text-teal-400 text-xs font-semibold mb-1">T5</div>
+          <div class="text-sm font-bold text-zinc-100">💾 Memória e Compressão</div>
+        </a>
+        <a href="../trilha6/index.html" class="block p-4 rounded-lg border border-rose-500/30 bg-gradient-to-br from-rose-900/40 to-zinc-900 hover:from-rose-900/60 transition">
+          <div class="text-rose-400 text-xs font-semibold mb-1">T6</div>
+          <div class="text-sm font-bold text-zinc-100">📊 Avaliação e Produção</div>
+        </a>
+      </div>
+    </section>
+
   </main>
+
+  <!-- MODAIS DOS MÓDULOS (carregam módulo via iframe) -->
+  
+    <div id="modal-2-1" class="fec-modal hidden fixed inset-0 z-50 items-center justify-center p-2 sm:p-4 bg-black/80" data-modal-backdrop>
+      <div class="bg-zinc-900 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-zinc-700">
+        <div class="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="text-blue-400 font-bold">2.1</span>
+            <span class="font-semibold text-zinc-100">✉️ Estrutura da mensagem: system, few-shot, XML/JSON, ancoragem</span>
+          </div>
+          <button data-modal-close class="text-zinc-400 hover:text-zinc-100 text-3xl leading-none px-2" aria-label="Fechar">&times;</button>
+        </div>
+        <iframe src="modulo-2-1.html" class="flex-1 w-full bg-zinc-950" title="Estrutura da mensagem: system, few-shot, XML/JSON, ancoragem"></iframe>
+      </div>
+    </div>
+    <div id="modal-2-2" class="fec-modal hidden fixed inset-0 z-50 items-center justify-center p-2 sm:p-4 bg-black/80" data-modal-backdrop>
+      <div class="bg-zinc-900 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-zinc-700">
+        <div class="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="text-blue-400 font-bold">2.2</span>
+            <span class="font-semibold text-zinc-100">📝 Templates, versionamento de prompt e eval primer</span>
+          </div>
+          <button data-modal-close class="text-zinc-400 hover:text-zinc-100 text-3xl leading-none px-2" aria-label="Fechar">&times;</button>
+        </div>
+        <iframe src="modulo-2-2.html" class="flex-1 w-full bg-zinc-950" title="Templates, versionamento de prompt e eval primer"></iframe>
+      </div>
+    </div>
 
   <footer class="border-t border-zinc-800 mt-16">
     <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
@@ -212,6 +364,8 @@
       </div>
     </div>
   </footer>
+
+  <script src="../../assets/js/inema.js?v=2a7d0678" defer></script>
 
 </body>
 </html>

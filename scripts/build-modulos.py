@@ -21,7 +21,7 @@ for _m in MODULOS:
 
 REPO = Path(__file__).resolve().parent.parent
 
-CSP = "default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests"
+CSP = "default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'self' 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests"
 
 
 def _css_version() -> str:
@@ -263,14 +263,18 @@ def render_modulo(m: dict) -> str:
 </head>
 <body class="bg-zinc-950 text-zinc-100 font-sans antialiased min-h-screen" data-status="{m['status']}">
 
-  <!-- NAV GLOBAL -->
+  <!-- NAV GLOBAL — INEMA.CLUB ao lado do logo separado por | (regra MASTER 1.4) -->
   <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
     <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-      <a href="../../index.html" class="flex items-center gap-3 flex-shrink-0">
-        <span class="text-2xl font-bold text-primary">FEC</span>
-        <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
-      </a>
-      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto">
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <a href="../../index.html" class="flex items-center gap-3">
+          <span class="text-2xl font-bold text-primary">FEC</span>
+          <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
+        </a>
+        <span class="text-zinc-700">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto px-4">
         <a href="../trilha1/index.html" class="px-2.5 py-1 rounded border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition whitespace-nowrap{' bg-emerald-500/20' if m['trilha']==1 else ''}" title="T1 Fundamentos">T1 · Fundamentos</a>
         <a href="../trilha2/index.html" class="px-2.5 py-1 rounded border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition whitespace-nowrap{' bg-blue-500/20' if m['trilha']==2 else ''}" title="T2 Mensagem">T2 · Mensagem</a>
         <a href="../trilha3/index.html" class="px-2.5 py-1 rounded border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 transition whitespace-nowrap{' bg-purple-500/20' if m['trilha']==3 else ''}" title="T3 RAG">T3 · RAG</a>
@@ -281,7 +285,6 @@ def render_modulo(m: dict) -> str:
       <div class="flex items-center gap-3 text-sm flex-shrink-0">
         <a href="index.html" class="md:hidden text-{cor}-400">← T{m['trilha']}</a>
         <a href="https://github.com/inematds/FEC" class="hidden lg:inline text-zinc-400 hover:text-primary transition">GitHub</a>
-        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 font-medium transition">INEMA.CLUB</a>
       </div>
     </div>
   </nav>
@@ -330,7 +333,6 @@ def render_modulo(m: dict) -> str:
 
   <!-- CONTEÚDO -->
   <main class="max-w-6xl mx-auto px-6 py-12">
-   <div class="max-w-4xl mx-auto">
 
     <!-- Introdução -->
     <section class="mb-12 prose prose-invert max-w-none">
@@ -371,7 +373,6 @@ def render_modulo(m: dict) -> str:
     <!-- Resumo Final + Navegação -->
     {resumo_html}
 
-   </div>
   </main>
 
   <!-- FOOTER -->
@@ -387,6 +388,8 @@ def render_modulo(m: dict) -> str:
       </div>
     </div>
   </footer>
+
+  <script src="../../assets/js/inema.js?v={CSS_V}" defer></script>
 
 </body>
 </html>

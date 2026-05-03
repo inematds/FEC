@@ -13,11 +13,15 @@
 
   <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
     <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-      <a href="../../index.html" class="flex items-center gap-3 flex-shrink-0">
-        <span class="text-2xl font-bold text-primary">FEC</span>
-        <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
-      </a>
-      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto">
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <a href="../../index.html" class="flex items-center gap-3">
+          <span class="text-2xl font-bold text-primary">FEC</span>
+          <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
+        </a>
+        <span class="text-zinc-700">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto px-4">
         <a href="../trilha1/index.html" class="px-2.5 py-1 rounded border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition whitespace-nowrap bg-emerald-500/20" title="T1 Fundamentos">T1 · Fundamentos</a>
         <a href="../trilha2/index.html" class="px-2.5 py-1 rounded border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition whitespace-nowrap" title="T2 Mensagem">T2 · Mensagem</a>
         <a href="../trilha3/index.html" class="px-2.5 py-1 rounded border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 transition whitespace-nowrap" title="T3 RAG">T3 · RAG</a>
@@ -28,7 +32,6 @@
       <div class="flex items-center gap-3 text-sm flex-shrink-0">
         <a href="../../index.html" class="md:hidden text-zinc-400">← Trilhas</a>
         <a href="https://github.com/inematds/FEC" class="hidden lg:inline text-zinc-400 hover:text-primary transition">GitHub</a>
-        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 font-medium transition">INEMA.CLUB</a>
       </div>
     </div>
   </nav>
@@ -61,7 +64,26 @@
   </header>
 
   <main class="max-w-6xl mx-auto px-6 py-12">
-   <div class="max-w-4xl mx-auto">
+
+    <!-- O que esta trilha explora (resumo rico) -->
+    <section class="mb-12 bg-gradient-to-br from-emerald-900/20 to-zinc-900 rounded-xl border border-emerald-500/30 p-6 md:p-8">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="md:col-span-2">
+          <h3 class="text-xl font-bold text-emerald-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Objetivo desta trilha</h3>
+          <p class="text-zinc-200 mb-6 leading-relaxed">Construir o modelo mental de como o modelo lê de fato uma mensagem.</p>
+          <h3 class="text-xl font-bold text-emerald-400 mb-3 flex items-center"><span class="mr-2">🔍</span> O que você vai explorar</h3>
+          <ul class="space-y-2">
+            <li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">▸</span><span class="text-sm text-zinc-300">Janela de contexto como sequência fixa serializada — não 'conversa'.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">▸</span><span class="text-sm text-zinc-300">Atenção causal e KV cache; por que prefixos estáveis são cacheáveis.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">▸</span><span class="text-sm text-zinc-300">Lost in the middle (Liu et al. 2023) e mitigações validadas.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">▸</span><span class="text-sm text-zinc-300">Posição via RoPE; ordem de seções estável→variável→instrução.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">▸</span><span class="text-sm text-zinc-300">Tokens e tokenização (BPE/SentencePiece); custo input vs. output.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">▸</span><span class="text-sm text-zinc-300">Os três níveis de modelo: frontier, low-cost, OSS local.</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="bg-zinc-900/60 rounded-lg p-4 border border-zinc-800">
+            <h4 class="text-emerald-400 font-semibold mb-2 text-sm">👤 Para quem</h4>
+            <p class="text-zinc-300 text-sm">Todo aluno. Pré-requisito das outras 5 trilhas — não pule.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <h2 class="text-2xl font-bold mb-6">📚 Módulos da trilha</h2>
 
@@ -73,54 +95,92 @@
               <span class="text-emerald-400 font-bold">1.1</span>
               <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-xs font-semibold">GA</span>
             </div>
-            <span class="text-xs text-zinc-500">~60 min · Básico</span>
+            <span class="text-xs text-zinc-500">~60 min · Básico · Teoria</span>
           </div>
           <h3 class="text-2xl font-bold mb-2 text-zinc-100">🪟 Janela de contexto, atenção e "lost in the middle"</h3>
           <p class="text-sm text-zinc-400">A anatomia operacional da janela: o que é atenção, por que tokens no meio são esquecidos, e como isso muda decisões de engenharia.</p>
         </div>
 
-        <div class="px-3">
+        <div class="divide-y divide-zinc-800/50 px-3 py-2">
           
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">1</span>
-            <span>🪟 A janela é o ambiente físico do modelo</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Tokens, não conversas</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="flex-1"><span>🪟 A janela é o ambiente físico do modelo</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Tokens, não conversas</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Sequência fixa de tokens que o modelo lê em uma chamada. System prompt + histórico + contexto recuperado + user turn — tudo junto.</span></div>
             <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem essa visão, você assume que o modelo tem 'memória da conversa'. Não tem — você reconstrói a cada chamada.</span></div>
             <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Janela nominal, janela efetiva, ordem de seções, custo do input total.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">2</span>
-            <span>🎯 Atenção causal e KV cache</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— O mecanismo que pesa tokens</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="flex-1"><span>🎯 Atenção causal e KV cache</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— O mecanismo que pesa tokens</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada token só 'olha' tokens anteriores. Estados intermediários (KV cache) podem ser reutilizados — base do prompt caching.</span></div>
             <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Entender KV cache explica por que prefixos estáveis no início têm custo amortizado e por que mexer no system prompt invalida cache da sessão.</span></div>
             <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Self-attention, causal mask, KV cache, attention heads, prefix prefill.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">3</span>
-            <span>📍 Posição: rotary embeddings e o efeito recência</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Por que tokens recentes têm vantagem</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="flex-1"><span>📍 Posição: rotary embeddings e o efeito recência</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Por que tokens recentes têm vantagem</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Modelos modernos codificam posição via Rotary Position Embeddings (RoPE). Tokens recentes têm vantagem estrutural; tokens iniciais têm vantagem de fixação.</span></div>
             <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Esse é o mecanismo concreto por trás do 'lost in the middle'. Tokens no meio simplesmente não têm vantagem estrutural nenhuma.</span></div>
             <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">RoPE (Su et al. 2021), prefix bias, recency bias, position interpolation.</span></div>
           </div>
         </details>
-          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="flex-1"><span>📜 Lost in the middle (Liu et al. 2023)</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— A curva U de atenção</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Em testes controlados, acurácia de QA cai até 30% quando a informação crítica está no meio da janela. Permanece alta no início e fim.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">RAG ingênuo coloca 50 documentos esperando que o modelo dê peso uniforme. Não dá. Precisa rerankear ou recuperar menos.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Curva U, U-shape attention, mitigação por reranking, ancoragem.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="flex-1"><span>🧭 Ordem das seções: estável → variável → instrução</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— O padrão que casa atenção e cache</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">System prompt e few-shot fixos primeiro (estáveis, cacheáveis), contexto recuperado depois (variável), instrução do usuário no fim (atenção máxima).</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Esta ordem maximiza cache hit rate (Anthropic 2024) e coloca a instrução do usuário na posição mais 'atendida' pelo modelo.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Prefix stability, cache breakpoints, instruction-at-the-end pattern, ancoragem.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="flex-1"><span>📏 Janela nominal vs. efetiva</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— 200k de marketing ≠ 200k de qualidade</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Janela nominal é o que o modelo aceita sem erro de API. Janela efetiva é onde a qualidade se mantém. Frequentemente bem menor (RULER, Hsieh et al. 2024).</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Decidir 'cabe' e 'funciona bem' são duas perguntas diferentes. A segunda exige eval no harness.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Effective context length, needle-in-a-haystack, RULER benchmark.</span></div>
+          </div>
+        </details>
         </div>
 
-        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+        <div class="p-4 bg-zinc-800/30 flex justify-start gap-3 border-t border-zinc-800">
+          <button data-modal="modal-1-1" class="btn px-4 py-2 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors justify-start">
+            Ver em Modal
+          </button>
           <a href="modulo-1-1.html" class="btn px-4 py-2 text-sm bg-emerald-600 text-white hover:bg-emerald-500 rounded-lg transition-colors justify-start">
             Ver Completo →
           </a>
@@ -134,54 +194,92 @@
               <span class="text-emerald-400 font-bold">1.2</span>
               <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-xs font-semibold">GA</span>
             </div>
-            <span class="text-xs text-zinc-500">~55 min · Básico</span>
+            <span class="text-xs text-zinc-500">~55 min · Básico · Prático</span>
           </div>
           <h3 class="text-2xl font-bold mb-2 text-zinc-100">🔢 Tokens, custo e limites práticos por modelo</h3>
           <p class="text-sm text-zinc-400">Como contar tokens, estimar custo antes de chamar a API, e escolher entre frontier / low-cost / OSS para o caso certo.</p>
         </div>
 
-        <div class="px-3">
+        <div class="divide-y divide-zinc-800/50 px-3 py-2">
           
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">1</span>
-            <span>🔤 Tokenização: BPE e SentencePiece</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Por que tokens ≠ palavras</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="flex-1"><span>🔤 Tokenização: BPE e SentencePiece</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Por que tokens ≠ palavras</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">BPE/SentencePiece quebram texto em unidades sub-palavra aprendidas. 'engenharia' pode virar 3 tokens; 'engineering' pode virar 1.</span></div>
             <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Estimativa de custo precisa do tokenizer correto. Heurísticas universais ('1 token ≈ 4 chars') falham em PT-BR (~3 chars/token), código e emoji.</span></div>
             <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">BPE (Sennrich 2016), SentencePiece (Kudo 2018), vocabulário, multi-byte tokens, UNK.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">2</span>
-            <span>💰 Custo: input vs. output (cuidado com a ratio)</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Output é caro mas input é volume</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="flex-1"><span>💰 Custo: input vs. output (cuidado com a ratio)</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Output é caro mas input é volume</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Output tokens custam 3-5× mais que input. Mas em janelas longas, você gasta mais em input total porque ele é grande.</span></div>
             <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Otimização incorreta — tentar reduzir output enquanto a janela está inflada — não move custo significativamente.</span></div>
             <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Pricing por 1M tokens, ratio input/output, batch discounts, prompt caching.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center">3</span>
-            <span>🏗️ Os três níveis de modelo</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Frontier, low-cost, OSS local</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="flex-1"><span>🏗️ Os três níveis de modelo</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Frontier, low-cost, OSS local</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Frontier (~$3-15/M): raciocínio complexo, contexto grande. Low-cost (~$0.10-0.30/M): volume alto, classificação. OSS local: $0/chamada, hardware-bound.</span></div>
             <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Engenheiros pulam direto para frontier por inércia. Em volume, isso queima orçamento sem ganho.</span></div>
             <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Capability vs. context vs. cost, model routing, hierarchical inference.</span></div>
           </div>
         </details>
-          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="flex-1"><span>⏱️ Latência: prefill vs. decode</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— TTFT em janelas longas</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Prefill é o tempo para o modelo 'ler' o input. Decode é o tempo de geração. Janela longa = prefill longo = TTFT (time-to-first-token) grande.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para UX de chat ao vivo, prefill domina o 'tempo até primeiro token'. Cache reduz drasticamente — entender isso é entender UX real.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">TTFT, tokens/sec, KV cache reuse, streaming.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="flex-1"><span>🔁 Prompt caching: como obter desconto real</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— 10% do preço para tokens cacheados</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Anthropic e OpenAI oferecem cache de prefixo. Tokens cacheados custam ~10% do preço normal de input.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em chat com system prompt + few-shot grandes, cache pode reduzir custo de input em 80-90%. Detalhado em T5.2.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Cache breakpoint, TTL, hit rate, prefix stability.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="flex-1"><span>🆓 OSS local: a matriz de hardware</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— O que cabe na sua máquina</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Qwen2.5-7B q4 cabe em 16GB RAM. Llama-3.1-8B-instruct também. Modelos >13B exigem GPU. Detalhes em <code>OLLAMA-MATRIZ.md</code>.</span></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">O caminho gratuito do curso usa OSS — entenda o que cabe antes de tentar T4.3 (multi-agente).</span></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Quantização (q4, q5, q8), VRAM/RAM, throughput CPU vs. GPU, vLLM.</span></div>
+          </div>
+        </details>
         </div>
 
-        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+        <div class="p-4 bg-zinc-800/30 flex justify-start gap-3 border-t border-zinc-800">
+          <button data-modal="modal-1-2" class="btn px-4 py-2 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors justify-start">
+            Ver em Modal
+          </button>
           <a href="modulo-1-2.html" class="btn px-4 py-2 text-sm bg-emerald-600 text-white hover:bg-emerald-500 rounded-lg transition-colors justify-start">
             Ver Completo →
           </a>
@@ -197,8 +295,62 @@
       </a>
     </section>
 
-   </div>
+    <!-- Outras trilhas (mapa do curso) -->
+    <section class="mt-12">
+      <h3 class="text-lg font-bold mb-4">🗺️ Outras trilhas</h3>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        
+        <a href="../trilha2/index.html" class="block p-4 rounded-lg border border-blue-500/30 bg-gradient-to-br from-blue-900/40 to-zinc-900 hover:from-blue-900/60 transition">
+          <div class="text-blue-400 text-xs font-semibold mb-1">T2</div>
+          <div class="text-sm font-bold text-zinc-100">✉️ Engenharia da Mensagem</div>
+        </a>
+        <a href="../trilha3/index.html" class="block p-4 rounded-lg border border-purple-500/30 bg-gradient-to-br from-purple-900/40 to-zinc-900 hover:from-purple-900/60 transition">
+          <div class="text-purple-400 text-xs font-semibold mb-1">T3</div>
+          <div class="text-sm font-bold text-zinc-100">📚 RAG e Recuperação</div>
+        </a>
+        <a href="../trilha4/index.html" class="block p-4 rounded-lg border border-amber-500/30 bg-gradient-to-br from-amber-900/40 to-zinc-900 hover:from-amber-900/60 transition">
+          <div class="text-amber-400 text-xs font-semibold mb-1">T4</div>
+          <div class="text-sm font-bold text-zinc-100">🛠️ Tools, Agentes e Multi-Agente</div>
+        </a>
+        <a href="../trilha5/index.html" class="block p-4 rounded-lg border border-teal-500/30 bg-gradient-to-br from-teal-900/40 to-zinc-900 hover:from-teal-900/60 transition">
+          <div class="text-teal-400 text-xs font-semibold mb-1">T5</div>
+          <div class="text-sm font-bold text-zinc-100">💾 Memória e Compressão</div>
+        </a>
+        <a href="../trilha6/index.html" class="block p-4 rounded-lg border border-rose-500/30 bg-gradient-to-br from-rose-900/40 to-zinc-900 hover:from-rose-900/60 transition">
+          <div class="text-rose-400 text-xs font-semibold mb-1">T6</div>
+          <div class="text-sm font-bold text-zinc-100">📊 Avaliação e Produção</div>
+        </a>
+      </div>
+    </section>
+
   </main>
+
+  <!-- MODAIS DOS MÓDULOS (carregam módulo via iframe) -->
+  
+    <div id="modal-1-1" class="fec-modal hidden fixed inset-0 z-50 items-center justify-center p-2 sm:p-4 bg-black/80" data-modal-backdrop>
+      <div class="bg-zinc-900 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-zinc-700">
+        <div class="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="text-emerald-400 font-bold">1.1</span>
+            <span class="font-semibold text-zinc-100">🪟 Janela de contexto, atenção e "lost in the middle"</span>
+          </div>
+          <button data-modal-close class="text-zinc-400 hover:text-zinc-100 text-3xl leading-none px-2" aria-label="Fechar">&times;</button>
+        </div>
+        <iframe src="modulo-1-1.html" class="flex-1 w-full bg-zinc-950" title="Janela de contexto, atenção e "lost in the middle""></iframe>
+      </div>
+    </div>
+    <div id="modal-1-2" class="fec-modal hidden fixed inset-0 z-50 items-center justify-center p-2 sm:p-4 bg-black/80" data-modal-backdrop>
+      <div class="bg-zinc-900 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-zinc-700">
+        <div class="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="text-emerald-400 font-bold">1.2</span>
+            <span class="font-semibold text-zinc-100">🔢 Tokens, custo e limites práticos por modelo</span>
+          </div>
+          <button data-modal-close class="text-zinc-400 hover:text-zinc-100 text-3xl leading-none px-2" aria-label="Fechar">&times;</button>
+        </div>
+        <iframe src="modulo-1-2.html" class="flex-1 w-full bg-zinc-950" title="Tokens, custo e limites práticos por modelo"></iframe>
+      </div>
+    </div>
 
   <footer class="border-t border-zinc-800 mt-16">
     <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
@@ -212,6 +364,8 @@
       </div>
     </div>
   </footer>
+
+  <script src="../../assets/js/inema.js?v=2a7d0678" defer></script>
 
 </body>
 </html>

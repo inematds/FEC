@@ -13,11 +13,15 @@
 
   <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
     <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-      <a href="../../index.html" class="flex items-center gap-3 flex-shrink-0">
-        <span class="text-2xl font-bold text-primary">FEC</span>
-        <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
-      </a>
-      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto">
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <a href="../../index.html" class="flex items-center gap-3">
+          <span class="text-2xl font-bold text-primary">FEC</span>
+          <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
+        </a>
+        <span class="text-zinc-700">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto px-4">
         <a href="../trilha1/index.html" class="px-2.5 py-1 rounded border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition whitespace-nowrap" title="T1 Fundamentos">T1 · Fundamentos</a>
         <a href="../trilha2/index.html" class="px-2.5 py-1 rounded border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition whitespace-nowrap" title="T2 Mensagem">T2 · Mensagem</a>
         <a href="../trilha3/index.html" class="px-2.5 py-1 rounded border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 transition whitespace-nowrap" title="T3 RAG">T3 · RAG</a>
@@ -28,7 +32,6 @@
       <div class="flex items-center gap-3 text-sm flex-shrink-0">
         <a href="../../index.html" class="md:hidden text-zinc-400">← Trilhas</a>
         <a href="https://github.com/inematds/FEC" class="hidden lg:inline text-zinc-400 hover:text-primary transition">GitHub</a>
-        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 font-medium transition">INEMA.CLUB</a>
       </div>
     </div>
   </nav>
@@ -61,7 +64,26 @@
   </header>
 
   <main class="max-w-6xl mx-auto px-6 py-12">
-   <div class="max-w-4xl mx-auto">
+
+    <!-- O que esta trilha explora (resumo rico) -->
+    <section class="mb-12 bg-gradient-to-br from-amber-900/20 to-zinc-900 rounded-xl border border-amber-500/30 p-6 md:p-8">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="md:col-span-2">
+          <h3 class="text-xl font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Objetivo desta trilha</h3>
+          <p class="text-zinc-200 mb-6 leading-relaxed">Agentes que chamam ferramentas com sandbox e tracing — não brinquedos de demo.</p>
+          <h3 class="text-xl font-bold text-amber-400 mb-3 flex items-center"><span class="mr-2">🔍</span> O que você vai explorar</h3>
+          <ul class="space-y-2">
+            <li class="flex items-start gap-2"><span class="text-amber-400 mt-1">▸</span><span class="text-sm text-zinc-300">Tool/function calling provider-neutral via JSON Schema.</span></li><li class="flex items-start gap-2"><span class="text-amber-400 mt-1">▸</span><span class="text-sm text-zinc-300">Description é o prompt do tool; escolha do modelo depende dela.</span></li><li class="flex items-start gap-2"><span class="text-amber-400 mt-1">▸</span><span class="text-sm text-zinc-300">Sandbox jailed obrigatório (filesystem, rede, processo).</span></li><li class="flex items-start gap-2"><span class="text-amber-400 mt-1">▸</span><span class="text-sm text-zinc-300">ReAct e planner/executor; controle de loop (max_iter, budget).</span></li><li class="flex items-start gap-2"><span class="text-amber-400 mt-1">▸</span><span class="text-sm text-zinc-300">Tracing por step (OpenTelemetry GenAI semconv).</span></li><li class="flex items-start gap-2"><span class="text-amber-400 mt-1">▸</span><span class="text-sm text-zinc-300">Multi-agente: orquestrador-trabalhador, debate, MCP.</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="bg-zinc-900/60 rounded-lg p-4 border border-zinc-800">
+            <h4 class="text-amber-400 font-semibold mb-2 text-sm">👤 Para quem</h4>
+            <p class="text-zinc-300 text-sm">Quem vai colocar agente em produção. T6 vai exigir P5 baseado em T4.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <h2 class="text-2xl font-bold mb-6">📚 Módulos da trilha</h2>
 
@@ -73,54 +95,92 @@
               <span class="text-amber-400 font-bold">4.1</span>
               <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded text-xs font-semibold">GA</span>
             </div>
-            <span class="text-xs text-zinc-500">~65 min · Intermediário</span>
+            <span class="text-xs text-zinc-500">~65 min · Intermediário · Hands-on</span>
           </div>
           <h3 class="text-2xl font-bold mb-2 text-zinc-100">🛠️ Tool/function calling provider-neutral</h3>
           <p class="text-sm text-zinc-400">Como o modelo invoca funções estruturadas. JSON Schema como contrato, tratamento de erro, sandbox obrigatório.</p>
         </div>
 
-        <div class="px-3">
+        <div class="divide-y divide-zinc-800/50 px-3 py-2">
           
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">1</span>
-            <span>📋 JSON Schema: o contrato do tool</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Tipo, descrição, validação</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="flex-1"><span>📋 JSON Schema: o contrato do tool</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Tipo, descrição, validação</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada tool tem schema declarativo: nome, descrição, parâmetros tipados (string, number, enum, etc.) com required.</span></div>
             <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Schema bom = chamada confiável. Modelo usa descrição para escolher e schema para formatar argumentos.</span></div>
             <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">JSON Schema 2020-12, parameter validation, required fields, oneOf.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">2</span>
-            <span>✏️ Descrição do tool: o prompt do prompt</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Onde a magia acontece</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="flex-1"><span>✏️ Descrição do tool: o prompt do prompt</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Onde a magia acontece</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Texto livre que descreve quando usar o tool. É lido pelo LLM ao decidir ferramenta.</span></div>
             <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Modelos escolhem tool com base na descrição. 'busca_web' vs 'busca_web_para_eventos_recentes_e_notícias' muda comportamento.</span></div>
             <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Tool description, disambiguation, when-to-use clauses.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">3</span>
-            <span>🚦 Erro tipado: sucesso, retry, abort</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Como o tool comunica falha</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="flex-1"><span>🚦 Erro tipado: sucesso, retry, abort</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Como o tool comunica falha</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Resultado do tool inclui campo de status. Modelo lê e decide retry, fallback ou parar.</span></div>
             <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem tipo de erro, modelo tenta de novo cegamente ou desiste. Estrutura permite recovery inteligente.</span></div>
             <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Result types, ToolError, retry-able vs fatal, exponential backoff.</span></div>
           </div>
         </details>
-          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="flex-1"><span>🔒 Sandbox obrigatório (PLAN item 62a)</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Filesystem, processo, rede</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Toda tool que toca FS/rede/processo roda dentro de FilesystemSandbox + NetworkPolicy do fec_sdk.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Prompt injection consegue fazer tool ler ~/.aws/credentials se não houver sandbox. PLAN item 62a é gate de GA.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Path traversal, deny-by-default, allowlist, jail.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="flex-1"><span>🔄 Loop: tool → resultado → próximo passo</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— ReAct simplificado</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Modelo decide chamar tool → executa → resultado vira mensagem do role 'tool' → modelo continua.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Esse é o building block de agentes. Um loop simples já resolve muitas tarefas.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Tool result message, role=tool, tool_use_id, conversation continuation.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="flex-1"><span>🎚️ Tool choice: forçar ou deixar o modelo decidir</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— auto, any, specific</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Parâmetro que controla quando o modelo pode chamar tool: auto (decide), any (deve chamar algum), specific (deve chamar X).</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em alguns fluxos você QUER forçar uso de tool (ex.: extract). Em outros, deixar livre é melhor.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">tool_choice, parallel tool calls, required tool.</span></div>
+          </div>
+        </details>
         </div>
 
-        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+        <div class="p-4 bg-zinc-800/30 flex justify-start gap-3 border-t border-zinc-800">
+          <button data-modal="modal-4-1" class="btn px-4 py-2 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors justify-start">
+            Ver em Modal
+          </button>
           <a href="modulo-4-1.html" class="btn px-4 py-2 text-sm bg-amber-600 text-white hover:bg-amber-500 rounded-lg transition-colors justify-start">
             Ver Completo →
           </a>
@@ -134,54 +194,92 @@
               <span class="text-amber-400 font-bold">4.2</span>
               <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded text-xs font-semibold">GA</span>
             </div>
-            <span class="text-xs text-zinc-500">~70 min · Avançado</span>
+            <span class="text-xs text-zinc-500">~70 min · Avançado · Hands-on</span>
           </div>
           <h3 class="text-2xl font-bold mb-2 text-zinc-100">🤖 Agentes single: ReAct e planner/executor</h3>
           <p class="text-sm text-zinc-400">Agente é loop tool→pensa→tool. ReAct, planner/executor, controle de loop, e como debugar via tracing.</p>
         </div>
 
-        <div class="px-3">
+        <div class="divide-y divide-zinc-800/50 px-3 py-2">
           
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">1</span>
-            <span>🧭 ReAct: Reason + Act</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Yao et al. 2022</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="flex-1"><span>🧭 ReAct: Reason + Act</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Yao et al. 2022</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Loop: modelo pensa em texto livre ('Pensamento: preciso buscar X') → decide tool ('Ação: search(X)') → recebe resultado ('Observação: ...') → repete.</span></div>
             <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Padrão simples e eficaz. Pensamento explícito facilita debug e melhora qualidade em tarefas multi-passo.</span></div>
             <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">ReAct (Yao 2022), Thought-Action-Observation, scratchpad, reasoning trace.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">2</span>
-            <span>📐 Planner / Executor: separar plano de execução</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Decomposição prévia</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="flex-1"><span>📐 Planner / Executor: separar plano de execução</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Decomposição prévia</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Primeiro passo: LLM gera plano em N passos. Segundo passo: executor segue passo por passo.</span></div>
             <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para tarefas estruturadas conhecidas (workflows), plano explícito é mais auditável que ReAct.</span></div>
             <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Plan-and-execute, BabyAGI, hierarchical planning.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">3</span>
-            <span>⛔ Controle de loop: max_iterations, max_tokens</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Limites duros</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="flex-1"><span>⛔ Controle de loop: max_iterations, max_tokens</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Limites duros</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Agente tem budget explícito: máximo de iterações, máximo de tokens, timeout total.</span></div>
             <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem isso, agente loopa em produção e queima orçamento. Limite duro é seguro.</span></div>
             <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Max iterations, token budget, wall-clock timeout, infinite loop detection.</span></div>
           </div>
         </details>
-          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="flex-1"><span>🔍 Tracing por step: a chave para debug</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Cada decisão fica registrada</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada step do agente vira entry estruturada (timestamp, tool, args, result, next). Salvo em traces/.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem tracing, debugar agente em produção é impossível. P2 do curso exige.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Step trace, OpenTelemetry, structured logging, step replay.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="flex-1"><span>🛡️ Recovery: tool error, JSON inválido, loop</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Padrões de robustez</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Estratégias para quando algo dá errado: retry com fix, abort com mensagem, fallback para LLM puro.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em produção, ferramentas falham, JSON vem malformado, modelos respondem fora do schema. Sem recovery, agente quebra.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Retry policies, JSON repair, graceful degradation, partial success.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="flex-1"><span>💸 Orçamento de custo por agente</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Budget cap antes de loop</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Antes de iniciar o agente, declarar 'esta tarefa custa no máximo X tokens / Y dólares'. Aborta se atingir.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Cap nativo de provedor é última linha; cap explícito no agente é controle real.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Per-task budget, cost estimation, soft limit, hard limit.</span></div>
+          </div>
+        </details>
         </div>
 
-        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+        <div class="p-4 bg-zinc-800/30 flex justify-start gap-3 border-t border-zinc-800">
+          <button data-modal="modal-4-2" class="btn px-4 py-2 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors justify-start">
+            Ver em Modal
+          </button>
           <a href="modulo-4-2.html" class="btn px-4 py-2 text-sm bg-amber-600 text-white hover:bg-amber-500 rounded-lg transition-colors justify-start">
             Ver Completo →
           </a>
@@ -195,54 +293,92 @@
               <span class="text-amber-400 font-bold">4.3</span>
               <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded text-xs font-semibold">beta</span>
             </div>
-            <span class="text-xs text-zinc-500">~70 min · Avançado</span>
+            <span class="text-xs text-zinc-500">~70 min · Avançado · Avançado</span>
           </div>
           <h3 class="text-2xl font-bold mb-2 text-zinc-100">👥 Multi-agente e MCP (beta)</h3>
           <p class="text-sm text-zinc-400">Padrões multi-agente: orquestrador-trabalhador, debate, blackboard. MCP (Model Context Protocol). Quando NÃO multiplicar.</p>
         </div>
 
-        <div class="px-3">
+        <div class="divide-y divide-zinc-800/50 px-3 py-2">
           
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">1</span>
-            <span>🎼 Orquestrador + trabalhadores especializados</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— O padrão mais comum</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="flex-1"><span>🎼 Orquestrador + trabalhadores especializados</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— O padrão mais comum</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Um agente coordenador delega sub-tarefas a agentes especializados (busca, código, análise). Cada um tem tools próprios.</span></div>
             <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Especialização por contexto: cada trabalhador tem prompt e tools focados. Orquestrador foca em planejamento.</span></div>
             <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Orchestrator-worker, specialization, hand-off, delegation.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">2</span>
-            <span>💬 Debate: dois agentes argumentam</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Du et al. 2023</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="flex-1"><span>💬 Debate: dois agentes argumentam</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Du et al. 2023</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Dois agentes resolvem a mesma tarefa, comparam respostas, debatem discordâncias até convergir.</span></div>
             <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em raciocínio adversarial, debate consistente bate single agent. Custo: 2-3× mais tokens.</span></div>
             <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Multi-agent debate, adversarial reasoning, consensus protocol.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center">3</span>
-            <span>🗂️ Blackboard: estado compartilhado</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Memória comum</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="flex-1"><span>🗂️ Blackboard: estado compartilhado</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Memória comum</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Agentes leem e escrevem em um 'quadro' compartilhado. Comunicação assíncrona via state, não messaging direto.</span></div>
             <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para workflows longos onde agentes trabalham em paralelo em sub-tarefas, blackboard é mais escalável que conversation.</span></div>
             <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Blackboard architecture, shared state, async coordination.</span></div>
           </div>
         </details>
-          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="flex-1"><span>🔌 MCP: Model Context Protocol</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Anthropic 2024</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Protocolo aberto para conectar LLMs a fontes de dados e tools externos. Inspirado em LSP do mundo de IDE.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Padroniza integração: um servidor MCP serve tools/resources que qualquer cliente pode consumir.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">MCP, tools, resources, prompts, transport (stdio, SSE).</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="flex-1"><span>🤝 Handoff: passar contexto entre agentes</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Resumir + delegar</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Quando agente A passa para B, sumariza o estado relevante. Não passar histórico inteiro = economia + atenção.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Histórico cresce; contexto cresce; lost-in-the-middle entra em jogo. Handoff explícito mitiga.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Context compression, state handoff, summary message.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="flex-1"><span>🚫 Quando UM agente é melhor</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— A maioria dos casos</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <span class="text-zinc-300">Tarefas que cabem em um único contexto coerente, sem trabalho paralelizável real, são piores com multi-agente.</span></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Multi-agente adiciona: handoff loss, custo extra, complexidade de tracing. Default ao single agent é honesto.</span></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Default to simple, complexity budget, when-not-to.</span></div>
+          </div>
+        </details>
         </div>
 
-        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+        <div class="p-4 bg-zinc-800/30 flex justify-start gap-3 border-t border-zinc-800">
+          <button data-modal="modal-4-3" class="btn px-4 py-2 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors justify-start">
+            Ver em Modal
+          </button>
           <a href="modulo-4-3.html" class="btn px-4 py-2 text-sm bg-amber-600 text-white hover:bg-amber-500 rounded-lg transition-colors justify-start">
             Ver Completo →
           </a>
@@ -258,8 +394,74 @@
       </a>
     </section>
 
-   </div>
+    <!-- Outras trilhas (mapa do curso) -->
+    <section class="mt-12">
+      <h3 class="text-lg font-bold mb-4">🗺️ Outras trilhas</h3>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        
+        <a href="../trilha1/index.html" class="block p-4 rounded-lg border border-emerald-500/30 bg-gradient-to-br from-emerald-900/40 to-zinc-900 hover:from-emerald-900/60 transition">
+          <div class="text-emerald-400 text-xs font-semibold mb-1">T1</div>
+          <div class="text-sm font-bold text-zinc-100">🧠 Fundamentos de Contexto</div>
+        </a>
+        <a href="../trilha2/index.html" class="block p-4 rounded-lg border border-blue-500/30 bg-gradient-to-br from-blue-900/40 to-zinc-900 hover:from-blue-900/60 transition">
+          <div class="text-blue-400 text-xs font-semibold mb-1">T2</div>
+          <div class="text-sm font-bold text-zinc-100">✉️ Engenharia da Mensagem</div>
+        </a>
+        <a href="../trilha3/index.html" class="block p-4 rounded-lg border border-purple-500/30 bg-gradient-to-br from-purple-900/40 to-zinc-900 hover:from-purple-900/60 transition">
+          <div class="text-purple-400 text-xs font-semibold mb-1">T3</div>
+          <div class="text-sm font-bold text-zinc-100">📚 RAG e Recuperação</div>
+        </a>
+        <a href="../trilha5/index.html" class="block p-4 rounded-lg border border-teal-500/30 bg-gradient-to-br from-teal-900/40 to-zinc-900 hover:from-teal-900/60 transition">
+          <div class="text-teal-400 text-xs font-semibold mb-1">T5</div>
+          <div class="text-sm font-bold text-zinc-100">💾 Memória e Compressão</div>
+        </a>
+        <a href="../trilha6/index.html" class="block p-4 rounded-lg border border-rose-500/30 bg-gradient-to-br from-rose-900/40 to-zinc-900 hover:from-rose-900/60 transition">
+          <div class="text-rose-400 text-xs font-semibold mb-1">T6</div>
+          <div class="text-sm font-bold text-zinc-100">📊 Avaliação e Produção</div>
+        </a>
+      </div>
+    </section>
+
   </main>
+
+  <!-- MODAIS DOS MÓDULOS (carregam módulo via iframe) -->
+  
+    <div id="modal-4-1" class="fec-modal hidden fixed inset-0 z-50 items-center justify-center p-2 sm:p-4 bg-black/80" data-modal-backdrop>
+      <div class="bg-zinc-900 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-zinc-700">
+        <div class="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="text-amber-400 font-bold">4.1</span>
+            <span class="font-semibold text-zinc-100">🛠️ Tool/function calling provider-neutral</span>
+          </div>
+          <button data-modal-close class="text-zinc-400 hover:text-zinc-100 text-3xl leading-none px-2" aria-label="Fechar">&times;</button>
+        </div>
+        <iframe src="modulo-4-1.html" class="flex-1 w-full bg-zinc-950" title="Tool/function calling provider-neutral"></iframe>
+      </div>
+    </div>
+    <div id="modal-4-2" class="fec-modal hidden fixed inset-0 z-50 items-center justify-center p-2 sm:p-4 bg-black/80" data-modal-backdrop>
+      <div class="bg-zinc-900 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-zinc-700">
+        <div class="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="text-amber-400 font-bold">4.2</span>
+            <span class="font-semibold text-zinc-100">🤖 Agentes single: ReAct e planner/executor</span>
+          </div>
+          <button data-modal-close class="text-zinc-400 hover:text-zinc-100 text-3xl leading-none px-2" aria-label="Fechar">&times;</button>
+        </div>
+        <iframe src="modulo-4-2.html" class="flex-1 w-full bg-zinc-950" title="Agentes single: ReAct e planner/executor"></iframe>
+      </div>
+    </div>
+    <div id="modal-4-3" class="fec-modal hidden fixed inset-0 z-50 items-center justify-center p-2 sm:p-4 bg-black/80" data-modal-backdrop>
+      <div class="bg-zinc-900 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-zinc-700">
+        <div class="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="text-amber-400 font-bold">4.3</span>
+            <span class="font-semibold text-zinc-100">👥 Multi-agente e MCP (beta)</span>
+          </div>
+          <button data-modal-close class="text-zinc-400 hover:text-zinc-100 text-3xl leading-none px-2" aria-label="Fechar">&times;</button>
+        </div>
+        <iframe src="modulo-4-3.html" class="flex-1 w-full bg-zinc-950" title="Multi-agente e MCP (beta)"></iframe>
+      </div>
+    </div>
 
   <footer class="border-t border-zinc-800 mt-16">
     <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
@@ -273,6 +475,8 @@
       </div>
     </div>
   </footer>
+
+  <script src="../../assets/js/inema.js?v=2a7d0678" defer></script>
 
 </body>
 </html>

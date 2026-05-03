@@ -13,11 +13,15 @@
 
   <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
     <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-      <a href="../../index.html" class="flex items-center gap-3 flex-shrink-0">
-        <span class="text-2xl font-bold text-primary">FEC</span>
-        <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
-      </a>
-      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto">
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <a href="../../index.html" class="flex items-center gap-3">
+          <span class="text-2xl font-bold text-primary">FEC</span>
+          <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
+        </a>
+        <span class="text-zinc-700">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto px-4">
         <a href="../trilha1/index.html" class="px-2.5 py-1 rounded border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition whitespace-nowrap" title="T1 Fundamentos">T1 · Fundamentos</a>
         <a href="../trilha2/index.html" class="px-2.5 py-1 rounded border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition whitespace-nowrap" title="T2 Mensagem">T2 · Mensagem</a>
         <a href="../trilha3/index.html" class="px-2.5 py-1 rounded border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 transition whitespace-nowrap" title="T3 RAG">T3 · RAG</a>
@@ -28,7 +32,6 @@
       <div class="flex items-center gap-3 text-sm flex-shrink-0">
         <a href="../../index.html" class="md:hidden text-zinc-400">← Trilhas</a>
         <a href="https://github.com/inematds/FEC" class="hidden lg:inline text-zinc-400 hover:text-primary transition">GitHub</a>
-        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 font-medium transition">INEMA.CLUB</a>
       </div>
     </div>
   </nav>
@@ -61,7 +64,26 @@
   </header>
 
   <main class="max-w-6xl mx-auto px-6 py-12">
-   <div class="max-w-4xl mx-auto">
+
+    <!-- O que esta trilha explora (resumo rico) -->
+    <section class="mb-12 bg-gradient-to-br from-teal-900/20 to-zinc-900 rounded-xl border border-teal-500/30 p-6 md:p-8">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="md:col-span-2">
+          <h3 class="text-xl font-bold text-teal-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Objetivo desta trilha</h3>
+          <p class="text-zinc-200 mb-6 leading-relaxed">Dar 'memória' ao agente sem inflar custo nem janela.</p>
+          <h3 class="text-xl font-bold text-teal-400 mb-3 flex items-center"><span class="mr-2">🔍</span> O que você vai explorar</h3>
+          <ul class="space-y-2">
+            <li class="flex items-start gap-2"><span class="text-teal-400 mt-1">▸</span><span class="text-sm text-zinc-300">Buffer de turns (curto prazo) — solução simples para chats curtos.</span></li><li class="flex items-start gap-2"><span class="text-teal-400 mt-1">▸</span><span class="text-sm text-zinc-300">Sumarização incremental e hierárquica (MemGPT).</span></li><li class="flex items-start gap-2"><span class="text-teal-400 mt-1">▸</span><span class="text-sm text-zinc-300">Memória vetorial para longo prazo + recall por similaridade.</span></li><li class="flex items-start gap-2"><span class="text-teal-400 mt-1">▸</span><span class="text-sm text-zinc-300">Perfil estruturado do usuário no system prompt.</span></li><li class="flex items-start gap-2"><span class="text-teal-400 mt-1">▸</span><span class="text-sm text-zinc-300">Prompt caching: 10% do preço para tokens cacheados.</span></li><li class="flex items-start gap-2"><span class="text-teal-400 mt-1">▸</span><span class="text-sm text-zinc-300">Context distillation e compressão (LLMLingua).</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="bg-zinc-900/60 rounded-lg p-4 border border-zinc-800">
+            <h4 class="text-teal-400 font-semibold mb-2 text-sm">👤 Para quem</h4>
+            <p class="text-zinc-300 text-sm">Quem opera chats com histórico longo ou quer cortar custo de input.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <h2 class="text-2xl font-bold mb-6">📚 Módulos da trilha</h2>
 
@@ -73,54 +95,92 @@
               <span class="text-teal-400 font-bold">5.1</span>
               <span class="px-2 py-0.5 bg-teal-500/20 text-teal-400 rounded text-xs font-semibold">GA</span>
             </div>
-            <span class="text-xs text-zinc-500">~60 min · Intermediário</span>
+            <span class="text-xs text-zinc-500">~60 min · Intermediário · Prático</span>
           </div>
           <h3 class="text-2xl font-bold mb-2 text-zinc-100">💾 Estratégias de memória: curto, longo prazo e summarização hierárquica</h3>
           <p class="text-sm text-zinc-400">Como dar 'memória' a um agente: buffer de turn, summarização hierárquica, vetor de longo prazo, recall sob demanda.</p>
         </div>
 
-        <div class="px-3">
+        <div class="divide-y divide-zinc-800/50 px-3 py-2">
           
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">1</span>
-            <span>📥 Buffer de turns: memória de curto prazo</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Últimos N turns</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="flex-1"><span>📥 Buffer de turns: memória de curto prazo</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Últimos N turns</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Manter os últimos N turns inteiros na janela. Simples, eficaz para conversas curtas.</span></div>
             <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em chats curtos (5-10 turns), buffer puro basta. Modelos atendem bem com janela &lt;10k.</span></div>
             <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Sliding window, message buffer, FIFO eviction.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">2</span>
-            <span>📝 Summarização incremental</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Comprimir o que sai do buffer</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="flex-1"><span>📝 Summarização incremental</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Comprimir o que sai do buffer</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Quando buffer estoura, sumariza turns antigos em parágrafo. Sumário fica no system prompt.</span></div>
             <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Mantém continuidade sem inflar janela. Trade-off: perde detalhe do que foi sumarizado.</span></div>
             <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Recursive summarization, sliding-window summarization, hierarchical.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">3</span>
-            <span>🌳 Sumarização hierárquica: árvore de memória</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Múltiplos níveis</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="flex-1"><span>🌳 Sumarização hierárquica: árvore de memória</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Múltiplos níveis</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Sumariza turns em sumário-de-1; sumários-de-1 em sumário-de-2; etc. Estrutura tipo árvore.</span></div>
             <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para chats longos (centenas de turns), hierarquia preserva detalhe nos níveis superiores.</span></div>
             <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Tree summarization, multi-level memory, MemGPT.</span></div>
           </div>
         </details>
-          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="flex-1"><span>🗃️ Memória vetorial: longo prazo</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Embedding de turns + recall</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada turn vira embedding indexado. No próximo turn, busca turns relevantes ao tópico atual e injeta.</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Permite chats que 'lembram' de conversas de meses atrás sem manter tudo na janela.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Long-term memory, episodic memory, recall on demand, retrieval-augmented memory.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="flex-1"><span>🔍 Recall sob demanda: tool de memória</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Agente busca a memória</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Padrão alternativo: agente tem tool 'buscar_memoria' e decide quando precisa de info antiga.</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Mais explícito que injection automático. Custo: mais roundtrips, mas precisão maior.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Active recall, memory tool, on-demand retrieval.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="flex-1"><span>🧠 Personalização: persona + perfil do usuário</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Memória como facto</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Mantém ficha estruturada do usuário (nome, preferências, contexto profissional) atualizada incremental.</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Diferente de memória conversacional — é estado do usuário. Cabe no system prompt como JSON pequeno.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">User profile, structured memory, preference modeling.</span></div>
+          </div>
+        </details>
         </div>
 
-        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+        <div class="p-4 bg-zinc-800/30 flex justify-start gap-3 border-t border-zinc-800">
+          <button data-modal="modal-5-1" class="btn px-4 py-2 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors justify-start">
+            Ver em Modal
+          </button>
           <a href="modulo-5-1.html" class="btn px-4 py-2 text-sm bg-teal-600 text-white hover:bg-teal-500 rounded-lg transition-colors justify-start">
             Ver Completo →
           </a>
@@ -134,54 +194,92 @@
               <span class="text-teal-400 font-bold">5.2</span>
               <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded text-xs font-semibold">beta</span>
             </div>
-            <span class="text-xs text-zinc-500">~65 min · Avançado</span>
+            <span class="text-xs text-zinc-500">~65 min · Avançado · Avançado</span>
           </div>
           <h3 class="text-2xl font-bold mb-2 text-zinc-100">⚡ Prompt caching e context distillation (beta)</h3>
           <p class="text-sm text-zinc-400">Como reduzir custo em 80-90% com prompt caching. Quando context distillation (treinar um modelo pequeno) substitui contexto.</p>
         </div>
 
-        <div class="px-3">
+        <div class="divide-y divide-zinc-800/50 px-3 py-2">
           
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">1</span>
-            <span>💰 Prompt caching (Anthropic, OpenAI)</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— 10% do preço para hits</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="flex-1"><span>💰 Prompt caching (Anthropic, OpenAI)</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— 10% do preço para hits</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Provedor cacheia o prefixo da janela. Próxima chamada com mesmo prefixo: tokens cacheados custam ~10% do normal.</span></div>
             <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em chat com system prompt + few-shot grandes, redução real de 80-90% no custo de input.</span></div>
             <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Prompt cache, cache_control, cache breakpoints, TTL (5min Anthropic), hit rate.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">2</span>
-            <span>🎯 Cache breakpoints: onde marcar</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Estável vs variável</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="flex-1"><span>🎯 Cache breakpoints: onde marcar</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Estável vs variável</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Você marca pontos do prompt como 'cacheável'. Anthropic: até 4 breakpoints. OpenAI: automático para prefixos &gt;1024 tokens.</span></div>
             <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Cache só vale se o prefixo até o breakpoint for ESTÁVEL. Mexer no system prompt invalida tudo daquele ponto pra frente.</span></div>
             <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Cache anchor, prefix stability, partial invalidation.</span></div>
           </div>
         </details>
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center">3</span>
-            <span>📊 Medir hit rate: você está economizando?</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Métrica explícita</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="flex-1"><span>📊 Medir hit rate: você está economizando?</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Métrica explícita</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada chamada retorna métricas: tokens lidos do cache vs. tokens novos. Hit rate = cached / total.</span></div>
             <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem medir hit rate, você não sabe se cache está funcionando. Pequena mudança no prefix derruba hit para 0.</span></div>
             <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Hit rate, cache miss, cache invalidation, observability.</span></div>
           </div>
         </details>
-          <p class='text-xs text-zinc-500 px-2 py-2 italic'>+ 3 sub-tópicos no módulo completo</p>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="flex-1"><span>🧪 Context distillation: substituir contexto por modelo</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Treinar pequeno</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Treinar (fine-tune) um modelo pequeno usando inputs e outputs do modelo grande com contexto longo. Modelo pequeno aprende sem precisar do contexto.</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para tarefa fixada e volume alto, distillation reduz custo dramaticamente — sem precisar do contexto a cada chamada.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Knowledge distillation, fine-tuning, teacher-student, dataset curation.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="flex-1"><span>📦 Compressão por sumarização</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— LLMLingua, sumário do contexto</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Comprimir contexto longo em representação mais densa antes de mandar (via sumarização ou modelo de compressão).</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para tarefas onde detalhe completo não é crítico, compressão reduz tokens sem cair muito a qualidade.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">LLMLingua (Jiang 2023), compression ratio, lossy compression.</span></div>
+          </div>
+        </details>
+        <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-400 text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="flex-1"><span>⚠️ Quando caching/distillation NÃO valem</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— Casos onde não compensa</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
+          </summary>
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
+            <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cache não vale com prefix instável. Distillation não vale com tarefa que muda rápido. Compressão não vale com tarefa que exige fidelidade.</span></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Cada técnica tem zona de aplicabilidade — assumir que sempre vale é o erro mais comum.</span></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Applicability, regression risk, distillation drift.</span></div>
+          </div>
+        </details>
         </div>
 
-        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+        <div class="p-4 bg-zinc-800/30 flex justify-start gap-3 border-t border-zinc-800">
+          <button data-modal="modal-5-2" class="btn px-4 py-2 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors justify-start">
+            Ver em Modal
+          </button>
           <a href="modulo-5-2.html" class="btn px-4 py-2 text-sm bg-teal-600 text-white hover:bg-teal-500 rounded-lg transition-colors justify-start">
             Ver Completo →
           </a>
@@ -197,8 +295,62 @@
       </a>
     </section>
 
-   </div>
+    <!-- Outras trilhas (mapa do curso) -->
+    <section class="mt-12">
+      <h3 class="text-lg font-bold mb-4">🗺️ Outras trilhas</h3>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        
+        <a href="../trilha1/index.html" class="block p-4 rounded-lg border border-emerald-500/30 bg-gradient-to-br from-emerald-900/40 to-zinc-900 hover:from-emerald-900/60 transition">
+          <div class="text-emerald-400 text-xs font-semibold mb-1">T1</div>
+          <div class="text-sm font-bold text-zinc-100">🧠 Fundamentos de Contexto</div>
+        </a>
+        <a href="../trilha2/index.html" class="block p-4 rounded-lg border border-blue-500/30 bg-gradient-to-br from-blue-900/40 to-zinc-900 hover:from-blue-900/60 transition">
+          <div class="text-blue-400 text-xs font-semibold mb-1">T2</div>
+          <div class="text-sm font-bold text-zinc-100">✉️ Engenharia da Mensagem</div>
+        </a>
+        <a href="../trilha3/index.html" class="block p-4 rounded-lg border border-purple-500/30 bg-gradient-to-br from-purple-900/40 to-zinc-900 hover:from-purple-900/60 transition">
+          <div class="text-purple-400 text-xs font-semibold mb-1">T3</div>
+          <div class="text-sm font-bold text-zinc-100">📚 RAG e Recuperação</div>
+        </a>
+        <a href="../trilha4/index.html" class="block p-4 rounded-lg border border-amber-500/30 bg-gradient-to-br from-amber-900/40 to-zinc-900 hover:from-amber-900/60 transition">
+          <div class="text-amber-400 text-xs font-semibold mb-1">T4</div>
+          <div class="text-sm font-bold text-zinc-100">🛠️ Tools, Agentes e Multi-Agente</div>
+        </a>
+        <a href="../trilha6/index.html" class="block p-4 rounded-lg border border-rose-500/30 bg-gradient-to-br from-rose-900/40 to-zinc-900 hover:from-rose-900/60 transition">
+          <div class="text-rose-400 text-xs font-semibold mb-1">T6</div>
+          <div class="text-sm font-bold text-zinc-100">📊 Avaliação e Produção</div>
+        </a>
+      </div>
+    </section>
+
   </main>
+
+  <!-- MODAIS DOS MÓDULOS (carregam módulo via iframe) -->
+  
+    <div id="modal-5-1" class="fec-modal hidden fixed inset-0 z-50 items-center justify-center p-2 sm:p-4 bg-black/80" data-modal-backdrop>
+      <div class="bg-zinc-900 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-zinc-700">
+        <div class="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="text-teal-400 font-bold">5.1</span>
+            <span class="font-semibold text-zinc-100">💾 Estratégias de memória: curto, longo prazo e summarização hierárquica</span>
+          </div>
+          <button data-modal-close class="text-zinc-400 hover:text-zinc-100 text-3xl leading-none px-2" aria-label="Fechar">&times;</button>
+        </div>
+        <iframe src="modulo-5-1.html" class="flex-1 w-full bg-zinc-950" title="Estratégias de memória: curto, longo prazo e summarização hierárquica"></iframe>
+      </div>
+    </div>
+    <div id="modal-5-2" class="fec-modal hidden fixed inset-0 z-50 items-center justify-center p-2 sm:p-4 bg-black/80" data-modal-backdrop>
+      <div class="bg-zinc-900 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-zinc-700">
+        <div class="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="text-teal-400 font-bold">5.2</span>
+            <span class="font-semibold text-zinc-100">⚡ Prompt caching e context distillation (beta)</span>
+          </div>
+          <button data-modal-close class="text-zinc-400 hover:text-zinc-100 text-3xl leading-none px-2" aria-label="Fechar">&times;</button>
+        </div>
+        <iframe src="modulo-5-2.html" class="flex-1 w-full bg-zinc-950" title="Prompt caching e context distillation (beta)"></iframe>
+      </div>
+    </div>
 
   <footer class="border-t border-zinc-800 mt-16">
     <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
@@ -212,6 +364,8 @@
       </div>
     </div>
   </footer>
+
+  <script src="../../assets/js/inema.js?v=2a7d0678" defer></script>
 
 </body>
 </html>

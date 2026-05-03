@@ -38,6 +38,83 @@ DESCRICOES = {
 }
 
 
+# Explicação rica do que cada trilha explora — exibida abaixo do header da trilha
+EXPLORA = {
+    1: {
+        "objetivo": "Construir o modelo mental de como o modelo lê de fato uma mensagem.",
+        "topicos": [
+            "Janela de contexto como sequência fixa serializada — não 'conversa'.",
+            "Atenção causal e KV cache; por que prefixos estáveis são cacheáveis.",
+            "Lost in the middle (Liu et al. 2023) e mitigações validadas.",
+            "Posição via RoPE; ordem de seções estável→variável→instrução.",
+            "Tokens e tokenização (BPE/SentencePiece); custo input vs. output.",
+            "Os três níveis de modelo: frontier, low-cost, OSS local.",
+        ],
+        "para_quem": "Todo aluno. Pré-requisito das outras 5 trilhas — não pule.",
+    },
+    2: {
+        "objetivo": "Tratar prompt como código: estrutura, versionamento, eval automatizado.",
+        "topicos": [
+            "Anatomia da mensagem em 5 seções estáveis.",
+            "System prompt, few-shot canônico, formato declarativo XML/JSON.",
+            "Padrão FEC de ordem: estável → variável → âncora → user turn.",
+            "Ancoragem dupla; chain-of-thought quando vale.",
+            "Prompts versionados em arquivo (Jinja2/templates), SemVer aplicado.",
+            "Eval primer: golden set + mini-eval em toda mudança de prompt.",
+        ],
+        "para_quem": "Quem pretende manter prompts em produção, não 'tunar pra demo'.",
+    },
+    3: {
+        "objetivo": "Construir RAG que responde com citações e atinge groundedness ≥0.85.",
+        "topicos": [
+            "Chunking deliberado (500 tokens + overlap, fronteira semântica).",
+            "Embeddings densos vs BM25; híbrido com Reciprocal Rank Fusion.",
+            "Vector stores (FAISS, pgvector, Qdrant) e ANN.",
+            "Reranking cross-encoder; contextual retrieval (Anthropic 2024).",
+            "Citação obrigatória + saber dizer 'não sei'.",
+            "RAG agêntico (multi-hop, self-RAG) e quando NÃO usar.",
+        ],
+        "para_quem": "Quem precisa que o modelo responda sobre dados próprios.",
+    },
+    4: {
+        "objetivo": "Agentes que chamam ferramentas com sandbox e tracing — não brinquedos de demo.",
+        "topicos": [
+            "Tool/function calling provider-neutral via JSON Schema.",
+            "Description é o prompt do tool; escolha do modelo depende dela.",
+            "Sandbox jailed obrigatório (filesystem, rede, processo).",
+            "ReAct e planner/executor; controle de loop (max_iter, budget).",
+            "Tracing por step (OpenTelemetry GenAI semconv).",
+            "Multi-agente: orquestrador-trabalhador, debate, MCP.",
+        ],
+        "para_quem": "Quem vai colocar agente em produção. T6 vai exigir P5 baseado em T4.",
+    },
+    5: {
+        "objetivo": "Dar 'memória' ao agente sem inflar custo nem janela.",
+        "topicos": [
+            "Buffer de turns (curto prazo) — solução simples para chats curtos.",
+            "Sumarização incremental e hierárquica (MemGPT).",
+            "Memória vetorial para longo prazo + recall por similaridade.",
+            "Perfil estruturado do usuário no system prompt.",
+            "Prompt caching: 10% do preço para tokens cacheados.",
+            "Context distillation e compressão (LLMLingua).",
+        ],
+        "para_quem": "Quem opera chats com histórico longo ou quer cortar custo de input.",
+    },
+    6: {
+        "objetivo": "Levar o sistema LLM para produção com gates objetivos e rollback rápido.",
+        "topicos": [
+            "Golden sets, métricas por tarefa, LLM-as-judge calibrado (κ ≥0.6).",
+            "Tracing estruturado em OTel + custo como métrica de produto.",
+            "Prompt injection sandboxed (defesa em camadas).",
+            "A/B com significância estatística; canário 5%→25%→100%.",
+            "Kill switch e rollback hot &lt;1 min.",
+            "Eval contínuo em produção (sampling 1-5%).",
+        ],
+        "para_quem": "Pré-requisito para o projeto final P5. Disciplina que costura T1-T5.",
+    },
+}
+
+
 def render_trilha(num: int) -> str:
     t = TRILHAS[num]
     cor = t["cor"]
@@ -47,33 +124,32 @@ def render_trilha(num: int) -> str:
     total_min = sum(m["minutos"] for m in modulos_da_trilha)
 
     cards = []
+    modais = []
     for idx, m in enumerate(modulos_da_trilha):
-        # Mostra os 3 primeiros sub-tópicos como preview
-        preview = m["topicos"][:3]
+        # MOSTRA TODOS os 6 sub-tópicos (regra crítica INEMA: card no index = todos visíveis)
         topicos_html = []
-        for i, tp in enumerate(preview, 1):
+        for i, tp in enumerate(m["topicos"], 1):
             topicos_html.append(f"""
         <details class="topico-expansivel border-b border-zinc-800 py-3 px-2 last:border-b-0">
-          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none">
-            <span class="topico-numero w-6 h-6 rounded-full bg-{cor}-500/20 border border-{cor}-500/30 text-{cor}-400 text-xs font-bold flex items-center justify-center">{i}</span>
-            <span>{tp["emoji"]} {tp["titulo"]}</span>
-            <span class="text-zinc-500 text-xs ml-2 hidden md:inline">— {tp["subtitulo"]}</span>
+          <summary class="cursor-pointer flex items-center gap-3 text-sm font-medium list-none hover:bg-zinc-800/40 rounded p-1 -m-1">
+            <span class="topico-numero w-6 h-6 rounded-full bg-{cor}-500/20 border border-{cor}-500/30 text-{cor}-400 text-xs font-bold flex items-center justify-center flex-shrink-0">{i}</span>
+            <span class="flex-1"><span>{tp["emoji"]} {tp["titulo"]}</span><span class="text-zinc-500 text-xs ml-2 hidden md:inline">— {tp["subtitulo"]}</span></span>
+            <span class="text-zinc-500 text-xs">▾</span>
           </summary>
-          <div class="mt-3 ml-9 space-y-2 text-xs">
+          <div class="mt-3 ml-9 space-y-2 text-xs bg-zinc-950/40 rounded p-3">
             <div><span class="text-{cor}-400 font-semibold">O que é:</span> <span class="text-zinc-300">{tp["o_que_e"]}</span></div>
             <div><span class="text-{cor}-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">{tp["por_que"]}</span></div>
             <div><span class="text-{cor}-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">{tp["conceitos"]}</span></div>
           </div>
         </details>""")
 
-        more_topics = len(m["topicos"]) - 3
-        more_text = f"<p class='text-xs text-zinc-500 px-2 py-2 italic'>+ {more_topics} sub-tópicos no módulo completo</p>" if more_topics > 0 else ""
-
         status_badge = (
             f'<span class="px-2 py-0.5 bg-{cor}-500/20 text-{cor}-400 rounded text-xs font-semibold">GA</span>'
             if m["status"] == "GA" else
             f'<span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded text-xs font-semibold">beta</span>'
         )
+
+        modal_id = f"modal-{m['numero'].replace('.', '-')}"
 
         cards.append(f"""
       <article class="modulo-card bg-zinc-900 rounded-xl border border-zinc-800 hover:border-{cor}-500/40 mb-6 transition-colors">
@@ -83,24 +159,62 @@ def render_trilha(num: int) -> str:
               <span class="text-{cor}-400 font-bold">{m['numero']}</span>
               {status_badge}
             </div>
-            <span class="text-xs text-zinc-500">~{m['minutos']} min · {m['nivel']}</span>
+            <span class="text-xs text-zinc-500">~{m['minutos']} min · {m['nivel']} · {m['tipo']}</span>
           </div>
           <h3 class="text-2xl font-bold mb-2 text-zinc-100">{m['emoji']} {m['titulo']}</h3>
           <p class="text-sm text-zinc-400">{m['descricao']}</p>
         </div>
 
-        <div class="px-3">
+        <div class="divide-y divide-zinc-800/50 px-3 py-2">
           {''.join(topicos_html)}
-          {more_text}
         </div>
 
-        <div class="p-4 bg-zinc-800/30 flex justify-start space-x-3">
+        <div class="p-4 bg-zinc-800/30 flex justify-start gap-3 border-t border-zinc-800">
+          <button data-modal="{modal_id}" class="btn px-4 py-2 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors justify-start">
+            Ver em Modal
+          </button>
           <a href="{m['id']}.html" class="btn px-4 py-2 text-sm bg-{cor}-600 text-white hover:bg-{cor}-500 rounded-lg transition-colors justify-start">
             Ver Completo →
           </a>
         </div>
       </article>
 """)
+
+        modais.append(f"""
+    <div id="{modal_id}" class="fec-modal hidden fixed inset-0 z-50 items-center justify-center p-2 sm:p-4 bg-black/80" data-modal-backdrop>
+      <div class="bg-zinc-900 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-zinc-700">
+        <div class="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
+          <div class="flex items-center gap-3">
+            <span class="text-{cor}-400 font-bold">{m['numero']}</span>
+            <span class="font-semibold text-zinc-100">{m['emoji']} {m['titulo']}</span>
+          </div>
+          <button data-modal-close class="text-zinc-400 hover:text-zinc-100 text-3xl leading-none px-2" aria-label="Fechar">&times;</button>
+        </div>
+        <iframe src="{m['id']}.html" class="flex-1 w-full bg-zinc-950" title="{m['titulo']}"></iframe>
+      </div>
+    </div>""")
+
+    # Bloco "O que explora"
+    explora = EXPLORA[num]
+    explora_objetivo = explora["objetivo"]
+    explora_para_quem = explora["para_quem"]
+    explora_topicos_html = "".join(
+        f'<li class="flex items-start gap-2"><span class="text-{cor}-400 mt-1">▸</span><span class="text-sm text-zinc-300">{t}</span></li>'
+        for t in explora["topicos"]
+    )
+
+    # Cards de outras trilhas (mapa do curso)
+    outras_cards = []
+    for n_other, t_other in TRILHAS.items():
+        if n_other == num:
+            continue
+        c_other = t_other["cor"]
+        outras_cards.append(f"""
+        <a href="../trilha{n_other}/index.html" class="block p-4 rounded-lg border border-{c_other}-500/30 bg-gradient-to-br from-{c_other}-900/40 to-zinc-900 hover:from-{c_other}-900/60 transition">
+          <div class="text-{c_other}-400 text-xs font-semibold mb-1">T{n_other}</div>
+          <div class="text-sm font-bold text-zinc-100">{t_other['emoji']} {t_other['nome']}</div>
+        </a>""")
+    outras_trilhas_cards = "".join(outras_cards)
 
     return f"""<!DOCTYPE html>
 <html lang="pt-BR">
@@ -117,11 +231,15 @@ def render_trilha(num: int) -> str:
 
   <nav class="sticky top-0 z-50 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
     <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-      <a href="../../index.html" class="flex items-center gap-3 flex-shrink-0">
-        <span class="text-2xl font-bold text-primary">FEC</span>
-        <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
-      </a>
-      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto">
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <a href="../../index.html" class="flex items-center gap-3">
+          <span class="text-2xl font-bold text-primary">FEC</span>
+          <span class="text-zinc-400 text-sm hidden xl:inline">Engenharia de Contexto</span>
+        </a>
+        <span class="text-zinc-700">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium transition">INEMA.CLUB</a>
+      </div>
+      <div class="hidden md:flex items-center gap-1.5 text-xs flex-1 justify-center overflow-x-auto px-4">
         <a href="../trilha1/index.html" class="px-2.5 py-1 rounded border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition whitespace-nowrap{' bg-emerald-500/20' if num==1 else ''}" title="T1 Fundamentos">T1 · Fundamentos</a>
         <a href="../trilha2/index.html" class="px-2.5 py-1 rounded border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition whitespace-nowrap{' bg-blue-500/20' if num==2 else ''}" title="T2 Mensagem">T2 · Mensagem</a>
         <a href="../trilha3/index.html" class="px-2.5 py-1 rounded border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 transition whitespace-nowrap{' bg-purple-500/20' if num==3 else ''}" title="T3 RAG">T3 · RAG</a>
@@ -132,7 +250,6 @@ def render_trilha(num: int) -> str:
       <div class="flex items-center gap-3 text-sm flex-shrink-0">
         <a href="../../index.html" class="md:hidden text-zinc-400">← Trilhas</a>
         <a href="https://github.com/inematds/FEC" class="hidden lg:inline text-zinc-400 hover:text-primary transition">GitHub</a>
-        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 font-medium transition">INEMA.CLUB</a>
       </div>
     </div>
   </nav>
@@ -165,7 +282,26 @@ def render_trilha(num: int) -> str:
   </header>
 
   <main class="max-w-6xl mx-auto px-6 py-12">
-   <div class="max-w-4xl mx-auto">
+
+    <!-- O que esta trilha explora (resumo rico) -->
+    <section class="mb-12 bg-gradient-to-br from-{cor}-900/20 to-zinc-900 rounded-xl border border-{cor}-500/30 p-6 md:p-8">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="md:col-span-2">
+          <h3 class="text-xl font-bold text-{cor}-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Objetivo desta trilha</h3>
+          <p class="text-zinc-200 mb-6 leading-relaxed">{explora_objetivo}</p>
+          <h3 class="text-xl font-bold text-{cor}-400 mb-3 flex items-center"><span class="mr-2">🔍</span> O que você vai explorar</h3>
+          <ul class="space-y-2">
+            {explora_topicos_html}
+          </ul>
+        </div>
+        <div>
+          <div class="bg-zinc-900/60 rounded-lg p-4 border border-zinc-800">
+            <h4 class="text-{cor}-400 font-semibold mb-2 text-sm">👤 Para quem</h4>
+            <p class="text-zinc-300 text-sm">{explora_para_quem}</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <h2 class="text-2xl font-bold mb-6">📚 Módulos da trilha</h2>
 
@@ -179,8 +315,18 @@ def render_trilha(num: int) -> str:
       </a>
     </section>
 
-   </div>
+    <!-- Outras trilhas (mapa do curso) -->
+    <section class="mt-12">
+      <h3 class="text-lg font-bold mb-4">🗺️ Outras trilhas</h3>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {outras_trilhas_cards}
+      </div>
+    </section>
+
   </main>
+
+  <!-- MODAIS DOS MÓDULOS (carregam módulo via iframe) -->
+  {''.join(modais)}
 
   <footer class="border-t border-zinc-800 mt-16">
     <div class="max-w-6xl mx-auto px-6 py-8 text-sm text-zinc-500 flex flex-wrap items-center justify-between gap-4">
@@ -194,6 +340,8 @@ def render_trilha(num: int) -> str:
       </div>
     </div>
   </footer>
+
+  <script src="../../assets/js/inema.js?v={CSS_V}" defer></script>
 
 </body>
 </html>

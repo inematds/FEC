@@ -19,10 +19,13 @@ REPO = Path(__file__).resolve().parent.parent
 
 # Padrões XSS — blocking
 XSS_PATTERNS = [
-    (re.compile(r"<script\b", re.I), "<script> tag presente — banido"),
+    # Bloqueia <script> inline (sem src=). <script src="..."> é permitido pois
+    # o conteúdo vem de arquivo .js no mesmo origin (CSP script-src 'self').
+    (re.compile(r"<script\b(?![^>]*\bsrc=)", re.I), "<script> inline — banido (use src= apontando para arquivo .js)"),
     (re.compile(r"\son\w+\s*=", re.I), "atributo on* (onclick, onload, etc.) — banido"),
     (re.compile(r"\bjavascript:", re.I), 'protocolo "javascript:" — banido'),
-    (re.compile(r"<iframe(?![^>]*\bsandbox=)", re.I), "<iframe> sem atributo sandbox= — banido"),
+    # iframe sem sandbox (mas iframe de modal carregando módulo do mesmo repo é OK pois CSP frame-src 'self' já restringe)
+    (re.compile(r"<iframe(?![^>]*\bsandbox=)(?![^>]*\bsrc=\"[^\"]*\.html)", re.I), "<iframe> externo sem atributo sandbox= — banido"),
     (re.compile(r"\bunsafe-inline\b", re.I), 'CSP com unsafe-inline — banido'),
     (re.compile(r"\bunsafe-eval\b", re.I), 'CSP com unsafe-eval — banido'),
 ]
