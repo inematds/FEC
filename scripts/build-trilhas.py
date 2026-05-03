@@ -144,7 +144,8 @@ def render_trilha(num: int) -> str:
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-6 py-12">
+  <main class="max-w-6xl mx-auto px-6 py-12">
+   <div class="max-w-4xl mx-auto">
 
     <h2 class="text-2xl font-bold mb-6">📚 Módulos da trilha</h2>
 
@@ -158,6 +159,7 @@ def render_trilha(num: int) -> str:
       </a>
     </section>
 
+   </div>
   </main>
 
   <footer class="border-t border-zinc-800 mt-16">

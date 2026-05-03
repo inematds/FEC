@@ -73,7 +73,8 @@
   </header>
 
   <!-- CONTEÚDO -->
-  <main class="max-w-4xl mx-auto px-6 py-12">
+  <main class="max-w-6xl mx-auto px-6 py-12">
+   <div class="max-w-4xl mx-auto">
 
     <!-- Introdução -->
     <section class="mb-12 prose prose-invert max-w-none">
@@ -107,19 +108,32 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Quebrar documentos em pedaços (chunks) de 200-1000 tokens com overlap de 10-20%. Pode ser por caracteres, sentenças ou parágrafos.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Chunks muito grandes diluem relevância; muito pequenos perdem contexto. Overlap evita corte abrupto entre fronteiras.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Sliding window, semantic chunking, fronteira de seção, recursive splitter.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Chunking é a primeira e mais consequente decisão. Chunk muito grande (&gt;2000 tokens) dilui relevância — embedding fica genérico. Chunk muito pequeno (&lt;100 tokens) perde contexto. Default robusto: <strong>500 tokens com overlap de 10-20%</strong>, cortando em fronteira semântica (parágrafo, fim de sentença). Recursive splitter (LangChain) ou SemanticChunker (LlamaIndex) implementam isso bem.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">chunking em fronteira de parágrafo</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">def chunk_by_paragraph(text: str, target=500, overlap=50) -&gt; list[str]:
+    paras = text.split('\n\n')
+    chunks, current = [], ''
+    for p in paras:
+        if len(current) + len(p) &gt; target:
+            chunks.append(current)
+            current = current[-overlap:] + '\n\n' + p  # overlap
+        else:
+            current += '\n\n' + p
+    chunks.append(current)
+    return chunks</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Quebrar documentos em pedaços (chunks) de 200-1000 tokens com overlap de 10-20%. Pode ser por caracteres, sentenças ou parágrafos.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Chunks muito grandes diluem relevância; muito pequenos perdem contexto. Overlap evita corte abrupto entre fronteiras.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Sliding window, semantic chunking, fronteira de seção, recursive splitter.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -132,19 +146,29 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Converte texto em vetor (768-3072 dim) onde proximidade vetorial ≈ similaridade semântica. Modelos: bge, mpnet, OpenAI ada/text-3.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Captura sinônimos e paráfrase que BM25 perde ('automóvel' vs 'carro'). Base do retrieval moderno.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Cosine similarity, dual encoder, MTEB benchmark, dimensionalidade.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Embeddings densos mapeiam texto em vetor (768-3072 dimensões) onde proximidade vetorial ≈ similaridade semântica. Modelos canônicos: <strong>BGE-large</strong> (open), <strong>OpenAI text-embedding-3-large</strong>, <strong>Cohere embed-v3</strong>. Capturam paráfrase ('automóvel' ≈ 'carro') que BM25 sozinho perde.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">embedding com sentence-transformers</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('BAAI/bge-large-en-v1.5')
+
+chunks = ['o carro é vermelho', 'o automóvel é vermelho', 'o gato dorme']
+vectors = model.encode(chunks, normalize_embeddings=True)
+
+# vectors[0] @ vectors[1] ~ 0.92 (similar)
+# vectors[0] @ vectors[2] ~ 0.15 (não relacionado)</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Converte texto em vetor (768-3072 dim) onde proximidade vetorial ≈ similaridade semântica. Modelos: bge, mpnet, OpenAI ada/text-3.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Captura sinônimos e paráfrase que BM25 perde ('automóvel' vs 'carro'). Base do retrieval moderno.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Cosine similarity, dual encoder, MTEB benchmark, dimensionalidade.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -157,19 +181,28 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Algoritmo probabilístico de relevância baseado em frequência de termo (TF) e raridade (IDF). Não usa ML.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Robusto, rápido, captura match exato (números, IDs, nomes próprios) que embeddings densas erram.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">TF-IDF, BM25, sparse vector, lexical match, rare term boost.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">BM25 é probabilístico, baseado em TF-IDF. Não usa ML, mas é excelente em <strong>match exato</strong>: números, IDs, nomes próprios, acrônimos — coisas que embeddings densos costumam errar. Em queries factuais ('quem é Liu et al. 2023?'), BM25 frequentemente bate dense retrieval sozinho.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">BM25 com rank_bm25</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">from rank_bm25 import BM25Okapi
+tokenized = [doc.lower().split() for doc in corpus]
+bm25 = BM25Okapi(tokenized)
+
+query = 'Liu 2023 lost in middle'.lower().split()
+scores = bm25.get_scores(query)
+top10 = sorted(zip(corpus, scores), key=lambda x: -x[1])[:10]</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Algoritmo probabilístico de relevância baseado em frequência de termo (TF) e raridade (IDF). Não usa ML.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Robusto, rápido, captura match exato (números, IDs, nomes próprios) que embeddings densas erram.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">TF-IDF, BM25, sparse vector, lexical match, rare term boost.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -182,19 +215,31 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Roda ambos em paralelo, funde rankings via Reciprocal Rank Fusion (RRF) ou peso linear (alpha).</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Ganhos consistentes em benchmarks (BEIR). Cada método cobre falhas do outro: BM25 pega match exato, denso pega paráfrase.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">RRF, alpha-fusion, hybrid search, ColBERT (alternativa late-interaction).</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Híbrido roda BM25 + dense em paralelo, depois funde via <strong>Reciprocal Rank Fusion (RRF)</strong>. RRF combina rankings sem precisar normalizar scores: <code>score = Σ 1/(k + rank_i)</code> com k=60. Em benchmark BEIR, híbrido bate cada método sozinho consistentemente.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">RRF combinando dois rankings</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">def rrf(rankings: list[list[int]], k: int = 60) -&gt; list[int]:
+    scores = {}
+    for ranking in rankings:
+        for rank, doc_id in enumerate(ranking):
+            scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank)
+    return [d for d, _ in sorted(scores.items(), key=lambda x: -x[1])]
+
+top_bm25  = bm25_search(query, top_k=50)
+top_dense = vector_search(query, top_k=50)
+top_hybrid = rrf([top_bm25, top_dense])[:20]</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Roda ambos em paralelo, funde rankings via Reciprocal Rank Fusion (RRF) ou peso linear (alpha).</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Ganhos consistentes em benchmarks (BEIR). Cada método cobre falhas do outro: BM25 pega match exato, denso pega paráfrase.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">RRF, alpha-fusion, hybrid search, ColBERT (alternativa late-interaction).</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -207,19 +252,25 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Bancos de dados otimizados para nearest-neighbor search em vetores. Local (FAISS, pgvector) ou hosted (Qdrant Cloud, Pinecone).</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Sem isso, busca em 100k embeddings vira O(n) inviável. Vector stores fazem ANN (HNSW, IVF) em ms.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">ANN (approximate nearest neighbor), HNSW, IVF, recall@k, índice em memória vs. disco.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Vector stores fazem ANN (approximate nearest neighbor) com algoritmos como HNSW (hierarchical navigable small world) ou IVF. Em 100k documentos, cosine similarity exato é O(n) — inviável em produção. ANN entrega ~99% de recall em &lt;5ms. Para começar: <strong>FAISS</strong> em memória ou <strong>pgvector</strong> em Postgres existente. Cloud: Qdrant, Pinecone, Weaviate.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-x-auto">
+          <table class="w-full">
+            <caption class="px-4 py-2 text-xs text-zinc-500 text-left">comparação de vector stores (2026-Q2)</caption>
+            <thead class="bg-zinc-900"><tr><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-purple-400'>Store</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-purple-400'>Hosting</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-purple-400'>Quando usar</th></tr></thead>
+            <tbody><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>FAISS</td><td class='py-2 px-3 text-sm text-zinc-300'>biblioteca local</td><td class='py-2 px-3 text-sm text-zinc-300'>&lt;1M docs, dev/research</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>pgvector</td><td class='py-2 px-3 text-sm text-zinc-300'>Postgres existente</td><td class='py-2 px-3 text-sm text-zinc-300'>Já tem Postgres, simplicidade</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Qdrant</td><td class='py-2 px-3 text-sm text-zinc-300'>self-hosted ou cloud</td><td class='py-2 px-3 text-sm text-zinc-300'>Filtros complexos, hybrid search nativo</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Pinecone</td><td class='py-2 px-3 text-sm text-zinc-300'>cloud only</td><td class='py-2 px-3 text-sm text-zinc-300'>Não quer operar infra</td></tr></tbody>
+          </table>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Bancos de dados otimizados para nearest-neighbor search em vetores. Local (FAISS, pgvector) ou hosted (Qdrant Cloud, Pinecone).</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem isso, busca em 100k embeddings vira O(n) inviável. Vector stores fazem ANN (HNSW, IVF) em ms.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">ANN (approximate nearest neighbor), HNSW, IVF, recall@k, índice em memória vs. disco.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -232,19 +283,33 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Anexar metadados a cada chunk (data, autor, categoria, idioma) e filtrar por eles antes ou depois da busca vetorial.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Pergunta 'eventos de 2024' não deve trazer chunks de 2019, mesmo que semanticamente similares. Filtros resolvem.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Metadata filtering, pre-filter, post-filter, namespace.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Retrieval só por similaridade semântica é ingênuo. Em corpus heterogêneo, você quer filtros: 'eventos de 2024' não deve trazer chunks de 2019, mesmo que semanticamente similares. Vector stores modernos suportam metadata filters (pre-filter ou post-filter). Pre-filter (Qdrant, pgvector) é mais eficiente; post-filter (FAISS) força recuperar mais e descartar.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">filtro por metadata em Qdrant</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">from qdrant_client import QdrantClient
+from qdrant_client.models import Filter, FieldCondition, MatchValue
+
+client.search(
+    collection_name='docs',
+    query_vector=q,
+    query_filter=Filter(must=[
+        FieldCondition(key='year', range={'gte': 2024}),
+        FieldCondition(key='lang', match=MatchValue(value='pt')),
+    ]),
+    limit=10,
+)</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Anexar metadados a cada chunk (data, autor, categoria, idioma) e filtrar por eles antes ou depois da busca vetorial.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Pergunta 'eventos de 2024' não deve trazer chunks de 2019, mesmo que semanticamente similares. Filtros resolvem.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Metadata filtering, pre-filter, post-filter, namespace.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -411,6 +476,7 @@ bm25 = BM25(chunks)
       </section>
 
 
+   </div>
   </main>
 
   <!-- FOOTER -->

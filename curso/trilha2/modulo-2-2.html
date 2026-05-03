@@ -73,7 +73,8 @@
   </header>
 
   <!-- CONTEÚDO -->
-  <main class="max-w-4xl mx-auto px-6 py-12">
+  <main class="max-w-6xl mx-auto px-6 py-12">
+   <div class="max-w-4xl mx-auto">
 
     <!-- Introdução -->
     <section class="mb-12 prose prose-invert max-w-none">
@@ -112,19 +113,31 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-blue-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Padrão template com placeholders (Jinja2, f-string, mustache). O prompt fica em arquivo versionado; dados entram no momento da chamada.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Prompts hardcoded em código Python ficam impossíveis de revisar e versionar. Templates externos permitem PR review do prompt isoladamente.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Template engine, variáveis, schema de input, sanitização.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Templates separam <em>estrutura do prompt</em> (versionado em git) de <em>dados que entram</em> (variáveis em runtime). Jinja2 é o padrão Python; mustache é portável; f-strings funcionam para casos simples. O efeito é grande: revisores leem o prompt isoladamente em PR, e o mesmo arquivo serve para múltiplos chamadores.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">prompt como arquivo .j2</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200"># prompts/classify_v1.0.0.j2
+Você classifica sentimento. Saída: positivo, negativo ou neutro.
+
+&lt;exemplos&gt;
+{% for ex in exemplos %}
+  &lt;ex&gt;&lt;in&gt;{{ ex.in }}&lt;/in&gt;&lt;out&gt;{{ ex.out }}&lt;/out&gt;&lt;/ex&gt;
+{% endfor %}
+&lt;/exemplos&gt;
+
+Texto: {{ texto }}</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-blue-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Padrão template com placeholders (Jinja2, f-string, mustache). O prompt fica em arquivo versionado; dados entram no momento da chamada.</span></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Prompts hardcoded em código Python ficam impossíveis de revisar e versionar. Templates externos permitem PR review do prompt isoladamente.</span></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Template engine, variáveis, schema de input, sanitização.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -137,19 +150,25 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-blue-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Major: mudança que invalida saídas anteriores (formato, persona). Minor: capability nova compatível. Patch: correção de typo, clareza.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Sem versionamento, regressão silenciosa é certeza. Você muda 'só uma palavra' e quebra 30% dos casos sem perceber.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">SemVer, prompt diff, breaking change, hash de prompt.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4"><strong>SemVer aplicado a prompts</strong>: <code>v{major}.{minor}.{patch}</code>. Major: muda formato de saída ou persona (quebra cliente). Minor: capability nova compatível. Patch: typo, clareza. Hash sha256 do template + versão são gravados no run manifest do harness — auditável.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-x-auto">
+          <table class="w-full">
+            <caption class="px-4 py-2 text-xs text-zinc-500 text-left">exemplos de bump</caption>
+            <thead class="bg-zinc-900"><tr><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-blue-400'>Mudança</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-blue-400'>Bump</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-blue-400'>Por quê</th></tr></thead>
+            <tbody><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Adicionei vírgula em 'Olá, mundo'</td><td class='py-2 px-3 text-sm text-zinc-300'>patch (v1.0.1)</td><td class='py-2 px-3 text-sm text-zinc-300'>estética; comportamento idêntico</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Adicionei classe 'misto' às opções</td><td class='py-2 px-3 text-sm text-zinc-300'>minor (v1.1.0)</td><td class='py-2 px-3 text-sm text-zinc-300'>novo output válido; antigos casos seguem</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Mudei saída de string para JSON</td><td class='py-2 px-3 text-sm text-zinc-300'>major (v2.0.0)</td><td class='py-2 px-3 text-sm text-zinc-300'>quebra qualquer parser que esperava string</td></tr></tbody>
+          </table>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-blue-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Major: mudança que invalida saídas anteriores (formato, persona). Minor: capability nova compatível. Patch: correção de typo, clareza.</span></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem versionamento, regressão silenciosa é certeza. Você muda 'só uma palavra' e quebra 30% dos casos sem perceber.</span></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">SemVer, prompt diff, breaking change, hash de prompt.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -162,19 +181,26 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-blue-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Conjunto fixado de input → output esperado, usado para medir se o prompt continua funcionando após mudança.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">É o teste automatizado do prompt. Sem golden set, 'A/B' vira 'achei que melhorou'.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Golden set, regression test, eval frozen, harness.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Golden set é seu teste automatizado. Comece com <strong>30 exemplos</strong> cobrindo: 60% típicos, 20% edge cases, 20% adversariais. Versionado em <code>evals/v1/datasets/</code> com hash sha256. O custo de manter é baixo se você adiciona casos quando descobre bugs em produção.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">golden set em JSONL</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">{"id": "001", "in": "Adorei!", "out": "positivo", "tag": "tipico"}
+{"id": "002", "in": "Que lixo.", "out": "negativo", "tag": "tipico"}
+{"id": "003", "in": "Eh, mais ou menos.", "out": "neutro", "tag": "tipico"}
+{"id": "020", "in": "Tá uma droga... brincadeira!", "out": "positivo", "tag": "adversarial"}
+{"id": "021", "in": "", "out": "neutro", "tag": "edge"}</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-blue-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Conjunto fixado de input → output esperado, usado para medir se o prompt continua funcionando após mudança.</span></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">É o teste automatizado do prompt. Sem golden set, 'A/B' vira 'achei que melhorou'.</span></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Golden set, regression test, eval frozen, harness.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -187,19 +213,29 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-blue-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Toda mudança em prompt entra com mini-eval contra o golden set. Métrica primária + 1-2 secundárias. Diff documentado.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Disciplina anti-regressão. Sem isso, o prompt vai sendo 'melhorado' ad hoc até parar de funcionar.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Mini-eval, A/B no harness, statistical significance, eval cost.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">A regra é simples: <strong>toda mudança em prompt entra com mini-eval</strong> contra o golden set. PR que muda prompt sem rodar eval é equivalente a PR que muda código sem rodar testes. Métrica primária definida; se regredir, não merge. Eval roda em CI fast (mockado) e scheduled (real).</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">pytest gate de prompt</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">import json, pytest
+from meu_app.classify import classificar
+
+def test_golden():
+    examples = [json.loads(l) for l in open('evals/v1/datasets/classify-v1.jsonl')]
+    correct = sum(1 for e in examples if classificar(e['in']) == e['out'])
+    accuracy = correct / len(examples)
+    assert accuracy &gt;= 0.85, f'regression: {accuracy:.2%} &lt; baseline 85%'</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-blue-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Toda mudança em prompt entra com mini-eval contra o golden set. Métrica primária + 1-2 secundárias. Diff documentado.</span></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Disciplina anti-regressão. Sem isso, o prompt vai sendo 'melhorado' ad hoc até parar de funcionar.</span></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Mini-eval, A/B no harness, statistical significance, eval cost.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -212,19 +248,25 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-blue-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Exact match para classificação. BLEU/ROUGE para tradução/sumarização. LLM-as-judge para qualidade subjetiva (com cuidado dos vieses).</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Cada tipo de tarefa pede sua métrica. LLM-as-judge é poderoso mas tem vieses — detalhado em T6.1.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Exact match, BLEU, ROUGE, LLM-as-judge, judge bias.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Não existe métrica universal. <strong>Exact match</strong> para classificação fechada. <strong>BLEU/ROUGE</strong> para sumarização e tradução. <strong>LLM-as-judge</strong> para qualidade subjetiva (groundedness, helpfulness) — com cuidado de calibração contra humanos (κ ≥0.6, ver T6.1). Para cada prompt, escolha 1 primária + 1-2 secundárias.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-x-auto">
+          <table class="w-full">
+            <caption class="px-4 py-2 text-xs text-zinc-500 text-left">métrica por tarefa</caption>
+            <thead class="bg-zinc-900"><tr><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-blue-400'>Tarefa</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-blue-400'>Primária</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-blue-400'>Secundária</th></tr></thead>
+            <tbody><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Classificação binária/multi-classe</td><td class='py-2 px-3 text-sm text-zinc-300'>Accuracy/F1</td><td class='py-2 px-3 text-sm text-zinc-300'>Custo médio</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Extração de entidades</td><td class='py-2 px-3 text-sm text-zinc-300'>F1 por tipo de entidade</td><td class='py-2 px-3 text-sm text-zinc-300'>Tempo p95</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Sumarização</td><td class='py-2 px-3 text-sm text-zinc-300'>ROUGE-L</td><td class='py-2 px-3 text-sm text-zinc-300'>LLM-as-judge fluência</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>RAG QA</td><td class='py-2 px-3 text-sm text-zinc-300'>Groundedness (judge)</td><td class='py-2 px-3 text-sm text-zinc-300'>Citation accuracy</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Geração criativa</td><td class='py-2 px-3 text-sm text-zinc-300'>LLM-as-judge</td><td class='py-2 px-3 text-sm text-zinc-300'>Diversidade</td></tr></tbody>
+          </table>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-blue-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Exact match para classificação. BLEU/ROUGE para tradução/sumarização. LLM-as-judge para qualidade subjetiva (com cuidado dos vieses).</span></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Cada tipo de tarefa pede sua métrica. LLM-as-judge é poderoso mas tem vieses — detalhado em T6.1.</span></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Exact match, BLEU, ROUGE, LLM-as-judge, judge bias.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -237,19 +279,22 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-blue-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Ciclo: hipótese de mudança → escrever variant → rodar contra golden → comparar métricas → decidir.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Prompt engineering não é arte intuitiva — é ciência empírica. Ciclos rápidos e medidos batem 'feeling'.</p>
-          </div>
-          <div>
-            <span class="text-blue-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Hypothesis-driven, eval cycle, prompt diff, A/B significant.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Prompt engineering não é arte intuitiva — é ciência empírica. Ciclo: <strong>hipótese → variant → eval → diff → decide</strong>. Cada iteração é um PR pequeno com 1 mudança e métricas medidas. Em 3-5 iterações você normalmente atinge o teto da arquitetura escolhida; para subir mais, troca de modelo ou repensa retrieval.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <p class="text-xs uppercase tracking-wider text-blue-400 font-semibold mb-3">ciclo do prompt</p>
+          <ul class="space-y-2"><li class='flex items-start gap-2'><span class='text-blue-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Hipótese:</strong> 'adicionar exemplo adversarial em few-shot melhora F1 em casos com ironia'.</span></li><li class='flex items-start gap-2'><span class='text-blue-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Variant:</strong> v1.1.0 com 1 exemplo extra.</span></li><li class='flex items-start gap-2'><span class='text-blue-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Eval:</strong> roda v1.0.0 e v1.1.0 contra mesmo golden, mesma seed.</span></li><li class='flex items-start gap-2'><span class='text-blue-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Diff:</strong> F1 macro de 0.78 → 0.83; custo +5%.</span></li><li class='flex items-start gap-2'><span class='text-blue-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Decide:</strong> mergea — ganho é maior que custo.</span></li></ul>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-blue-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-blue-400 font-semibold">O que é:</span> <span class="text-zinc-300">Ciclo: hipótese de mudança → escrever variant → rodar contra golden → comparar métricas → decidir.</span></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Prompt engineering não é arte intuitiva — é ciência empírica. Ciclos rápidos e medidos batem 'feeling'.</span></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Hypothesis-driven, eval cycle, prompt diff, A/B significant.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -420,6 +465,7 @@ def test_golden():
       </section>
 
 
+   </div>
   </main>
 
   <!-- FOOTER -->

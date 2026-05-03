@@ -73,7 +73,8 @@
   </header>
 
   <!-- CONTEÚDO -->
-  <main class="max-w-4xl mx-auto px-6 py-12">
+  <main class="max-w-6xl mx-auto px-6 py-12">
+   <div class="max-w-4xl mx-auto">
 
     <!-- Introdução -->
     <section class="mb-12 prose prose-invert max-w-none">
@@ -112,19 +113,31 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-emerald-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Sequência fixa de tokens que o modelo lê em uma chamada. System prompt + histórico + contexto recuperado + user turn — tudo junto.</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Sem essa visão, você assume que o modelo tem 'memória da conversa'. Não tem — você reconstrói a cada chamada.</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Janela nominal, janela efetiva, ordem de seções, custo do input total.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">A janela é uma string serializada que vive na memória do servidor do provedor durante a chamada. Quando você faz <code>client.messages.create(...)</code>, o SDK monta essa string em um formato específico do modelo (ChatML, Anthropic XML, etc.) e envia. O modelo processa tudo de uma vez no <em>prefill</em>, depois gera tokens um a um. Essa visão muda decisões: ordenar para maximizar cache, recuperar menos para reduzir input, ou comprimir histórico antigo deixam de ser 'truques' e passam a ser engenharia.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">anatomia de uma janela serializada (Anthropic-like)</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">&lt;system&gt;
+  Você é um assistente conciso. Use formato JSON.
+&lt;/system&gt;
+&lt;few_shot&gt;
+  &lt;example&gt;&lt;in&gt;...&lt;/in&gt;&lt;out&gt;...&lt;/out&gt;&lt;/example&gt;
+&lt;/few_shot&gt;
+&lt;context&gt;
+  &lt;doc id=42&gt;...trecho recuperado por RAG...&lt;/doc&gt;
+&lt;/context&gt;
+&lt;user&gt;Qual a janela do modelo?&lt;/user&gt;</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-emerald-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Sequência fixa de tokens que o modelo lê em uma chamada. System prompt + histórico + contexto recuperado + user turn — tudo junto.</span></div>
+              <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem essa visão, você assume que o modelo tem 'memória da conversa'. Não tem — você reconstrói a cada chamada.</span></div>
+              <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Janela nominal, janela efetiva, ordem de seções, custo do input total.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -137,19 +150,22 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-emerald-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Cada token só 'olha' tokens anteriores. Estados intermediários (KV cache) podem ser reutilizados — base do prompt caching.</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Entender KV cache explica por que prefixos estáveis no início têm custo amortizado e por que mexer no system prompt invalida cache da sessão.</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Self-attention, causal mask, KV cache, attention heads, prefix prefill.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Atenção causal significa que cada token, ao ser processado, só pode 'olhar' para tokens anteriores — não para o futuro. Isso permite paralelização do prefill (todos os tokens de input são processados juntos) e geração autoregressiva no decode. O <strong>KV cache</strong> guarda os estados <em>key</em> e <em>value</em> de cada camada para cada token já processado; se o prefixo não muda entre chamadas, o provedor reutiliza esses estados. Daí o ganho de prompt caching: ~10% do preço para tokens cacheados.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <p class="text-xs uppercase tracking-wider text-emerald-400 font-semibold mb-3">o que invalida o KV cache</p>
+          <ul class="space-y-2"><li class='flex items-start gap-2'><span class='text-emerald-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Mudar 1 caractere no system prompt → invalida TUDO daquele ponto em diante.</span></li><li class='flex items-start gap-2'><span class='text-emerald-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Reordenar few-shots → invalida do primeiro deslocamento em diante.</span></li><li class='flex items-start gap-2'><span class='text-emerald-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Adicionar uma mensagem do usuário no fim → NÃO invalida cache (apenas adiciona).</span></li><li class='flex items-start gap-2'><span class='text-emerald-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Trocar o modelo (mesmo da mesma família) → invalida tudo.</span></li></ul>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-emerald-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada token só 'olha' tokens anteriores. Estados intermediários (KV cache) podem ser reutilizados — base do prompt caching.</span></div>
+              <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Entender KV cache explica por que prefixos estáveis no início têm custo amortizado e por que mexer no system prompt invalida cache da sessão.</span></div>
+              <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Self-attention, causal mask, KV cache, attention heads, prefix prefill.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -162,19 +178,25 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-emerald-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Modelos modernos codificam posição via Rotary Position Embeddings (RoPE). Tokens recentes têm vantagem estrutural; tokens iniciais têm vantagem de fixação.</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Esse é o mecanismo concreto por trás do 'lost in the middle'. Tokens no meio simplesmente não têm vantagem estrutural nenhuma.</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">RoPE (Su et al. 2021), prefix bias, recency bias, position interpolation.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Posição não é só 'tokens 1, 2, 3...'. Modelos modernos usam <strong>RoPE</strong> (Rotary Position Embedding, Su et al. 2021), que codifica posição via rotação de pares de dimensões em cada cabeça de atenção. Resultado prático: o modelo dá <em>peso estrutural</em> diferente para tokens em posições diferentes — o início (prefix bias) e o fim (recency bias) recebem mais 'sinal' que o meio. Esse é o mecanismo concreto por trás do 'lost in the middle'.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-x-auto">
+          <table class="w-full">
+            <caption class="px-4 py-2 text-xs text-zinc-500 text-left">atenção típica por região da janela (10k tokens)</caption>
+            <thead class="bg-zinc-900"><tr><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-emerald-400'>Região</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-emerald-400'>Posição</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-emerald-400'>Peso relativo de atenção</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-emerald-400'>Comportamento</th></tr></thead>
+            <tbody><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Início</td><td class='py-2 px-3 text-sm text-zinc-300'>0–1k</td><td class='py-2 px-3 text-sm text-zinc-300'>alto (~1.0)</td><td class='py-2 px-3 text-sm text-zinc-300'>prefix bias — fixa contexto</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Meio inferior</td><td class='py-2 px-3 text-sm text-zinc-300'>1k–4k</td><td class='py-2 px-3 text-sm text-zinc-300'>moderado (~0.7)</td><td class='py-2 px-3 text-sm text-zinc-300'>atenção decai gradualmente</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Meio (zona crítica)</td><td class='py-2 px-3 text-sm text-zinc-300'>4k–7k</td><td class='py-2 px-3 text-sm text-zinc-300'>baixo (~0.5)</td><td class='py-2 px-3 text-sm text-zinc-300'>lost in the middle</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Meio superior</td><td class='py-2 px-3 text-sm text-zinc-300'>7k–9k</td><td class='py-2 px-3 text-sm text-zinc-300'>moderado (~0.7)</td><td class='py-2 px-3 text-sm text-zinc-300'>começa a recuperar</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Fim</td><td class='py-2 px-3 text-sm text-zinc-300'>9k–10k</td><td class='py-2 px-3 text-sm text-zinc-300'>alto (~1.0)</td><td class='py-2 px-3 text-sm text-zinc-300'>recency bias — atenção máxima</td></tr></tbody>
+          </table>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-emerald-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Modelos modernos codificam posição via Rotary Position Embeddings (RoPE). Tokens recentes têm vantagem estrutural; tokens iniciais têm vantagem de fixação.</span></div>
+              <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Esse é o mecanismo concreto por trás do 'lost in the middle'. Tokens no meio simplesmente não têm vantagem estrutural nenhuma.</span></div>
+              <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">RoPE (Su et al. 2021), prefix bias, recency bias, position interpolation.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -187,19 +209,22 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-emerald-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Em testes controlados, acurácia de QA cai até 30% quando a informação crítica está no meio da janela. Permanece alta no início e fim.</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">RAG ingênuo coloca 50 documentos esperando que o modelo dê peso uniforme. Não dá. Precisa rerankear ou recuperar menos.</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Curva U, U-shape attention, mitigação por reranking, ancoragem.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Liu et al. (2023) construíram experimento controlado: pegaram um documento com a resposta correta e o inseriram em posições variáveis dentro de janelas de 10-32k tokens preenchidas com documentos distratores. Mediram a acurácia do modelo em encontrar a resposta. O resultado é uma <strong>curva em U</strong> consistente — acurácia ~75% quando a info está no topo, cai para ~50% no meio, sobe de novo para ~70% no fim. O efeito persiste em GPT-3.5, GPT-4, Claude 2, Llama-2. <strong>Não é bug de modelo único</strong>; é arquitetural.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <p class="text-xs uppercase tracking-wider text-emerald-400 font-semibold mb-3">mitigações validadas (com evidência)</p>
+          <ul class="space-y-2"><li class='flex items-start gap-2'><span class='text-emerald-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Reranking:</strong> top-50 retrieval → cross-encoder rerank → top-5 (Anthropic 2024 reporta -49% failure rate).</span></li><li class='flex items-start gap-2'><span class='text-emerald-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Recuperar menos:</strong> 5 docs bem rankeados &gt; 50 docs concatenados.</span></li><li class='flex items-start gap-2'><span class='text-emerald-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Ancoragem:</strong> repetir a pergunta antes E depois do bloco de contexto.</span></li><li class='flex items-start gap-2'><span class='text-emerald-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Auditoria de eval:</strong> ' needle in haystack' test antes de aceitar a janela atual.</span></li></ul>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-emerald-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Em testes controlados, acurácia de QA cai até 30% quando a informação crítica está no meio da janela. Permanece alta no início e fim.</span></div>
+              <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">RAG ingênuo coloca 50 documentos esperando que o modelo dê peso uniforme. Não dá. Precisa rerankear ou recuperar menos.</span></div>
+              <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Curva U, U-shape attention, mitigação por reranking, ancoragem.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -212,19 +237,30 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-emerald-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">System prompt e few-shot fixos primeiro (estáveis, cacheáveis), contexto recuperado depois (variável), instrução do usuário no fim (atenção máxima).</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Esta ordem maximiza cache hit rate (Anthropic 2024) e coloca a instrução do usuário na posição mais 'atendida' pelo modelo.</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Prefix stability, cache breakpoints, instruction-at-the-end pattern, ancoragem.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">A ordem certa não é estética — é alinhada a três forças: prompt cache (estável fica no início), atenção (instrução fica no fim), e ancoragem (pergunta repetida antes/depois do contexto recuperado). O padrão mais robusto é: <code>system → few-shot → âncora-pergunta → contexto recuperado → âncora-pergunta → user-turn</code>. Isso maximiza cache hit rate (~70-95% típico em chats), reduz lost-in-middle e dá ao modelo um sinal claro de 'a pergunta de fato é esta'.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">padrão FEC de ordem de seções (Python)</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">msgs = [
+    Message(role=SYSTEM, content=system_prompt),       # estável (cacheável)
+    Message(role=USER, content=few_shot_canonico),     # estável (cacheável)
+    Message(role=USER, content=(
+        f'Pergunta: {pergunta}\n\n'                  # âncora 1
+        f'&lt;contexto&gt;\n{contexto_recuperado}\n&lt;/contexto&gt;\n\n'
+        f'Pergunta (repete): {pergunta}'                # âncora 2
+    )),
+]</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-emerald-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">System prompt e few-shot fixos primeiro (estáveis, cacheáveis), contexto recuperado depois (variável), instrução do usuário no fim (atenção máxima).</span></div>
+              <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Esta ordem maximiza cache hit rate (Anthropic 2024) e coloca a instrução do usuário na posição mais 'atendida' pelo modelo.</span></div>
+              <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Prefix stability, cache breakpoints, instruction-at-the-end pattern, ancoragem.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -237,19 +273,25 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-emerald-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Janela nominal é o que o modelo aceita sem erro de API. Janela efetiva é onde a qualidade se mantém. Frequentemente bem menor (RULER, Hsieh et al. 2024).</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Decidir 'cabe' e 'funciona bem' são duas perguntas diferentes. A segunda exige eval no harness.</p>
-          </div>
-          <div>
-            <span class="text-emerald-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Effective context length, needle-in-a-haystack, RULER benchmark.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4"><strong>Janela nominal</strong> é o que o marketing fala (200k tokens, 1M tokens). <strong>Janela efetiva</strong> é onde a qualidade não degrada. O benchmark <strong>RULER</strong> (Hsieh et al. 2024) mede isso: muitos modelos com 128k nominal degradam significativamente acima de 32-64k em tarefas que exigem múltipla recuperação. Antes de assumir que cabe E funciona, faça um needle-in-a-haystack próprio com seus dados.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-x-auto">
+          <table class="w-full">
+            <caption class="px-4 py-2 text-xs text-zinc-500 text-left">exemplo de gap nominal × efetiva (valores ilustrativos do RULER)</caption>
+            <thead class="bg-zinc-900"><tr><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-emerald-400'>Modelo</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-emerald-400'>Nominal</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-emerald-400'>Efetiva (RULER)</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-emerald-400'>Gap</th></tr></thead>
+            <tbody><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>GPT-4 Turbo</td><td class='py-2 px-3 text-sm text-zinc-300'>128k</td><td class='py-2 px-3 text-sm text-zinc-300'>~64k</td><td class='py-2 px-3 text-sm text-zinc-300'>50%</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Claude 3 Opus</td><td class='py-2 px-3 text-sm text-zinc-300'>200k</td><td class='py-2 px-3 text-sm text-zinc-300'>~128k</td><td class='py-2 px-3 text-sm text-zinc-300'>64%</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Llama-3-8B-Instruct</td><td class='py-2 px-3 text-sm text-zinc-300'>8k (nativo)</td><td class='py-2 px-3 text-sm text-zinc-300'>~4k</td><td class='py-2 px-3 text-sm text-zinc-300'>50%</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Qwen2.5-7B-Instruct</td><td class='py-2 px-3 text-sm text-zinc-300'>32k</td><td class='py-2 px-3 text-sm text-zinc-300'>~16k</td><td class='py-2 px-3 text-sm text-zinc-300'>50%</td></tr></tbody>
+          </table>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-emerald-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-emerald-400 font-semibold">O que é:</span> <span class="text-zinc-300">Janela nominal é o que o modelo aceita sem erro de API. Janela efetiva é onde a qualidade se mantém. Frequentemente bem menor (RULER, Hsieh et al. 2024).</span></div>
+              <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Decidir 'cabe' e 'funciona bem' são duas perguntas diferentes. A segunda exige eval no harness.</span></div>
+              <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Effective context length, needle-in-a-haystack, RULER benchmark.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -415,6 +457,7 @@ print(resp.content)</code></pre>
       </section>
 
 
+   </div>
   </main>
 
   <!-- FOOTER -->

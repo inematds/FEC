@@ -73,7 +73,8 @@
   </header>
 
   <!-- CONTEÚDO -->
-  <main class="max-w-4xl mx-auto px-6 py-12">
+  <main class="max-w-6xl mx-auto px-6 py-12">
+   <div class="max-w-4xl mx-auto">
 
     <!-- Introdução -->
     <section class="mb-12 prose prose-invert max-w-none">
@@ -107,19 +108,31 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-teal-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Manter os últimos N turns inteiros na janela. Simples, eficaz para conversas curtas.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Em chats curtos (5-10 turns), buffer puro basta. Modelos atendem bem com janela &lt;10k.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Sliding window, message buffer, FIFO eviction.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Para chats curtos (5-10 turns), buffer FIFO dos últimos N turns inteiros é o suficiente. Modelos atendem bem em janela &lt;10k. Implementação trivial: <code>deque(maxlen=N)</code>. Não invente memória vetorial dia 1.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">buffer simples</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">from collections import deque
+
+buffer = deque(maxlen=10)
+
+def turn(user_msg: str) -&gt; str:
+    buffer.append({'role': 'user', 'content': user_msg})
+    msgs = [{'role':'system', 'content': SYSTEM}] + list(buffer)
+    resp = client.chat(messages=msgs)
+    buffer.append({'role': 'assistant', 'content': resp.content})
+    return resp.content</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-teal-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Manter os últimos N turns inteiros na janela. Simples, eficaz para conversas curtas.</span></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Em chats curtos (5-10 turns), buffer puro basta. Modelos atendem bem com janela &lt;10k.</span></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Sliding window, message buffer, FIFO eviction.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -132,19 +145,30 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-teal-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Quando buffer estoura, sumariza turns antigos em parágrafo. Sumário fica no system prompt.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Mantém continuidade sem inflar janela. Trade-off: perde detalhe do que foi sumarizado.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Recursive summarization, sliding-window summarization, hierarchical.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Quando o buffer estoura, em vez de descartar mensagens antigas, sumarize. Sumário fica no system prompt; perde detalhe mas mantém continuidade. Trigger típico: a cada 10 turns, sumarize os 5 mais antigos em parágrafo curto.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">sumarização por trigger</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">def maybe_sumarizar(state):
+    if len(state.buffer) &gt;= 10:
+        antigos = list(state.buffer)[:5]
+        novos = list(state.buffer)[5:]
+        sumario = llm.generate(
+            'Sumarize esta conversa em 1 parágrafo:\n' + format(antigos)
+        )
+        state.sumario = state.sumario + '\n' + sumario
+        state.buffer = deque(novos, maxlen=10)</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-teal-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Quando buffer estoura, sumariza turns antigos em parágrafo. Sumário fica no system prompt.</span></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Mantém continuidade sem inflar janela. Trade-off: perde detalhe do que foi sumarizado.</span></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Recursive summarization, sliding-window summarization, hierarchical.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -157,19 +181,22 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-teal-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Sumariza turns em sumário-de-1; sumários-de-1 em sumário-de-2; etc. Estrutura tipo árvore.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Para chats longos (centenas de turns), hierarquia preserva detalhe nos níveis superiores.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Tree summarization, multi-level memory, MemGPT.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Para chats muito longos (centenas de turns), uma única sumarização perde detalhe demais. Hierarquia: turns viram sumário-de-1; sumários-de-1 viram sumário-de-2; etc. Estrutura tipo árvore. MemGPT (Packer et al. 2023) é a referência sistemática.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <p class="text-xs uppercase tracking-wider text-teal-400 font-semibold mb-3">níveis típicos</p>
+          <ul class="space-y-2"><li class='flex items-start gap-2'><span class='text-teal-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Nível 0:</strong> turns brutos (últimos 5).</span></li><li class='flex items-start gap-2'><span class='text-teal-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Nível 1:</strong> sumário dos 5 turns anteriores (1 parágrafo).</span></li><li class='flex items-start gap-2'><span class='text-teal-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Nível 2:</strong> sumário das últimas 10 sessões (1 parágrafo).</span></li><li class='flex items-start gap-2'><span class='text-teal-400 mt-1'>▸</span><span class='text-sm text-zinc-300'><strong>Nível 3:</strong> perfil do usuário consolidado (estrutura JSON).</span></li></ul>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-teal-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Sumariza turns em sumário-de-1; sumários-de-1 em sumário-de-2; etc. Estrutura tipo árvore.</span></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para chats longos (centenas de turns), hierarquia preserva detalhe nos níveis superiores.</span></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Tree summarization, multi-level memory, MemGPT.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -182,19 +209,32 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-teal-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Cada turn vira embedding indexado. No próximo turn, busca turns relevantes ao tópico atual e injeta.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Permite chats que 'lembram' de conversas de meses atrás sem manter tudo na janela.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Long-term memory, episodic memory, recall on demand, retrieval-augmented memory.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Para 'lembrar' meses depois, sumário hierárquico não basta — você precisa indexar turns como vetores e recuperar por similaridade quando relevante. Cada turn vira embedding; em novo turn, busca turns similares ao tópico atual e injeta no contexto. Fica grande? Use TTL ou compactação periódica.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">memória vetorial básica</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">def turn_com_memoria(query):
+    relevantes = vector_store.search(query, top_k=3, namespace=user_id)
+    msgs = [
+        Message(SYSTEM, SYSTEM_PROMPT),
+        Message(SYSTEM, f'Contexto histórico relevante:\n{relevantes}'),
+        *recent_buffer,
+        Message(USER, query),
+    ]
+    resp = client.chat(msgs)
+    vector_store.add(embed(f'Q: {query}\nA: {resp.content}'), namespace=user_id)
+    return resp.content</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-teal-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada turn vira embedding indexado. No próximo turn, busca turns relevantes ao tópico atual e injeta.</span></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Permite chats que 'lembram' de conversas de meses atrás sem manter tudo na janela.</span></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Long-term memory, episodic memory, recall on demand, retrieval-augmented memory.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -207,19 +247,28 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-teal-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Padrão alternativo: agente tem tool 'buscar_memoria' e decide quando precisa de info antiga.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Mais explícito que injection automático. Custo: mais roundtrips, mas precisão maior.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Active recall, memory tool, on-demand retrieval.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Alternativa ao injection automático: agente tem tool <code>buscar_memoria(termos)</code> e decide quando usar. Mais explícito (debugável); custo: 1 roundtrip extra quando aciona. Padrão útil em assistentes onde a memória é explícita ('lembre-se que eu sou vegetariano').</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">tool de memória explícita</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">tool_memoria = Tool(
+    name='buscar_memoria',
+    description='Busca em conversas anteriores. Use quando o usuário se referir a algo dito antes.',
+    parameters={'type': 'object', 'properties': {
+        'termos': {'type': 'string', 'description': 'palavras-chave da memória'}
+    }, 'required': ['termos']}
+)</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-teal-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Padrão alternativo: agente tem tool 'buscar_memoria' e decide quando precisa de info antiga.</span></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Mais explícito que injection automático. Custo: mais roundtrips, mas precisão maior.</span></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Active recall, memory tool, on-demand retrieval.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -232,19 +281,32 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-teal-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Mantém ficha estruturada do usuário (nome, preferências, contexto profissional) atualizada incremental.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Diferente de memória conversacional — é estado do usuário. Cabe no system prompt como JSON pequeno.</p>
-          </div>
-          <div>
-            <span class="text-teal-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">User profile, structured memory, preference modeling.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Memória conversacional ≠ estado do usuário. <strong>Perfil estruturado</strong> (nome, preferências, contexto profissional) fica em JSON pequeno no system prompt — atualizado incrementalmente quando o usuário diz algo novo. Mais estável e barato que injetar histórico inteiro a cada turn.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">perfil de usuário no system prompt</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">perfil = {
+    'nome': 'Nei',
+    'idioma_preferido': 'pt-BR',
+    'expertise': 'engenharia de software, LLM em produção',
+    'notas': ['vegetariano', 'reside em SC, Brasil']
+}
+
+system = (
+    SYSTEM_PROMPT_BASE + '\n\n'
+    f'Perfil do usuário:\n{json.dumps(perfil, ensure_ascii=False, indent=2)}'
+)</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-teal-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-teal-400 font-semibold">O que é:</span> <span class="text-zinc-300">Mantém ficha estruturada do usuário (nome, preferências, contexto profissional) atualizada incremental.</span></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Diferente de memória conversacional — é estado do usuário. Cabe no system prompt como JSON pequeno.</span></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">User profile, structured memory, preference modeling.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -423,6 +485,7 @@ class ChatComMemoria:
       </section>
 
 
+   </div>
   </main>
 
   <!-- FOOTER -->

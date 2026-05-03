@@ -73,7 +73,8 @@
   </header>
 
   <!-- CONTEÚDO -->
-  <main class="max-w-4xl mx-auto px-6 py-12">
+  <main class="max-w-6xl mx-auto px-6 py-12">
+   <div class="max-w-4xl mx-auto">
 
     <!-- Introdução -->
     <section class="mb-12 prose prose-invert max-w-none">
@@ -107,19 +108,25 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Pegar os k chunks mais similares à query. k=3-10 é o range típico para passar à geração.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">k baixo perde recall; k alto enche a janela de ruído (vide lost-in-the-middle). Otimize empiricamente.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Recall@k, precision@k, k-tuning, MRR (mean reciprocal rank).</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">k é o tamanho do top recuperado que vai pra geração. Trade-off: k baixo (3-5) tem alta precisão mas perde recall; k alto (20-50) capta tudo mas enche a janela e dispara lost-in-middle. <strong>Default: k=5 para gerar, k=50 para reranker</strong>. Otimize empiricamente no seu golden set.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-x-auto">
+          <table class="w-full">
+            <caption class="px-4 py-2 text-xs text-zinc-500 text-left">trade-off k em RAG (cenário ilustrativo)</caption>
+            <thead class="bg-zinc-900"><tr><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-purple-400'>k para gerar</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-purple-400'>Recall@k</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-purple-400'>Groundedness</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-purple-400'>Custo input</th></tr></thead>
+            <tbody><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>3</td><td class='py-2 px-3 text-sm text-zinc-300'>0.71</td><td class='py-2 px-3 text-sm text-zinc-300'>0.93</td><td class='py-2 px-3 text-sm text-zinc-300'>1×</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>5</td><td class='py-2 px-3 text-sm text-zinc-300'>0.84</td><td class='py-2 px-3 text-sm text-zinc-300'>0.91</td><td class='py-2 px-3 text-sm text-zinc-300'>1.6×</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>10</td><td class='py-2 px-3 text-sm text-zinc-300'>0.92</td><td class='py-2 px-3 text-sm text-zinc-300'>0.85</td><td class='py-2 px-3 text-sm text-zinc-300'>3×</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>20</td><td class='py-2 px-3 text-sm text-zinc-300'>0.96</td><td class='py-2 px-3 text-sm text-zinc-300'>0.78</td><td class='py-2 px-3 text-sm text-zinc-300'>6×</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>50</td><td class='py-2 px-3 text-sm text-zinc-300'>0.99</td><td class='py-2 px-3 text-sm text-zinc-300'>0.62</td><td class='py-2 px-3 text-sm text-zinc-300'>15×</td></tr></tbody>
+          </table>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Pegar os k chunks mais similares à query. k=3-10 é o range típico para passar à geração.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">k baixo perde recall; k alto enche a janela de ruído (vide lost-in-the-middle). Otimize empiricamente.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Recall@k, precision@k, k-tuning, MRR (mean reciprocal rank).</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -132,19 +139,29 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Modelo cross-encoder que recebe (query, chunk) e retorna score. Mais preciso que dual encoder, mas mais lento.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Padrão: recupera top-50 com encoder rápido, rankeia para top-5 com cross-encoder. Ganho consistente em recall.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Cross-encoder vs dual encoder, BGE reranker, Cohere Rerank, latency budget.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Retriever inicial (dual encoder) é rápido mas grosseiro. <strong>Reranker cross-encoder</strong> recebe (query, chunk) JUNTOS e produz score com mais precisão. Padrão: top-50 do retriever → reranker → top-5 final. Custo: 50-200ms a mais. Ganho: groundedness +5-15 pp consistente.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">rerank com BGE-reranker</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">from sentence_transformers import CrossEncoder
+rer = CrossEncoder('BAAI/bge-reranker-large')
+
+candidatos = retriever.search(query, top_k=50)
+pairs = [(query, c.text) for c in candidatos]
+scores = rer.predict(pairs)
+
+top5 = sorted(zip(candidatos, scores), key=lambda x: -x[1])[:5]</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Modelo cross-encoder que recebe (query, chunk) e retorna score. Mais preciso que dual encoder, mas mais lento.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Padrão: recupera top-50 com encoder rápido, rankeia para top-5 com cross-encoder. Ganho consistente em recall.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Cross-encoder vs dual encoder, BGE reranker, Cohere Rerank, latency budget.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -157,19 +174,30 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Antes de embedar cada chunk, injeta uma descrição curta do documento de onde veio. Reduz miss em 35-50% (Anthropic 2024).</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Chunk isolado perde contexto; com contexto, embedding fica mais informativo. Custo: chamada extra ao LLM por chunk no index time.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Contextual retrieval, document-level prefix, prompt caching no index, late chunking.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4"><strong>Contextual retrieval</strong> (Anthropic, 2024): antes de embedar cada chunk, o LLM gera uma frase curta de contexto sobre o documento e prefixa no chunk. Resultado: chunks isolados deixam de perder referência. Anthropic reporta -49% em failure rate (recall@20) com contextual retrieval + reranker. Custo: 1 chamada LLM por chunk no index time (mitigado por prompt caching).</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">contextualizar antes de embedar</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">for doc in corpus:
+    chunks = chunk_by_paragraph(doc.text)
+    for chunk in chunks:
+        contexto = llm_describe(
+            f'&lt;doc&gt;{doc.text}&lt;/doc&gt;\n&lt;chunk&gt;{chunk}&lt;/chunk&gt;\n'
+            'Em 1 frase: como este chunk se situa no doc?'
+        )
+        chunk_aumentado = f'{contexto}\n\n{chunk}'
+        index.add(embed(chunk_aumentado), metadata={...})</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Antes de embedar cada chunk, injeta uma descrição curta do documento de onde veio. Reduz miss em 35-50% (Anthropic 2024).</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Chunk isolado perde contexto; com contexto, embedding fica mais informativo. Custo: chamada extra ao LLM por chunk no index time.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Contextual retrieval, document-level prefix, prompt caching no index, late chunking.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -182,19 +210,27 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Padrão de incluir IDs/URLs dos chunks recuperados no prompt e exigir que a resposta cite a fonte de cada afirmação.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Sem citação, você não sabe se o modelo grounded a resposta ou alucinou. Eval (T6) precisa de citação para medir groundedness.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Citation patterns, source tracking, groundedness, attribution.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Sem citação explícita, você não sabe se o modelo grounded a resposta ou alucinou. Padrão: incluir IDs visíveis no contexto (<code>&lt;chunk id=42&gt;...&lt;/chunk&gt;</code>) e instruir 'cite o id após cada afirmação'. Eval de groundedness depende disso para ser objetivo.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">prompt com citação obrigatória</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">system = '''Responda APENAS com base no contexto fornecido.
+Cite o id de cada chunk usado, no formato [chunk:42].
+Se a resposta não está no contexto, diga: 'Não tenho informação suficiente'.
+Não invente fatos.'''
+
+ctx = '\n'.join(f'&lt;chunk id={c.id}&gt;{c.text}&lt;/chunk&gt;' for c in top5)</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Padrão de incluir IDs/URLs dos chunks recuperados no prompt e exigir que a resposta cite a fonte de cada afirmação.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem citação, você não sabe se o modelo grounded a resposta ou alucinou. Eval (T6) precisa de citação para medir groundedness.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Citation patterns, source tracking, groundedness, attribution.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -207,19 +243,33 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">System prompt instrui: 'se a resposta não está no contexto, diga não sei'. Reduz alucinação.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Modelos preferem responder algo a admitir ignorância. Instrução explícita + few-shot de 'não sei' equilibra.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Abstention, calibration, hallucination, RAG-fail-safe.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Modelos preferem responder algo a admitir ignorância — viés conhecido. Combate: instrução explícita 'se a resposta não está no contexto, diga não sei' + few-shot mostrando casos de abstenção. Sem isso, alucinação em RAG é a regra, não a exceção.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">few-shot de abstenção</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">&lt;exemplos&gt;
+  &lt;ex&gt;
+    &lt;ctx&gt;&lt;chunk id=1&gt;O céu é azul.&lt;/chunk&gt;&lt;/ctx&gt;
+    &lt;q&gt;Qual a cor do mar?&lt;/q&gt;
+    &lt;a&gt;Não tenho informação suficiente no contexto.&lt;/a&gt;
+  &lt;/ex&gt;
+  &lt;ex&gt;
+    &lt;ctx&gt;&lt;chunk id=2&gt;O mar é azul.&lt;/chunk&gt;&lt;/ctx&gt;
+    &lt;q&gt;Qual a cor do mar?&lt;/q&gt;
+    &lt;a&gt;O mar é azul [chunk:2].&lt;/a&gt;
+  &lt;/ex&gt;
+&lt;/exemplos&gt;</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">System prompt instrui: 'se a resposta não está no contexto, diga não sei'. Reduz alucinação.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Modelos preferem responder algo a admitir ignorância. Instrução explícita + few-shot de 'não sei' equilibra.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Abstention, calibration, hallucination, RAG-fail-safe.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -232,19 +282,28 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Antes de buscar, o LLM reescreve/expande a query (sinônimos, sub-perguntas) ou gera resposta hipotética (HyDE) usada como query.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Query do usuário é frequentemente curta e ambígua. Reescrita melhora recall sem custar muito.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Query rewriting, HyDE (Gao et al. 2022), multi-query retrieval, query decomposition.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Query do usuário é tipicamente curta e ambígua. <strong>Query rewriting</strong> expande sinônimos ou decompõe em sub-perguntas; <strong>HyDE</strong> (Gao et al. 2022) gera resposta hipotética com LLM e usa essa resposta como query — surpreendentemente eficaz para queries factuais. Custo: 1 chamada LLM extra; ganho: +5-10% em recall.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">HyDE em uma chamada</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">def hyde_search(query: str, retriever) -&gt; list:
+    # 1. gera resposta hipotética (sem contexto)
+    hipotetica = llm.generate(
+        f'Responda em 2 frases (mesmo que invente): {query}'
+    )
+    # 2. usa a resposta como query (semanticamente mais rica)
+    return retriever.search(hipotetica, top_k=10)</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Antes de buscar, o LLM reescreve/expande a query (sinônimos, sub-perguntas) ou gera resposta hipotética (HyDE) usada como query.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Query do usuário é frequentemente curta e ambígua. Reescrita melhora recall sem custar muito.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Query rewriting, HyDE (Gao et al. 2022), multi-query retrieval, query decomposition.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -417,6 +476,7 @@ def responder(query: str) -&gt; dict:
       </section>
 
 
+   </div>
   </main>
 
   <!-- FOOTER -->

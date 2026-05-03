@@ -13,6 +13,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from modulos_spec import MODULOS, TRILHAS  # noqa: E402
+from modulos_enrich import enrich  # noqa: E402
+
+# Aplica enrichment (paragrafo + exemplo por tópico)
+for _m in MODULOS:
+    enrich(_m)
 
 REPO = Path(__file__).resolve().parent.parent
 
@@ -35,9 +40,45 @@ def render_modulo(m: dict) -> str:
     ci = COR_INFO[cor]
     status_badge = f'<span class="px-2 py-1 bg-{cor}-500/20 border border-{cor}-500/30 text-{cor}-400 rounded text-xs">{m["status"]}</span>'
 
-    # === Topicos: 6 sections ricas ===
+    # === Topicos: 6 sections ricas, com explicacao aprofundada + exemplo ===
     topicos_html = []
     for i, tp in enumerate(m["topicos"], 1):
+        # Parágrafo explicativo (substitui a "lista de cabeçalhos" por conteúdo real)
+        paragrafo = tp.get("paragrafo") or tp.get("o_que_e", "")
+        # Exemplo concreto: pode ser código (com tipo "codigo"), tabela ou bullets
+        exemplo = tp.get("exemplo")
+        exemplo_html = ""
+        if exemplo:
+            if isinstance(exemplo, dict) and exemplo.get("tipo") == "codigo":
+                exemplo_html = f"""
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">{exemplo.get("titulo", "Exemplo")}</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">{_escape(exemplo["conteudo"])}</code></pre>
+        </div>"""
+            elif isinstance(exemplo, dict) and exemplo.get("tipo") == "tabela":
+                rows = "".join(
+                    "<tr class='border-b border-zinc-800'>" + "".join(
+                        f"<td class='py-2 px-3 text-sm text-zinc-300'>{c}</td>" for c in row
+                    ) + "</tr>"
+                    for row in exemplo["linhas"]
+                )
+                headers = "".join(f"<th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-{cor}-400'>{h}</th>" for h in exemplo["cabecalhos"])
+                exemplo_html = f"""
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-x-auto">
+          <table class="w-full">
+            <caption class="px-4 py-2 text-xs text-zinc-500 text-left">{exemplo.get("titulo", "")}</caption>
+            <thead class="bg-zinc-900"><tr>{headers}</tr></thead>
+            <tbody>{rows}</tbody>
+          </table>
+        </div>"""
+            elif isinstance(exemplo, dict) and exemplo.get("tipo") == "bullets":
+                items = "".join(f"<li class='flex items-start gap-2'><span class='text-{cor}-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>{b}</span></li>" for b in exemplo["itens"])
+                exemplo_html = f"""
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <p class="text-xs uppercase tracking-wider text-{cor}-400 font-semibold mb-3">{exemplo.get("titulo", "Exemplo")}</p>
+          <ul class="space-y-2">{items}</ul>
+        </div>"""
+
         topicos_html.append(f"""
       <section id="topico-{i}" class="mb-16">
         <div class="flex items-center space-x-4 mb-6">
@@ -48,19 +89,18 @@ def render_modulo(m: dict) -> str:
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-{cor}-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">{tp["o_que_e"]}</p>
-          </div>
-          <div>
-            <span class="text-{cor}-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">{tp["por_que"]}</p>
-          </div>
-          <div>
-            <span class="text-{cor}-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">{tp["conceitos"]}</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">{paragrafo}</p>
+          {exemplo_html}
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-{cor}-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-{cor}-400 font-semibold">O que é:</span> <span class="text-zinc-300">{tp["o_que_e"]}</span></div>
+              <div><span class="text-{cor}-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">{tp["por_que"]}</span></div>
+              <div><span class="text-{cor}-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">{tp["conceitos"]}</span></div>
+            </div>
+          </details>
         </div>
       </section>
 """)
@@ -269,7 +309,8 @@ def render_modulo(m: dict) -> str:
   </header>
 
   <!-- CONTEÚDO -->
-  <main class="max-w-4xl mx-auto px-6 py-12">
+  <main class="max-w-6xl mx-auto px-6 py-12">
+   <div class="max-w-4xl mx-auto">
 
     <!-- Introdução -->
     <section class="mb-12 prose prose-invert max-w-none">
@@ -310,6 +351,7 @@ def render_modulo(m: dict) -> str:
     <!-- Resumo Final + Navegação -->
     {resumo_html}
 
+   </div>
   </main>
 
   <!-- FOOTER -->

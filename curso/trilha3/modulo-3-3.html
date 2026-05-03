@@ -73,7 +73,8 @@
   </header>
 
   <!-- CONTEÚDO -->
-  <main class="max-w-4xl mx-auto px-6 py-12">
+  <main class="max-w-6xl mx-auto px-6 py-12">
+   <div class="max-w-4xl mx-auto">
 
     <!-- Introdução -->
     <section class="mb-12 prose prose-invert max-w-none">
@@ -107,19 +108,22 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Pergunta exige info de múltiplas fontes em sequência. Agente busca, lê, refina query, busca de novo.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Perguntas como 'compare A e B em 2024' precisam de 2+ buscas. RAG estático falha.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Multi-hop QA, iterative retrieval, query refinement, ReAct.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Multi-hop é quando a resposta exige <em>encadeamento</em> de buscas. Ex.: 'compare a janela de contexto do Claude 3 com a do GPT-4 em 2024' — 2 buscas (uma por modelo) + 1 comparação. RAG estático despeja tudo em 1 query; agêntico faz busca dirigida por etapa.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <p class="text-xs uppercase tracking-wider text-purple-400 font-semibold mb-3">perguntas que multi-hop resolve melhor</p>
+          <ul class="space-y-2"><li class='flex items-start gap-2'><span class='text-purple-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Comparação ('A vs B em métrica X')</span></li><li class='flex items-start gap-2'><span class='text-purple-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Ranking ('quais os 3 maiores X em 2024')</span></li><li class='flex items-start gap-2'><span class='text-purple-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Encadeamento causal ('por que isso aconteceu, dado este contexto')</span></li><li class='flex items-start gap-2'><span class='text-purple-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Verificação cruzada ('isso bate com o que disse Y?')</span></li></ul>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Pergunta exige info de múltiplas fontes em sequência. Agente busca, lê, refina query, busca de novo.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Perguntas como 'compare A e B em 2024' precisam de 2+ buscas. RAG estático falha.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Multi-hop QA, iterative retrieval, query refinement, ReAct.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -132,19 +136,33 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Modelo emite token especial decidindo se precisa buscar. Se não, responde do parâmetro; se sim, busca e cita.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Nem toda pergunta precisa de RAG. Self-RAG evita custo e latência quando o conhecimento paramétrico basta.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Self-RAG, retrieve-or-not, calibração de confiança, paramétrico vs. retrieval.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Self-RAG (Asai et al. 2023): o modelo emite token especial decidindo se precisa buscar. Reduz custo em queries triviais ('o que é 2+2') e mantém qualidade em queries factuais. Versão simplificada para produção: classificar a query antes do retrieval.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">decisor: buscar ou não</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">def decidir_busca(query: str) -&gt; bool:
+    decisor = llm.generate(
+        f'Para responder esta query, preciso de busca em base externa? Responda só sim ou não.\n'
+        f'Query: {query}'
+    )
+    return decisor.strip().lower().startswith('sim')
+
+if decidir_busca(query):
+    docs = retriever.search(query)
+    resposta = llm_responder_com_contexto(query, docs)
+else:
+    resposta = llm_responder_direto(query)</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Modelo emite token especial decidindo se precisa buscar. Se não, responde do parâmetro; se sim, busca e cita.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Nem toda pergunta precisa de RAG. Self-RAG evita custo e latência quando o conhecimento paramétrico basta.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Self-RAG, retrieve-or-not, calibração de confiança, paramétrico vs. retrieval.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -157,19 +175,22 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">LLM decompõe pergunta em sub-perguntas, busca cada uma, junta as evidências.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Para perguntas compostas ('o que mudou de A para B?'), decomposição melhora recall.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Query decomposition, sub-question answering, fan-out, planner.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Para perguntas compostas, decompor em sub-perguntas melhora recall. LLM faz a decomposição; cada sub-pergunta vira busca; respostas são combinadas. Cuidado: cada sub-busca custa; cap em 3-5 sub-perguntas é sensato.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
+          <p class="text-xs uppercase tracking-wider text-purple-400 font-semibold mb-3">exemplo de decomposição</p>
+          <ul class="space-y-2"><li class='flex items-start gap-2'><span class='text-purple-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Query: 'compare janela do Claude 3 e GPT-4 em 2024'</span></li><li class='flex items-start gap-2'><span class='text-purple-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Sub-1: 'qual a janela do Claude 3 em 2024?'</span></li><li class='flex items-start gap-2'><span class='text-purple-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Sub-2: 'qual a janela do GPT-4 em 2024?'</span></li><li class='flex items-start gap-2'><span class='text-purple-400 mt-1'>▸</span><span class='text-sm text-zinc-300'>Combinação: LLM recebe ambas respostas e gera comparação final.</span></li></ul>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">LLM decompõe pergunta em sub-perguntas, busca cada uma, junta as evidências.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Para perguntas compostas ('o que mudou de A para B?'), decomposição melhora recall.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Query decomposition, sub-question answering, fan-out, planner.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -182,19 +203,33 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Após resposta, segundo passo verifica: a resposta está grounded? Cita fonte? Se não, refaz.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Qualidade > velocidade em casos sensíveis. Critic step pega regressões.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Critic loop, verification step, self-correction, faithfulness.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Critic step é um segundo passo: outro LLM (ou o mesmo com prompt diferente) verifica se a resposta está grounded. Se não, refaz a busca. Custo: 2× tokens; ganho: redução de alucinação em casos críticos. Usar com critério — não em todas as queries.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">critic loop</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">def rag_com_critic(query, max_tries=2):
+    for _ in range(max_tries):
+        docs = retriever.search(query)
+        resp = gerar(query, docs)
+        crit = llm.generate(
+            f'A resposta abaixo está grounded no contexto?\n'
+            f'&lt;ctx&gt;{docs}&lt;/ctx&gt;\n&lt;resp&gt;{resp}&lt;/resp&gt;\n'
+            'Sim/Não + 1 frase.'
+        )
+        if crit.startswith('Sim'):
+            return resp
+    return 'Não foi possível responder com confiança.'</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Após resposta, segundo passo verifica: a resposta está grounded? Cita fonte? Se não, refaz.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Qualidade > velocidade em casos sensíveis. Critic step pega regressões.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Critic loop, verification step, self-correction, faithfulness.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -207,19 +242,31 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Critério explícito: max iterações, confiança suficiente, ou custo orçado atingido.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">Sem critério, o agente loopa. Loops em produção são desastre de custo.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Max iterations, confidence threshold, cost budget, early stop.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">Sem critério de parada explícito, agente loopa em produção e queima orçamento. Defina: max_iterations (3-5 típico), confiança mínima da resposta, OU custo máximo em tokens. O primeiro que disparar para o loop. Isto é pré-requisito de qualquer rollout.</p>
+          
+        <div class="mt-4 bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          <div class="px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs text-zinc-500 font-mono">controle de loop</div>
+          <pre class="p-4 text-sm overflow-x-auto"><code class="text-zinc-200">def agentic_rag(query, max_iter=3, max_tokens=20_000):
+    tokens_usados = 0
+    for i in range(max_iter):
+        if tokens_usados &gt; max_tokens:
+            return 'budget exceeded', tokens_usados
+        resp = um_passo(query, ...)
+        tokens_usados += resp.tokens
+        if resp.confianca &gt; 0.85:
+            return resp, tokens_usados
+    return 'max_iter sem convergência', tokens_usados</code></pre>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Critério explícito: max iterações, confiança suficiente, ou custo orçado atingido.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">Sem critério, o agente loopa. Loops em produção são desastre de custo.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Max iterations, confidence threshold, cost budget, early stop.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -232,19 +279,25 @@
           </div>
         </div>
 
-        <div class="ml-0 md:ml-16 space-y-3 bg-zinc-900/50 border border-zinc-800 rounded-lg p-5">
-          <div>
-            <span class="text-purple-400 font-semibold">O que é:</span>
-            <p class="text-zinc-300 text-sm mt-1">Cada hop custa: tokens + latência + risco de loop. Para 80% dos casos, RAG estático com bom reranker basta.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Por que aprender:</span>
-            <p class="text-zinc-300 text-sm mt-1">RAG agêntico pode 3-10× o custo de RAG estático sem ganho proporcional.</p>
-          </div>
-          <div>
-            <span class="text-purple-400 font-semibold">Conceitos-chave:</span>
-            <p class="text-zinc-300 text-sm mt-1">Cost amortization, complexity vs benefit, default to simple.</p>
-          </div>
+        <div class="ml-0 md:ml-16">
+          <p class="text-zinc-200 leading-relaxed mb-4">RAG agêntico é tentador mas frequentemente <strong>injustificado</strong>. Em 80% dos casos, RAG estático com reranker e contextual retrieval resolve a custo 3-10× menor. Antes de adotar agêntico, esgote o estático e meça o gap real com seu golden set.</p>
+          
+        <div class="mt-4 bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-x-auto">
+          <table class="w-full">
+            <caption class="px-4 py-2 text-xs text-zinc-500 text-left">decisão: estático vs agêntico</caption>
+            <thead class="bg-zinc-900"><tr><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-purple-400'>Sinal</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-purple-400'>Estático</th><th class='py-2 px-3 text-left text-xs uppercase tracking-wider text-purple-400'>Agêntico</th></tr></thead>
+            <tbody><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Pergunta single-hop</td><td class='py-2 px-3 text-sm text-zinc-300'>✓ default</td><td class='py-2 px-3 text-sm text-zinc-300'>✗ overhead</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Multi-hop confirmado em eval</td><td class='py-2 px-3 text-sm text-zinc-300'>✗ recall baixo</td><td class='py-2 px-3 text-sm text-zinc-300'>✓ vale custo</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Latência crítica (UX live)</td><td class='py-2 px-3 text-sm text-zinc-300'>✓</td><td class='py-2 px-3 text-sm text-zinc-300'>✗ múltiplos roundtrips</td></tr><tr class='border-b border-zinc-800'><td class='py-2 px-3 text-sm text-zinc-300'>Volume 1k+/dia</td><td class='py-2 px-3 text-sm text-zinc-300'>✓ econômico</td><td class='py-2 px-3 text-sm text-zinc-300'>depende — meça</td></tr></tbody>
+          </table>
+        </div>
+
+          <details class="mt-6 bg-zinc-900/40 border border-zinc-800 rounded-lg p-4 text-sm">
+            <summary class="cursor-pointer text-purple-400 font-semibold list-none">📑 Resumo navegável</summary>
+            <div class="mt-3 space-y-2">
+              <div><span class="text-purple-400 font-semibold">O que é:</span> <span class="text-zinc-300">Cada hop custa: tokens + latência + risco de loop. Para 80% dos casos, RAG estático com bom reranker basta.</span></div>
+              <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-zinc-300">RAG agêntico pode 3-10× o custo de RAG estático sem ganho proporcional.</span></div>
+              <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-zinc-300">Cost amortization, complexity vs benefit, default to simple.</span></div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -404,6 +457,7 @@ def agentic_rag(query: str, max_hops: int = 3) -&gt; dict:
       </section>
 
 
+   </div>
   </main>
 
   <!-- FOOTER -->
