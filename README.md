@@ -140,3 +140,11 @@ Encontrou vulnerabilidade? Veja [SECURITY.md](./SECURITY.md) — não abra issue
 ---
 
 **Mantido pelo INEMA — [inema.club](https://inema.club).**
+
+<!-- inema-backlink:v1 -->
+## Mais no INEMA.CLUB
+
+- [Ficha completa deste curso](https://www.inema.club/cursos/87-fec-formacao-de-engenharia-de-contexto/)
+- [Guia: como aprender inteligência artificial](https://www.inema.club/aprender-inteligencia-artificial/)
+- [Todos os cursos](https://www.inema.club/cursos/)
+<!-- /inema-backlink:v1 -->
